@@ -1,8 +1,4 @@
-FROM python:3.13
-
-#RUN apt update \
-#	&& apt install -y --no-install-recommends postgresql-client \
-#	&& rm -rf /var/lib/apt/lists/*
+FROM python:3.10
 
 WORKDIR /usr/src/app
 COPY requirements.txt ./
