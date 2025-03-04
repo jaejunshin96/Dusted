@@ -37,7 +37,7 @@ ALLOWED_HOSTS = []
 
 # Application definition
 
-SITE_ID = 1
+SITE_ID = 2
 
 INSTALLED_APPS = [
     'django.contrib.admin',
@@ -82,6 +82,7 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+	'allauth.account.middleware.AccountMiddleware',
 ]
 
 CORS_ALLOWED_ORIGINS = [
