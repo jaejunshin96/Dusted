@@ -9,3 +9,18 @@ services:
         - action: sync
           path: backend
           target: /usr/src/app
+    env_file:
+      - .env
+
+  frontend:
+    container_name: frontend
+    build: ./frontend
+    ports:
+      - "3000:3000"
+    develop:
+      watch:
+        - action: sync
+          path: frontend
+          target: /usr/src/app
+    env_file:
+      - .env
