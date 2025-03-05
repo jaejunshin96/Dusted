@@ -59,6 +59,7 @@ INSTALLED_APPS = [
 	'rest_framework_simplejwt.token_blacklist',
 
 	'users',
+	'social_auth',
 ]
 
 #SOCIALACCOUNT_PROVIDERS = {
