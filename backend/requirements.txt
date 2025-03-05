@@ -91,3 +91,4 @@ yarl==1.9.4
 zope.interface==6.3
 python-dotenv==1.0.0
 django-allauth==65.4.1
+google-api-python-client==2.162.0
