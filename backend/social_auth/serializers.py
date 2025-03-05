@@ -1,7 +1,6 @@
 from rest_framework import serializers
 from rest_framework.exceptions import AuthenticationFailed
-from .models import CustomUser
-from .utils import register_social_user
+from .register import register_social_user
 from . import google
 import os
 
@@ -27,4 +26,5 @@ class GoogleSocialAuthSerializer(serializers.Serializer):
         provider = 'google'
 
         return register_social_user(
-            provider=provider, user_id=user_id, email=email, name=name)
+            provider=provider, user_id=user_id, email=email, name=name
+        )
