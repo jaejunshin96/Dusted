@@ -15,7 +15,7 @@ class UserRegisterationSerializer(serializers.ModelSerializer):
 
 	class Meta:
 		model = CustomUser
-		fields = ['id', 'email', 'username', 'password', 'password2']
+		fields = ['email', 'username', 'password', 'password2']
 
 	# we need compare the two passwords the user provides
 	def validate(self, attrs):
@@ -27,7 +27,12 @@ class UserRegisterationSerializer(serializers.ModelSerializer):
 		return attrs
 
 	def create(self, validated_data):
-		return CustomUser.objects.create_user(**validated_data)
+		user = CustomUser.objects.create_user(
+			email = validated_data['email'],
+			username = validated_data['username'],
+			password = validated_data['password'],
+		)
+		return user
 
 
 class LoginSerializer(serializers.Serializer):
