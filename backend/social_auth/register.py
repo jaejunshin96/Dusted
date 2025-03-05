@@ -26,9 +26,11 @@ def register_social_user(provider, user_id, email, name):
             user_tokens = user.tokens()
 
             return {
-                'username': registered_user.username,
                 'email': registered_user.email,
-                'tokens': registered_user.tokens()
+                'username': registered_user.username,
+                #'tokens': registered_user.tokens()
+                'access_token': str(user_tokens.get('access')),
+                'refresh_token': str(user_tokens.get('refresh'))
             }
 
         else:
@@ -55,5 +57,7 @@ def register_social_user(provider, user_id, email, name):
         return {
             'email': new_user.email,
             'username': new_user.username,
-            'tokens': new_user.tokens()
+            #'tokens': new_user.tokens()
+            'access_token': str(user_tokens.get('access')),
+            'refresh_token': str(user_tokens.get('refresh'))
         }
