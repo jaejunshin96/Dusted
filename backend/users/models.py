@@ -6,6 +6,11 @@ from rest_framework_simplejwt.tokens import RefreshToken
 
 from .managers import CustomUserManager
 
+AUTH_PROVIDERS = {
+	"email": "email",
+	"google": "google",
+}
+
 class CustomUser(AbstractBaseUser, PermissionsMixin):
     email = models.EmailField(_("email address"), unique=True)
     username = models.CharField(max_length=150, blank=True, null=True, unique=True, verbose_name=_("Username"))
@@ -14,6 +19,7 @@ class CustomUser(AbstractBaseUser, PermissionsMixin):
     is_staff = models.BooleanField(default=False)
     is_active = models.BooleanField(default=True)
     date_joined = models.DateTimeField(default=timezone.now)
+    auth_provider = models.CharField(max_length=255, blank=False, null=False, default=AUTH_PROVIDERS.get("email"))
 
     USERNAME_FIELD = "email"
     REQUIRED_FIELDS = ['username', 'first_name', 'last_name']
