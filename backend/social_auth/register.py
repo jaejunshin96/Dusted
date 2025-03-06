@@ -21,9 +21,10 @@ def register_social_user(provider, user_id, email, name):
         if provider == filtered_user_by_email[0].auth_provider:
 
             registered_user = authenticate(
-                email=email, password=os.environ.get('SOCIAL_SECRET'))
+                email=email, password=os.environ.get('SOCIAL_SECRET')
+            )
 
-            user_tokens = user.tokens()
+            user_tokens = registered_user.tokens()
 
             return {
                 'email': registered_user.email,
@@ -39,8 +40,8 @@ def register_social_user(provider, user_id, email, name):
 
     else:
         user = {
-            'username': generate_username(name),
             'email': email,
+            'username': generate_username(name),
             'password': os.environ.get('SOCIAL_SECRET')
         }
         user = CustomUser.objects.create_user(**user)
