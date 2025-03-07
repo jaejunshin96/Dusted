@@ -5,15 +5,21 @@ detach:
 	@docker compose up --build -d
 
 down:
+	@docker compose down
+
+fdown:
 	@docker compose down --volumes
 
-re-build: down all
+migrate:
+	@docker exec -it backend python manage.py migrate
+
+createsuperuser:
+	@docker exec -it backend python manage.py createsuperuser
+
+rebuild: down all
 
 watch:
 	@docker compose up --watch
-
-pop:
-	@docker exec -it django python manage.py populate_users
 
 clean: down
 	@docker system prune -a
@@ -21,4 +27,4 @@ clean: down
 fclean: down
 	@docker system prune -f -a --volumes
 
-.PHONY: all detach down re-build watch clean fclean
+.PHONY: all detach down fdown migrate createsuperuser rebuild watch clean fclean
