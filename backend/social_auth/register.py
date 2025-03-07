@@ -13,7 +13,7 @@ def generate_username(name):
         random_username = username + str(random.randint(0, 1000))
         return generate_username(random_username)
 
-def register_social_user(provider, user_id, email, name):
+def register_social_user(provider, email, name):
     filtered_user_by_email = CustomUser.objects.filter(email=email)
 
     if filtered_user_by_email.exists():
@@ -27,9 +27,9 @@ def register_social_user(provider, user_id, email, name):
             user_tokens = registered_user.tokens()
 
             return {
+                'id': registered_user.id,
                 'email': registered_user.email,
                 'username': registered_user.username,
-                #'tokens': registered_user.tokens()
                 'access_token': str(user_tokens.get('access')),
                 'refresh_token': str(user_tokens.get('refresh'))
             }
@@ -45,7 +45,7 @@ def register_social_user(provider, user_id, email, name):
             'password': os.environ.get('SOCIAL_SECRET')
         }
         user = CustomUser.objects.create_user(**user)
-        #user.is_verified = True
+        user.is_verified = True
         user.auth_provider = provider
         user.save()
 
@@ -56,9 +56,9 @@ def register_social_user(provider, user_id, email, name):
         user_tokens = new_user.tokens()
 
         return {
+            'id': new_user.id,
             'email': new_user.email,
             'username': new_user.username,
-            #'tokens': new_user.tokens()
             'access_token': str(user_tokens.get('access')),
             'refresh_token': str(user_tokens.get('refresh'))
         }

@@ -34,6 +34,8 @@ class UserRegisterationSerializer(serializers.ModelSerializer):
 		)
 		return user
 
+class EmailVerificationSerializer(serializers.ModelSerializer):
+    pass
 
 class LoginSerializer(serializers.Serializer):
 	email = serializers.EmailField()
@@ -49,7 +51,6 @@ class LoginSerializer(serializers.Serializer):
 	def validate(self, attrs):
 		email = attrs.get('email')
 		password = attrs.get('password')
-		#request = self.context.get('request')
 		filtered_user_by_email = CustomUser.objects.filter(email=email)
 		user = authenticate(email=email, password=password)
 
@@ -59,6 +60,8 @@ class LoginSerializer(serializers.Serializer):
 
 		if not user:
 			raise AuthenticationFailed(f"invalid credentials try again")
+		if not user.is_verified:
+			raise AuthenticationFailed("Email is not verified")
 
 		user_tokens = user.tokens()
 

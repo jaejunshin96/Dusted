@@ -1,8 +1,9 @@
+from django.conf import settings
+import jwt
 from rest_framework.response import Response
 from rest_framework.views import APIView
 from rest_framework.permissions import IsAuthenticated, AllowAny
-from rest_framework import generics, status
-from rest_framework_simplejwt.tokens import RefreshToken
+from rest_framework import status
 from .models import CustomUser
 from .serializers import UserSerializer, UserRegisterationSerializer, LoginSerializer, LogoutSerializer
 from .utils import Util
@@ -30,7 +31,8 @@ class RegisterUserView(APIView):
 
             user_data = serializer.data
             user = CustomUser.objects.get(email=user_data['email'])
-            token = RefreshToken.for_user(user).access_token
+
+            token = jwt.encode({"user_id": user.id}, settings.SECRET_KEY, algorithm="HS256")
 
             current_site = get_current_site(request).domain
             relative_link = reverse('verify-email')
@@ -45,9 +47,22 @@ class RegisterUserView(APIView):
             return Response(serializer.data, status=status.HTTP_201_CREATED)
         return Response({'Error': "registration view"}, serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
-class VerifyEmail(generics.GenericAPIView):
-    def get(self):
-        pass
+class VerifyEmail(APIView):
+    permission_classes = [AllowAny]
+
+    def get(self, request):
+        token = request.GET.get('token')
+        try:
+            payload = jwt.decode(token, settings.SECRET_KEY, algorithms=["HS256"])
+            user = CustomUser.objects.get(id=payload['user_id'])
+            if not user.is_verified:
+                user.is_verified = True
+                user.save()
+            return Response({'email': 'Successfully activated'}, status=status.HTTP_200_OK)
+        except jwt.ExpiredSignatureError as identifier:
+            return Response({'Error': 'Activation Expired'}, status=status.HTTP_400_BAD_REQUEST)
+        except jwt.exceptions.DecodeError as identifier:
+            return Response({'Error': 'Invalid token'}, status=status.HTTP_400_BAD_REQUEST)
 
 class LoginView(APIView):
     permission_classes = [AllowAny]

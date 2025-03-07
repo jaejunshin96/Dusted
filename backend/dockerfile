@@ -1,5 +1,10 @@
 FROM python:3.10
 
+# make it read-only files and reduce disk usage
+ENV PYTHONDONTWRITEBYTECODE 1
+# flush the console and log immediately
+ENV PYTHONUNBUFFERED 1
+
 WORKDIR /usr/src/app
 COPY requirements.txt ./
 RUN pip install --no-cache-dir -r requirements.txt

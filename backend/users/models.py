@@ -14,8 +14,7 @@ AUTH_PROVIDERS = {
 class CustomUser(AbstractBaseUser, PermissionsMixin):
     email = models.EmailField(_("email address"), unique=True)
     username = models.CharField(max_length=150, blank=True, null=True, unique=True, verbose_name=_("Username"))
-    #first_name = models.CharField(max_length=150, default="", verbose_name=_("First Name"))
-    #last_name = models.CharField(max_length=150, default="", verbose_name=_("Last Name"))
+    is_verified = models.BooleanField(default=False)
     is_staff = models.BooleanField(default=False)
     is_active = models.BooleanField(default=True)
     date_joined = models.DateTimeField(default=timezone.now)
@@ -23,7 +22,6 @@ class CustomUser(AbstractBaseUser, PermissionsMixin):
 
     USERNAME_FIELD = "email"
     REQUIRED_FIELDS = ['username']
-    #REQUIRED_FIELDS = ['username', 'first_name', 'last_name']
 
     objects = CustomUserManager()
 
