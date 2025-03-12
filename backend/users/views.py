@@ -116,6 +116,7 @@ class PasswordTokenCheckAPI(APIView):
     permission_classes = [AllowAny]
 
     def get(self, request, uidb64, token):
+        #add redirect_url to the url to redirect to the frontend
         redirecte_url = request.GET.get('redirect_url')
 
         try:
