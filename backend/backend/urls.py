@@ -22,8 +22,9 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path('token/', TokenObtainPairView.as_view(), name='token_obtain_pair'),
     path('token_refresh/', TokenRefreshView.as_view(), name='token_refresh'),
-	path('api/', include('users.urls'), name='users'),
 	path('social_auth/', include('social_auth.urls'), name='social_auth'),
-	path('films/', include('reviews.urls'), name='films'),
+	path('api/', include('users.urls'), name='users'),
+	path('api/review/', include('reviews.urls'), name='review'),
+	path('api/film/', include('films.urls'), name='film'),
 ]
 
