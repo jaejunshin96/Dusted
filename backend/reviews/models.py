@@ -3,7 +3,7 @@ from django.conf import settings
 from django.core.validators import MinValueValidator, MaxValueValidator
 
 # Create your models here.
-class Reviews(models.Model):
+class Review(models.Model):
 	user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
 	title = models.CharField(max_length=255)
 	review = models.TextField()
