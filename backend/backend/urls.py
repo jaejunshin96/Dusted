@@ -24,6 +24,6 @@ urlpatterns = [
     path('token_refresh/', TokenRefreshView.as_view(), name='token_refresh'),
 	path('api/', include('users.urls'), name='users'),
 	path('social_auth/', include('social_auth.urls'), name='social_auth'),
-	path('films/', include('reviews.urls'), name='reviews'),
+	path('films/', include('reviews.urls'), name='films'),
 ]
 
