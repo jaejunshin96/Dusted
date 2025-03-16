@@ -1,4 +1,5 @@
 from django.conf import settings
+from django.shortcuts import redirect
 import jwt
 from rest_framework.response import Response
 from rest_framework.views import APIView
@@ -13,6 +14,10 @@ from django.contrib.auth.tokens import PasswordResetTokenGenerator
 from django.urls import reverse
 from django.utils.http import urlsafe_base64_encode, urlsafe_base64_decode
 from django.utils.encoding import smart_bytes, smart_str, DjangoUnicodeDecodeError
+import os
+from dotenv import load_dotenv
+
+load_dotenv()
 
 class UserDetailAPIView(APIView):
     permission_classes = [IsAuthenticated]
@@ -62,10 +67,30 @@ class VerifyEmail(APIView):
             if not user.is_verified:
                 user.is_verified = True
                 user.save()
-            return Response({'email': 'Successfully activated'}, status=status.HTTP_200_OK)
+            frontend_url = os.getenv("FRONTEND_URL", "http://localhost:5173")
+            activation_confirm_url = f"{frontend_url}/activation-confirm?token={token}"
+            return redirect(activation_confirm_url)
+            #return Response({'email': 'Successfully activated'}, status=status.HTTP_200_OK)
         except jwt.ExpiredSignatureError as identifier:
             return Response({'Error': 'Activation Expired'}, status=status.HTTP_400_BAD_REQUEST)
         except jwt.exceptions.DecodeError as identifier:
+            return Response({'Error': 'Invalid token'}, status=status.HTTP_400_BAD_REQUEST)
+
+class ValidateActivationToken(APIView):
+    permission_classes = [AllowAny]
+
+    def get(self, request):
+        token = request.GET.get('token')
+        try:
+            payload = jwt.decode(token, settings.SECRET_KEY, algorithms=["HS256"])
+            user = CustomUser.objects.get(id=payload['user_id'])
+
+            if user.is_verified:
+                return Response({'success': True}, status=status.HTTP_200_OK)
+            return Response({'Error': 'User not verified'}, status=status.HTTP_400_BAD_REQUEST)
+        except jwt.ExpiredSignatureError:
+            return Response({'Error': 'Token expired'}, status=status.HTTP_400_BAD_REQUEST)
+        except jwt.DecodeError:
             return Response({'Error': 'Invalid token'}, status=status.HTTP_400_BAD_REQUEST)
 
 class LoginView(APIView):
@@ -104,7 +129,7 @@ class RequestPasswordResetEmail(APIView):
                 redirect_url = request.data.get('redirect_url', '')
 
                 absurl = 'http://' + current_site + relative_link
-                email_body = 'Hello, \n Use link below to reset your password \n' + absurl + "?redirect_url=" + redirect_url
+                email_body = 'Hello, \n Use link below to reset your password \n' + absurl
                 data = {'email_body': email_body, 'to_email': user.email,
                         'email_subject': 'Reset your password'}
 
@@ -117,7 +142,7 @@ class PasswordTokenCheckAPI(APIView):
 
     def get(self, request, uidb64, token):
         #add redirect_url to the url to redirect to the frontend
-        redirecte_url = request.GET.get('redirect_url')
+        #redirecte_url = request.GET.get('redirect_url')
 
         try:
             id = smart_str(urlsafe_base64_decode(uidb64))
@@ -126,7 +151,10 @@ class PasswordTokenCheckAPI(APIView):
             if not PasswordResetTokenGenerator().check_token(user, token):
                 return Response({'Error': 'Token is not valid, please request a new one'}, status=status.HTTP_401_UNAUTHORIZED)
 
-            return Response({'success': True, 'message': 'Credentials Valid', 'uidb64': uidb64, 'token': token}, status=status.HTTP_200_OK)
+            frontend_url = os.getenv("FRONTEND_URL", "http://localhost:5173")
+            password_reset_complete_url = f"{frontend_url}/password-reset-complete?uidb64={uidb64}&token={token}"
+            return redirect(password_reset_complete_url)
+            #return Response({'success': True, 'message': 'Credentials Valid', 'uidb64': uidb64, 'token': token}, status=status.HTTP_200_OK)
         except DjangoUnicodeDecodeError as identifier:
             return Response({'Error': 'Token is not valid, please request a new one'}, status=status.HTTP_401_UNAUTHORIZED)
 
