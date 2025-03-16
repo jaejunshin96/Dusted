@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
 
 interface ResetResponse {
@@ -15,21 +15,27 @@ const NewPasswordPage: React.FC = () => {
   const navigate = useNavigate();
   const location = useLocation();
 
+  const searchParams = new URLSearchParams(location.search);
+  const uidb64 = searchParams.get("uidb64");
+  const token = searchParams.get("token");
+
+  useEffect(() => {
+    if (!uidb64 || !token) {
+      navigate("/"); // Redirect to home if token is invalid
+    }
+  }, [uidb64, token, navigate]);
+
   const handleResetPassword = async (e: React.FormEvent) => {
     e.preventDefault();
     setError(null);
 
-    if (password !== password2) {
-      setError("Passwords do not match");
+    if (!uidb64 || !token) {
+      setError("Invalid reset link.");
       return;
     }
 
-    const searchParams = new URLSearchParams(location.search);
-    const uidb64 = searchParams.get("uidb64");
-    const token = searchParams.get("token");
-
-    if (!uidb64 || !token) {
-      setError("Invalid reset link.");
+    if (password !== password2) {
+      setError("Passwords do not match");
       return;
     }
 

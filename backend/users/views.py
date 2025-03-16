@@ -126,7 +126,6 @@ class RequestPasswordResetEmail(APIView):
 
                 current_site = get_current_site(request).domain
                 relative_link = reverse('password-reset-confirm', kwargs={'uidb64': uidb64, 'token': token})
-                redirect_url = request.data.get('redirect_url', '')
 
                 absurl = 'http://' + current_site + relative_link
                 email_body = 'Hello, \n Use link below to reset your password \n' + absurl
@@ -137,24 +136,24 @@ class RequestPasswordResetEmail(APIView):
                 return Response({'success': 'We have sent you a link to reset your password'}, status=status.HTTP_200_OK)
             return Response({'Error': 'Email not found'}, status=status.HTTP_404_NOT_FOUND)
 
-class PasswordTokenCheckAPI(APIView):
+class PasswordResetTokenConfirm(APIView):
     permission_classes = [AllowAny]
 
     def get(self, request, uidb64, token):
-        #add redirect_url to the url to redirect to the frontend
-        #redirecte_url = request.GET.get('redirect_url')
-
         try:
             id = smart_str(urlsafe_base64_decode(uidb64))
             user = CustomUser.objects.get(id=id)
 
             if not PasswordResetTokenGenerator().check_token(user, token):
-                return Response({'Error': 'Token is not valid, please request a new one'}, status=status.HTTP_401_UNAUTHORIZED)
+                #I guess this should be a redirect to the frontend 404 page?
+                #return Response({'Error': 'Token is not valid, please request a new one'}, status=status.HTTP_401_UNAUTHORIZED)
+                frontend_url = os.getenv("FRONTEND_URL", "http://localhost:5173")
+                frontend_404_url = f'{frontend_url}/404'
+                return redirect(frontend_404_url)
 
             frontend_url = os.getenv("FRONTEND_URL", "http://localhost:5173")
             password_reset_complete_url = f"{frontend_url}/password-reset-complete?uidb64={uidb64}&token={token}"
             return redirect(password_reset_complete_url)
-            #return Response({'success': True, 'message': 'Credentials Valid', 'uidb64': uidb64, 'token': token}, status=status.HTTP_200_OK)
         except DjangoUnicodeDecodeError as identifier:
             return Response({'Error': 'Token is not valid, please request a new one'}, status=status.HTTP_401_UNAUTHORIZED)
 
