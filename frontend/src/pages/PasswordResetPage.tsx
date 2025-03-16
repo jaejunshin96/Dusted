@@ -11,7 +11,7 @@ const PasswordResetPage: React.FC = () => {
 
   const handleResetRequest = async (e: React.FormEvent) => {
     e.preventDefault();
-    const response = await fetch("http://127.0.0.1:8000/api/request-reset-email/", {
+    const response = await fetch("http://127.0.0.1:8000/api/request-password-reset-email/", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ email }),

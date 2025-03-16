@@ -6,12 +6,14 @@ import ActivationConfirmPage from "./pages/ActivationConfirmPage";
 import PasswordResetPage from "./pages/PasswordResetPage";
 import NewPasswordPage from "./pages/NewPasswordPage";
 import HomePage from "./pages/HomePage";
+import NotFoundPage from "./pages/NotFoundPage";
 import "./App.css";
 
 function App() {
 	return (
 	  <Router>
 		<Routes>
+		  <Route path="*" element={<NotFoundPage />} />
 		  <Route path="/" element={<HomePage />} />
 		  <Route path="/login" element={<LoginPage />} />
 		  <Route path="/register" element={<RegisterPage />} />
