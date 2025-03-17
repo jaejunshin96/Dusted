@@ -37,7 +37,6 @@ ALLOWED_HOSTS = []
 
 # Application definition
 
-#SITE_ID = 2
 
 INSTALLED_APPS = [
     'django.contrib.admin',
@@ -57,18 +56,6 @@ INSTALLED_APPS = [
 	'reviews',
 	'films',
 ]
-
-#SOCIALACCOUNT_PROVIDERS = {
-#	'google': {
-#		'SCOPE': [
-#			'email',
-#			'profile',
-#		],
-#		'AUTH_PARAMS': {
-#			'access_type': 'online',
-#		}
-#	}
-#}
 
 MIDDLEWARE = [
     "corsheaders.middleware.CorsMiddleware",
