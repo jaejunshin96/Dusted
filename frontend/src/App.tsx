@@ -7,23 +7,34 @@ import PasswordResetPage from "./pages/PasswordResetPage";
 import NewPasswordPage from "./pages/NewPasswordPage";
 import HomePage from "./pages/HomePage";
 import NotFoundPage from "./pages/NotFoundPage";
+import { AuthProvider } from "./utils/useAuth";
+import ProtectedRoute from "./utils/ProtectedRoute";
 import "./App.css";
 
 function App() {
-	return (
-	  <Router>
-		<Routes>
-		  <Route path="*" element={<NotFoundPage />} />
-		  <Route path="/" element={<HomePage />} />
-		  <Route path="/login" element={<LoginPage />} />
-		  <Route path="/register" element={<RegisterPage />} />
-		  <Route path="/verify-email" element={<VerifyEmailPage />} />
-		  <Route path="/activation-confirm" element={<ActivationConfirmPage />} />
-		  <Route path="/password-reset" element={<PasswordResetPage />} />
-		  <Route path="/password-reset-complete" element={<NewPasswordPage />} />
-		</Routes>
-	  </Router>
-	);
-  }
+  return (
+    <AuthProvider>
+      <Router>
+        <Routes>
+          {/* authenticated access */}
+          <Route element={<ProtectedRoute />}>
+            <Route path="/" element={<HomePage />} />
+          </Route>
 
-  export default App;
+          {/* public access */}
+          <Route path="/login" element={<LoginPage />} />
+          <Route path="/register" element={<RegisterPage />} />
+          <Route path="/verify-email" element={<VerifyEmailPage />} />
+          <Route path="/activation-confirm" element={<ActivationConfirmPage />} />
+          <Route path="/password-reset" element={<PasswordResetPage />} />
+          <Route path="/password-reset-complete" element={<NewPasswordPage />} />
+
+          {/* 404 */}
+          <Route path="*" element={<NotFoundPage />} />
+        </Routes>
+      </Router>
+    </AuthProvider>
+  );
+}
+
+export default App;
