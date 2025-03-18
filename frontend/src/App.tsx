@@ -1,14 +1,14 @@
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
-import LoginPage from "./pages/LoginPage";
-import RegisterPage from "./pages/RegisterPage";
-import VerifyEmailPage from "./pages/VerifyEmailPage";
-import ActivationConfirmPage from "./pages/ActivationConfirmPage";
-import PasswordResetPage from "./pages/PasswordResetPage";
-import NewPasswordPage from "./pages/NewPasswordPage";
+import LoginPage from "./pages/authentications/LoginPage";
+import RegisterPage from "./pages/authentications/RegisterPage";
+import VerifyEmailPage from "./pages/authentications/VerifyEmailPage";
+import ActivationConfirmPage from "./pages/authentications/ActivationConfirmPage";
+import PasswordResetPage from "./pages/authentications/PasswordResetPage";
+import NewPasswordPage from "./pages/authentications/NewPasswordPage";
 import HomePage from "./pages/HomePage";
-import NotFoundPage from "./pages/NotFoundPage";
-import { AuthProvider } from "./utils/useAuth";
-import ProtectedRoute from "./utils/ProtectedRoute";
+import NotFoundPage from "./pages/404/NotFoundPage";
+import { AuthProvider } from "./utils/authentications/useAuth";
+import ProtectedRoute from "./utils/authentications/ProtectedRoute";
 import "./App.css";
 
 function App() {
