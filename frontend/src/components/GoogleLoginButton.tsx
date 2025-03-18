@@ -11,9 +11,10 @@ const GoogleLoginButton = () => {
         auth_token: response.credential, // Send Google token to Django backend
       });
 
+      localStorage.setItem("email", res.data.email);
+      localStorage.setItem("username", res.data.username);
       localStorage.setItem("access_token", res.data.access_token);
       localStorage.setItem("refresh_token", res.data.refresh_token);
-      alert("Google login Successful!");
       navigate("/");
     } catch (error) {
       console.error("Google Login Failed:", error);

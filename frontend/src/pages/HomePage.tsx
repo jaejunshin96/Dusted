@@ -1,29 +1,48 @@
 import { Link } from "react-router-dom";
-import { GoogleOAuthProvider } from "@react-oauth/google";
-import GoogleLoginButton from "./GoogleLoginButton";
+import { useAuth } from "../utils/useAuth";
+import LogoutButton from "../components/LogoutButton";
 
 const HomePage: React.FC = () => {
+  const fetchUserProfile = async () => {
+    const token = localStorage.getItem("access_token");
+    const username = localStorage.getItem("username");
+    if (!token) {
+      console.log("User is not authenticated.");
+      return;
+    }
+
+    try {
+      const response = await fetch(`http://127.0.0.1:8000/api/user/${username}`, {
+        method: "GET",
+        headers: {
+          "Authorization": `Bearer ${token}`,
+        },
+      });
+
+      if (response.ok) {
+        const userData = await response.json();
+        console.log("User Profile:", userData);
+      } else {
+        console.log("Failed to fetch user profile.");
+      }
+    } catch (error) {
+      console.error("Error fetching user:", error);
+    }
+  };
+
+  const username = localStorage.getItem("username");
+
   return (
     <div>
-      <h1>Welcome to Dusty</h1>
-      <p>Please log in or register to continue.</p>
+      <h1>Welcome to Dusted</h1>
+      <p>
+        You are logged in as <strong>{username}</strong>.
+      </p>
       <div>
-        <Link to="/login">
-          <button>Login</button>
-        </Link>
+        <LogoutButton />
       </div>
-      <div>
-        <Link to="/register">
-          <button>Register</button>
-        </Link>
-      </div>
-      <GoogleOAuthProvider clientId={import.meta.env.VITE_GOOGLE_CLIENT_ID}>
-        <div>
-          <GoogleLoginButton />
-        </div>
-      </GoogleOAuthProvider>
     </div>
-  );
+  )
 };
 
 export default HomePage;

@@ -1,8 +1,13 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { GoogleOAuthProvider } from "@react-oauth/google";
+import GoogleLoginButton from "../components/GoogleLoginButton";
 
 interface LoginResponse {
-  token: string;
+  email: string;
+  username: string;
+  access_token: string;
+  refresh_token: string;
 }
 
 const LoginPage: React.FC = () => {
@@ -23,9 +28,13 @@ const LoginPage: React.FC = () => {
       });
 
       const data: LoginResponse = await response.json();
-      if (!response.ok) throw new Error(data.token || "Login failed");
+      if (!response.ok) throw new Error(data.access_token || "Login failed");
 
-      localStorage.setItem("token", data.token);
+      localStorage.setItem("email", data.email);
+      localStorage.setItem("username", data.username);
+      localStorage.setItem("access_token", data.access_token);
+      localStorage.setItem("refresh_token", data.refresh_token);
+      console.log(data);
       navigate("/");
     } catch (err: any) {
       setError(err.message);
@@ -56,6 +65,9 @@ const LoginPage: React.FC = () => {
       <p>
         <a href="/register">Register</a> | <a href="/password-reset">Forgot Password?</a>
       </p>
+	    <GoogleOAuthProvider clientId={import.meta.env.VITE_GOOGLE_CLIENT_ID}>
+        <GoogleLoginButton />
+      </GoogleOAuthProvider>
     </div>
   );
 };
