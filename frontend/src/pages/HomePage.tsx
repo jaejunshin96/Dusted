@@ -1,4 +1,5 @@
 import LogoutButton from "../components/LogoutButton";
+import MovieSearch from "../components/MovieSearch";
 
 const HomePage: React.FC = () => {
   const username = localStorage.getItem("username");
@@ -9,6 +10,7 @@ const HomePage: React.FC = () => {
       <p>
         You are logged in as <strong>{username}</strong>.
       </p>
+      <MovieSearch />
       <div>
         <LogoutButton />
       </div>
