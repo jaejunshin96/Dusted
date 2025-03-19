@@ -2,6 +2,7 @@ import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { GoogleOAuthProvider } from "@react-oauth/google";
 import GoogleLoginButton from "../../components/GoogleLoginButton";
+import axios from "axios";
 
 interface LoginResponse {
   email: string;
@@ -21,23 +22,22 @@ const LoginPage: React.FC = () => {
     setError(null);
 
     try {
-      const response = await fetch("http://127.0.0.1:8000/api/login/", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ email, password }),
+      const response = await axios.post("http://127.0.0.1:8000/api/login/", {
+        email,
+        password,
       });
 
-      const data: LoginResponse = await response.json();
-      if (!response.ok) throw new Error(data.access_token || "Login failed");
+      const data: LoginResponse = response.data;
 
       localStorage.setItem("email", data.email);
       localStorage.setItem("username", data.username);
       localStorage.setItem("access_token", data.access_token);
       localStorage.setItem("refresh_token", data.refresh_token);
+
       console.log(data);
       navigate("/");
     } catch (err: any) {
-      setError(err.message);
+      setError(err.response?.data?.message || "Login failed");
     }
   };
 
@@ -65,9 +65,9 @@ const LoginPage: React.FC = () => {
       <p>
         <a href="/register">Register</a> | <a href="/password-reset">Forgot Password?</a>
       </p>
-	    <GoogleOAuthProvider clientId={import.meta.env.VITE_GOOGLE_CLIENT_ID}>
-        <GoogleLoginButton />
-      </GoogleOAuthProvider>
+        <GoogleOAuthProvider clientId={import.meta.env.VITE_GOOGLE_CLIENT_ID}>
+          <GoogleLoginButton />
+        </GoogleOAuthProvider>
     </div>
   );
 };

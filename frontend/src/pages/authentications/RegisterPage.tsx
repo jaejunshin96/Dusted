@@ -1,4 +1,5 @@
 import { useState } from "react";
+import axios from "axios";
 
 interface RegisterResponse {
   success?: string;
@@ -18,18 +19,14 @@ const RegisterPage: React.FC = () => {
     setError(null);
 
     try {
-      const response = await fetch("http://127.0.0.1:8000/api/register/", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ username, email, password, password2 }),
-      });
-
-      const data: RegisterResponse = await response.json();
-      if (!response.ok) throw new Error(data.Error || "Registration failed");
+      const response = await axios.post("http://127.0.0.1:8000/api/register/",
+        { username, email, password, password2 },
+        { headers: { "Content-Type": "application/json" } }
+      );
 
       setMessage("Registration successful. Please check your email for verification.");
     } catch (err: any) {
-      setError(err.message);
+      setError(err.response?.data?.Error || "Registration failed");
     }
   };
 

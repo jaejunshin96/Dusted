@@ -1,4 +1,5 @@
 import { useState } from "react";
+import axios from "axios";
 
 interface PasswordResetResponse {
   success?: string;
@@ -11,14 +12,16 @@ const PasswordResetPage: React.FC = () => {
 
   const handleResetRequest = async (e: React.FormEvent) => {
     e.preventDefault();
-    const response = await fetch("http://127.0.0.1:8000/api/request-password-reset-email/", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ email }),
-    });
 
-    const data: PasswordResetResponse = await response.json();
-    setMessage(data.success || data.Error || "An unexpected error occurred.");
+    try {
+      const response = await axios.post("http://127.0.0.1:8000/api/request-password-reset-email/",
+        { email },
+        { headers: { "Content-Type": "application/json" } }
+      );
+      setMessage(response.data.success || "Password reset link sent.");
+    } catch (err: any) {
+      setMessage(err.response?.data?.Error || "An unexpected error occurred.");
+    }
   };
 
   return (
