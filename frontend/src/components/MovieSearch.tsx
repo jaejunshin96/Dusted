@@ -69,6 +69,7 @@ const styles = {
     width: "100%", // Matches the container width
     padding: "8px",
     fontSize: "16px",
+    boxSizing: "border-box" as const,
   },
   list: {
     width: "100%", // Matches the container width
@@ -76,12 +77,16 @@ const styles = {
     listStyleType: "none",
     padding: 0,
     marginTop: "10px",
+    boxSizing: "border-box"  as const,
+    maxHeight: "200px", // Limit height to show up to 5 items
+    overflowY: "auto" as "auto", // Enable scrolling when more than 5 items
   },
   listItem: {
-    //width: "100%", // Matches the container width
+    width: "100%", // Matches the container width
     padding: "8px",
     cursor: "pointer",
     borderBottom: "1px solid #ddd",
+    boxSizing: "border-box" as const,
   },
 };
 
