@@ -1,29 +1,25 @@
+import axios from "axios";
+
 const refreshAccessToken = async () => {
-	const refreshToken = localStorage.getItem("refresh_token");
-	if (!refreshToken) {
-	  console.log("No refresh token found. User must log in.");
-	  return null;
-	}
+  const refreshToken = localStorage.getItem("refresh_token");
 
-	try {
-	  const response = await fetch("http://127.0.0.1:8000/token_refresh/", {
-		method: "POST",
-		headers: { "Content-Type": "application/json" },
-		body: JSON.stringify({ refresh: refreshToken }),
-	  });
+  if (!refreshToken) {
+    console.log("No refresh token found. User must log in.");
+    return null;
+  }
 
-	  if (response.ok) {
-		const data = await response.json();
-		localStorage.setItem("access_token", data.access);
-		return data.access;
-	  } else {
-		console.log("Failed to refresh token. User must re-login.");
-		return null;
-	  }
-	} catch (error) {
-	  console.error("Error refreshing token:", error);
-	  return null;
-	}
-  };
+  try {
+    const response = await axios.post("http://127.0.0.1:8000/token_refresh/",
+      { refresh: refreshToken },
+      { headers: { "Content-Type": "application/json" } }
+    );
 
-  export default refreshAccessToken;
+    localStorage.setItem("access_token", response.data.access);
+    return response.data.access;
+  } catch (error: any) {
+    console.error("Error refreshing token:", error.response?.data || error);
+    return null;
+  }
+};
+
+export default refreshAccessToken;

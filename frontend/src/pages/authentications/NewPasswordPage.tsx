@@ -1,5 +1,6 @@
 import { useState, useEffect } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
+import axios from "axios";
 
 interface ResetResponse {
   success?: boolean;
@@ -40,19 +41,15 @@ const NewPasswordPage: React.FC = () => {
     }
 
     try {
-      const response = await fetch("http://127.0.0.1:8000/api/password-reset-complete/", {
-        method: "PATCH",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ uidb64, token, password, password2}),
-      });
-
-      const data: ResetResponse = await response.json();
-      if (!response.ok) throw new Error(data.Error || "Password reset failed");
+      const response = await axios.patch("http://127.0.0.1:8000/api/password-reset-complete/",
+        { uidb64, token, password, password2 },
+        { headers: { "Content-Type": "application/json" } }
+      );
 
       setMessage("Password reset successful. Redirecting to login...");
       setTimeout(() => navigate("/login"), 3000);
     } catch (err: any) {
-      setError(err.message);
+      setError(err.response?.data?.Error || "Password reset failed");
     }
   };
 
