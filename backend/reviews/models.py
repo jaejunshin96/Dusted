@@ -9,6 +9,7 @@ class Review(models.Model):
 	title = models.CharField(max_length=255)
 	review = models.TextField()
 	rating = models.FloatField(validators=[MinValueValidator(0), MaxValueValidator(5)])
+	image_path = models.URLField(max_length=500, null=True, blank=True)
 	created_at = models.DateTimeField(auto_now_add=True)
 	updated_at = models.DateTimeField(auto_now=True)
 
