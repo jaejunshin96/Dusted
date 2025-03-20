@@ -10,7 +10,9 @@ const HomePage: React.FC = () => {
       <p>
         You are logged in as <strong>{username}</strong>.
       </p>
-      <MovieSearch />
+      <div>
+        <MovieSearch />
+      </div>
       <div>
         <LogoutButton />
       </div>
