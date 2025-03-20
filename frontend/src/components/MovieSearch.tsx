@@ -82,7 +82,12 @@ const MovieSearch = () => {
         ))}
       </ul>
 
-      {selectedMovie && <MovieModal movie={selectedMovie} onClose={handleCloseModal} />}
+      {selectedMovie && (
+        <MovieModal
+          movie={selectedMovie}
+          onClose={handleCloseModal}
+        />
+      )}
     </div>
   );
 };
