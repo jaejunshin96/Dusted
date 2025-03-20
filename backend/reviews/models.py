@@ -5,6 +5,7 @@ from django.core.validators import MinValueValidator, MaxValueValidator
 # Create your models here.
 class Review(models.Model):
 	user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
+	movie_id = models.IntegerField(null=False, default=0)
 	title = models.CharField(max_length=255)
 	review = models.TextField()
 	rating = models.FloatField(validators=[MinValueValidator(0), MaxValueValidator(5)])
