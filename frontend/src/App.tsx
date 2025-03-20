@@ -9,6 +9,7 @@ import HomePage from "./pages/HomePage";
 import NotFoundPage from "./pages/404/NotFoundPage";
 import { AuthProvider } from "./utils/authentications/useAuth";
 import ProtectedRoute from "./utils/authentications/ProtectedRoute";
+import ReviewCollectionPage from "./pages/ReviewCollectionPage";
 import "./App.css";
 
 function App() {
@@ -19,6 +20,7 @@ function App() {
           {/* authenticated access */}
           <Route element={<ProtectedRoute />}>
             <Route path="/" element={<HomePage />} />
+            <Route path="/reviews" element={<ReviewCollectionPage />} />
           </Route>
 
           {/* public access */}

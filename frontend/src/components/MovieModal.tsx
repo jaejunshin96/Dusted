@@ -31,6 +31,7 @@ const MovieModal: React.FC<MovieModalProps> = ({ movie, onClose }) => {
           title: movie.title,
           rating: rating,
           review: reviewText,
+          image_path: `https://image.tmdb.org/t/p/original${movie.backdrop_path}`,
         },
         {
           headers: {
@@ -87,13 +88,13 @@ const MovieModal: React.FC<MovieModalProps> = ({ movie, onClose }) => {
           color: "white",
           boxShadow: "0 0 10px rgba(0,0,0,0.7)",
           position: "relative",
-          animation: "slideUp 0.3s ease",
+          animation: "slideUp 1.0s ease",
         }}
         onClick={(e) => e.stopPropagation()}
       >
         {!writingReview ? (
           <>
-            <h2>{movie.title}</h2>
+            <h2>{movie.title} ({movie.original_title})</h2>
             <p><strong>Release Date:</strong> {movie.release_date}</p>
             <p><strong>Overview:</strong> {movie.overview || "No description available."}</p>
 

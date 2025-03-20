@@ -23,11 +23,11 @@ const MovieListItem: React.FC<MovieListItemProps> = ({ movie, onClick }) => {
         boxSizing: "border-box",
         opacity: isVisible ? 1 : 0,
         transform: isVisible ? "translateY(0)" : "translateY(10px)",
-        transition: "opacity 0.4s ease, transform 0.4s ease",
+        transition: "opacity 1.0s ease, transform 1.0s ease",
       }}
       onClick={() => onClick(movie)}
     >
-      {movie.title}
+      {movie.title} ({movie.original_title}) ({movie.release_date})
     </li>
   );
 };
