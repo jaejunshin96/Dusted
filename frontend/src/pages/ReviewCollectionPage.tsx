@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from "react";
-import axios from "axios";
 import { Container, Row, Col, Card, CardBody, CardTitle, CardText } from "reactstrap";
 import { useNavigate } from "react-router-dom";
 import { Url } from "url";
@@ -19,7 +18,7 @@ const ReviewCollectionPage: React.FC = () => {
   const [reviews, setReviews] = useState<Review[]>([]);
   const [errorMessage, setErrorMessage] = useState("");
   const username = localStorage.getItem("username") || "User";
-  const navigate = useNavigate();
+  //const navigate = useNavigate();
 
   useEffect(() => {
     const fetchReviews = async () => {
@@ -45,7 +44,7 @@ const ReviewCollectionPage: React.FC = () => {
         {reviews.slice(0, 9).map((review) => ( // Limiting to 9 items to form a perfect 3x3 grid
           <Card
             key={review.id}
-            onClick={() => navigate(`/movie/${review.movie_id}`)}
+            //onClick={() => navigate(`/movie/${review.movie_id}`)}
             style={{
               backgroundImage: review.image_path
                 ? `url(https://image.tmdb.org/t/p/original${review.image_path})`

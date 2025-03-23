@@ -1,5 +1,5 @@
 import { useState } from "react";
-import axios from "axios";
+import authAxios from "../utils/authentications/authFetch";
 import LoadingErrorItem from "./LoadingErrorItem";
 import MovieListItem from "./MovieListItem";
 import MovieModal from "./MovieModal";
@@ -39,7 +39,8 @@ const MovieSearch = () => {
     setError("");
 
     try {
-      const response = await axios.get("http://127.0.0.1:8000/api/film/search/", {
+      const response = await authAxios("http://127.0.0.1:8000/api/film/search/", {
+        method: "GET",
         params: { query: searchTerm },
       });
       setMovies(response.data.results || []);

@@ -13,7 +13,7 @@ class ReviewsList(APIView):
 	def get(self, request):
 		reviews = Review.objects.filter(user=request.user).order_by('-created_at')
 		paginator = PageNumberPagination()
-		paginator.page_size = 5
+		paginator.page_size = 9
 		result_page = paginator.paginate_queryset(reviews, request)
 		serializer = ReviewsSerializer(result_page, many=True)
 		return paginator.get_paginated_response(serializer.data)
