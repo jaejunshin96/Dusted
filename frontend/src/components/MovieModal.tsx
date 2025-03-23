@@ -95,6 +95,7 @@ const MovieModal: React.FC<MovieModalProps> = ({ movie, onClose }) => {
         {!writingReview ? (
           <>
             <h2>{movie.title} ({movie.original_title})</h2>
+            <p><strong>Director:</strong> {movie.directors}</p>
             <p><strong>Release Date:</strong> {movie.release_date}</p>
             <p><strong>Overview:</strong> {movie.overview || "No description available."}</p>
 
