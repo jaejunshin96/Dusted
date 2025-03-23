@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import axios from "axios";
 import LoadingErrorItem from "./LoadingErrorItem";
 import MovieListItem from "./MovieListItem";
@@ -20,20 +20,18 @@ const MovieSearch = () => {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
   const [selectedMovie, setSelectedMovie] = useState<Movie | null>(null);
-  let debounceTimeout: NodeJS.Timeout;
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const value = e.target.value;
-    setQuery(value);
+    setQuery(e.target.value);
+  };
 
-    clearTimeout(debounceTimeout);
-    debounceTimeout = setTimeout(() => {
-      if (value.length > 1) {
-        fetchMovies(value);
-      } else {
-        setMovies([]);
-      }
-    }, 500);
+  const handleSearch = () => {
+    if (query.trim().length > 1) {
+      fetchMovies(query);
+    } else {
+      setMovies([]);
+      setError("Please enter at least 2 characters.");
+    }
   };
 
   const fetchMovies = async (searchTerm: string) => {
@@ -57,23 +55,28 @@ const MovieSearch = () => {
 
   return (
     <div style={{
-      display: "flex",           // Makes the parent a flex container
-      flexDirection: "column",    // Stacks children vertically
-      alignItems: "center",       // Centers children horizontally
+      display: "flex",
+      flexDirection: "column",
+      alignItems: "center",
     }}>
-      <input
-        type="text"
-        placeholder="Search for a movie..."
-        value={query}
-        onChange={handleInputChange}
-        style={{ width: "100%", padding: "8px", fontSize: "16px" }}
-      />
+      <div style={{ display: "flex", gap: "10px", marginBottom: "10px", width: "100%" }}>
+        <input
+          type="text"
+          placeholder="Search for a movie..."
+          value={query}
+          onChange={handleInputChange}
+          style={{ flex: 1, padding: "8px", fontSize: "16px" }}
+        />
+        <button onClick={handleSearch} style={{ padding: "8px 16px", cursor: "pointer" }}>
+          Search
+        </button>
+      </div>
+
       <ul style={{
         width: "100%",
         border: "1px solid #ddd",
         padding: 0,
-        marginTop: "10px",
-        maxHeight: "250px",            // Increased height for more visibility
+        maxHeight: "250px",
         overflowY: "auto",
         listStyleType: "none",
       }}>

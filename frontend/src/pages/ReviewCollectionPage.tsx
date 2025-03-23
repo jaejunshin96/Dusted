@@ -3,6 +3,7 @@ import axios from "axios";
 import { Container, Row, Col, Card, CardBody, CardTitle, CardText } from "reactstrap";
 import { useNavigate } from "react-router-dom";
 import { Url } from "url";
+import authAxios from "../utils/authentications/authFetch";
 
 interface Review {
   id: number;
@@ -23,11 +24,7 @@ const ReviewCollectionPage: React.FC = () => {
   useEffect(() => {
     const fetchReviews = async () => {
       try {
-        const response = await axios.get("http://localhost:8000/api/review/reviews/", {
-          headers: {
-            "Authorization": `Bearer ${localStorage.getItem("access_token")}`,
-          },
-        });
+        const response = await authAxios("http://localhost:8000/api/review/reviews/");
         setReviews(response.data.results); // Assuming paginated results
       } catch (error) {
         console.error("Failed to fetch reviews", error);
