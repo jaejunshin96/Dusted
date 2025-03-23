@@ -44,8 +44,11 @@ class SearchMovieAPIView(APIView):
 
                     movies_with_directors.append(movie)
 
+            # Sort movies by popularity in descending order
+            sorted_movies = sorted(movies_with_directors, key=lambda m: m.get('popularity', 0), reverse=True)
+
             # Send the modified response
-            data['results'] = movies_with_directors
+            data['results'] = sorted_movies
             return Response(data, status=status.HTTP_200_OK)
 
         except requests.RequestException as e:
