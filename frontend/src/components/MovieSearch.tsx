@@ -66,8 +66,10 @@ const MovieSearch = () => {
           placeholder="Search for a movie..."
           value={query}
           onChange={handleInputChange}
+          onKeyDown={(e) => e.key === "Enter" && handleSearch()}
           style={{ flex: 1, padding: "8px", fontSize: "16px" }}
         />
+
         <button onClick={handleSearch} style={{ padding: "8px 16px", cursor: "pointer" }}>
           Search
         </button>

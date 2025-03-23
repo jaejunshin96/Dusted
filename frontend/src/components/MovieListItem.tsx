@@ -27,7 +27,10 @@ const MovieListItem: React.FC<MovieListItemProps> = ({ movie, onClick }) => {
       }}
       onClick={() => onClick(movie)}
     >
-      {movie.title} ({movie.directors})
+      <div>
+        <div>{movie.title}</div>
+        <div>(Directed by {movie.directors.join(", ")})</div>
+      </div>
     </li>
   );
 };
