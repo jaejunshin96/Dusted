@@ -8,6 +8,7 @@ export interface Movie {
   id: number;
   original_title: string;
   title: string;
+  directors: [string];
   overview: string;
   backdrop_path: string | null;
   release_date: string;

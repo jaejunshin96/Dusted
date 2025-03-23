@@ -20,11 +20,32 @@ class SearchMovieAPIView(APIView):
 
         try:
             response = requests.get(url, headers=headers)
-            data = response.json()
-
             if response.status_code != 200:
-                return Response({"error": "Failed to fetch movies", "details": data}, status=response.status_code)
+                return Response({"error": "Failed to fetch movies"}, status=response.status_code)
+            data = response.json()
+            movies = data.get("results", [])
+            movies_with_directors = []
 
+            for movie in movies:
+                movie_id = movie.get("id")
+
+                if movie_id:
+                    # Fetch directors for the movie
+                    credits_url = f"https://api.themoviedb.org/3/movie/{movie_id}/credits?language=en-US"
+                    credits_response = requests.get(credits_url, headers=headers)
+
+                    if credits_response.status_code == 200:
+                        credits_data = credits_response.json()
+                        # Extract directors from crew
+                        directors = [member['name'] for member in credits_data.get('crew', []) if member.get('job') == 'Director']
+
+                        # Add directors to the movie dictionary
+                        movie['directors'] = directors
+
+                    movies_with_directors.append(movie)
+
+            # Send the modified response
+            data['results'] = movies_with_directors
             return Response(data, status=status.HTTP_200_OK)
 
         except requests.RequestException as e:

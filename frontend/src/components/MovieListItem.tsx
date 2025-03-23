@@ -27,7 +27,7 @@ const MovieListItem: React.FC<MovieListItemProps> = ({ movie, onClick }) => {
       }}
       onClick={() => onClick(movie)}
     >
-      {movie.title} ({movie.original_title}) ({movie.release_date})
+      {movie.title} ({movie.directors})
     </li>
   );
 };
