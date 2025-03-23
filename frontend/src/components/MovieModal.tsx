@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { Movie } from "./MovieSearch";
-import axios from "axios";
+import authAxios from "../utils/authentications/authFetch";
 
 interface MovieModalProps {
   movie: Movie;
@@ -25,21 +25,16 @@ const MovieModal: React.FC<MovieModalProps> = ({ movie, onClose }) => {
     }
 
     try {
-      const response = await axios.post("http://127.0.0.1:8000/api/review/reviews/",
-        {
+      const response = await authAxios("http://127.0.0.1:8000/api/review/reviews/", {
+        method: "POST",
+        data: {
           movie_id: movie.id,
           title: movie.title,
           rating: rating,
           review: reviewText,
           image_path: `https://image.tmdb.org/t/p/original${movie.backdrop_path}`,
-        },
-        {
-          headers: {
-            "Content-Type": "application/json",
-            "Authorization": `Bearer ${localStorage.getItem("access_token")}`, // Adjust if you store tokens differently
-          },
         }
-      );
+      });
 
       if (response.status === 201) {
         alert("Review submitted successfully!");
