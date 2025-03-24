@@ -77,7 +77,7 @@ const MovieSearch = () => {
 
       <ul style={{
         width: "100%",
-        border: "1px solid #ddd",
+        //border: "1px solid #ddd",
         padding: 0,
         maxHeight: "250px",
         overflowY: "auto",

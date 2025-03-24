@@ -11,9 +11,16 @@ class ReviewsList(APIView):
 	permission_classes = [IsAuthenticated]
 
 	def get(self, request):
-		reviews = Review.objects.filter(user=request.user).order_by('-created_at')
+		query = request.GET.get('query', '')
+		reviews = Review.objects.filter(user=request.user)
+		if query:
+			reviews = reviews.filter(title__icontains=query)
+
+		sorting = request.GET.get('sorting', '')
+
+		reviews = reviews.order_by(sorting)
 		paginator = PageNumberPagination()
-		paginator.page_size = 9
+		paginator.page_size = 12
 		result_page = paginator.paginate_queryset(reviews, request)
 		serializer = ReviewsSerializer(result_page, many=True)
 		return paginator.get_paginated_response(serializer.data)

@@ -95,7 +95,16 @@ const MovieModal: React.FC<MovieModalProps> = ({ movie, onClose }) => {
             <p><strong>Release Date:</strong> {movie.release_date}</p>
             <p><strong>Overview:</strong> {movie.overview || "No description available."}</p>
 
-            <div style={{ marginTop: "10px" }}>
+            <div
+              style={{
+                position: "absolute", // Make it stick to the bottom
+                bottom: "20px",        // Distance from the bottom of the modal
+                left: "0",
+                right: "0",
+                display: "flex",
+                justifyContent: "center"
+              }}
+            >
               <button
                 onClick={() => setWritingReview(true)}
                 style={{
@@ -125,7 +134,7 @@ const MovieModal: React.FC<MovieModalProps> = ({ movie, onClose }) => {
           </>
         ) : (
           <>
-            <h2>Review for {movie.title}</h2>
+            <h2>Review for {movie.title} ({movie.original_title})</h2>
 
             {/* Rating System */}
             <div>
@@ -161,7 +170,16 @@ const MovieModal: React.FC<MovieModalProps> = ({ movie, onClose }) => {
                 lineHeight: "1.5",
               }}
             />
-            <div style={{ marginTop: "10px" }}>
+            <div
+              style={{
+                position: "absolute", // Make it stick to the bottom
+                bottom: "20px",        // Distance from the bottom of the modal
+                left: "0",
+                right: "0",
+                display: "flex",
+                justifyContent: "center"
+              }}
+            >
               <button
                 onClick={handleSubmitReview}
                 style={{
