@@ -2,8 +2,9 @@ import React, { useEffect, useState } from "react";
 import { Container, Row, Card, CardBody, CardTitle, CardText, Button } from "reactstrap";
 import { useNavigate } from "react-router-dom";
 import authAxios from "../utils/authentications/authFetch";
+import ReviewDetailModal from "../components/ReviewDetailModal";
 
-interface Review {
+export interface Review {
   id: number;
   movie_id: number;
   title: string;
@@ -14,6 +15,7 @@ interface Review {
 }
 
 const ReviewCollectionPage: React.FC = () => {
+
   const [reviews, setReviews] = useState<Review[]>([]);
   const [errorMessage, setErrorMessage] = useState("");
   const [loading, setLoading] = useState(false);
@@ -25,6 +27,10 @@ const ReviewCollectionPage: React.FC = () => {
   const username = localStorage.getItem("username") || "User";
   const navigate = useNavigate();
   let debounceTimeout: NodeJS.Timeout;
+
+  const [selectedReview, setSelectedReview] = useState<Review | null>(null);
+
+  const handleCloseModal = () => setSelectedReview(null);
 
   const fetchReviews = async (pageNumber: number, query: string = "") => {
     setLoading(true);
@@ -64,6 +70,11 @@ const ReviewCollectionPage: React.FC = () => {
 
   const handlePageChange = (newPage: number) => {
     if (newPage > 0 && newPage <= totalPages) setPage(newPage);
+  };
+
+  const handleEditSave = async () => {
+    await fetchReviews(page, currentQuery);
+    setSelectedReview(null);
   };
 
   return (
@@ -135,7 +146,9 @@ const ReviewCollectionPage: React.FC = () => {
         {reviews.map((review) => (
           <Card
             key={review.id}
-            onClick={() => navigate(`/movie/${review.movie_id}`)}
+            onClick={() => {
+              setSelectedReview(review);
+            }}
             style={{
               backgroundImage: review.image_path
                 ? `url(${review.image_path})`
@@ -152,7 +165,19 @@ const ReviewCollectionPage: React.FC = () => {
             }}
           >
             <CardBody>
-              <CardTitle tag="h5">{review.title}</CardTitle>
+              <CardTitle
+                tag="h5"
+                style={{
+                  backgroundColor: "rgba(0, 0, 0, 0.6)",
+                  color: "white",
+                  padding: "5px 10px",
+                  borderRadius: "4px",
+                  display: "inline-block",
+                  marginBottom: "10px"
+                }}
+              >
+                {review.title}
+              </CardTitle>
               <CardText>
                 <div>
                   {[1, 2, 3, 4, 5].map((star) => (
@@ -169,11 +194,11 @@ const ReviewCollectionPage: React.FC = () => {
                   ))}
                 </div>
                 <br />
-                {review.review.substring(0, 50)}...
+                {/*{review.review.length > 50 ? `${review.review.substring(0, 50)}...` : review.review}*/}
               </CardText>
-              <CardText>
+              {/*<CardText>
                 <small className="text-muted">Posted on: {new Date(review.created_at).toLocaleDateString()}</small>
-              </CardText>
+              </CardText>*/}
             </CardBody>
           </Card>
         ))}
@@ -207,6 +232,14 @@ const ReviewCollectionPage: React.FC = () => {
         >
           Next
         </Button>
+
+        {selectedReview && (
+          <ReviewDetailModal
+            review={selectedReview}
+            onClose={handleCloseModal}
+            onSave={handleEditSave}
+          />
+        )}
       </div>
     </Container>
   );

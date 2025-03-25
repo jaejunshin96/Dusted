@@ -1,52 +1,52 @@
-import React, { useEffect, useState } from "react";
-import { Movie } from "./MovieSearch";
+import React, { useState } from "react";
+import { Review } from "../pages/ReviewCollectionPage";
 import authAxios from "../utils/authentications/authFetch";
 
-interface MovieModalProps {
-  movie: Movie;
+interface ReviewDetailModalProps {
+  review: Review;
   onClose: () => void;
+  onSave: () => void; // To refresh the list after editing
 }
 
-const MovieModal: React.FC<MovieModalProps> = ({ movie, onClose }) => {
-  const [isVisible, setIsVisible] = useState(false);
-  const [writingReview, setWritingReview] = useState(false);
-  const [reviewText, setReviewText] = useState("");
-  const [rating, setRating] = useState(0);
+const ReviewDetailModal: React.FC<ReviewDetailModalProps> = ({ review, onClose, onSave }) => {
+  const [isEditing, setIsEditing] = useState(false);
+  const [reviewText, setReviewText] = useState(review.review);
+  const [rating, setRating] = useState(review.rating);
 
-  useEffect(() => {
-    setIsVisible(true);
-    return () => setIsVisible(false);
-  }, []);
-
-  const handleSubmitReview = async () => {
-    if (rating === 0) {
-      alert("Please select a rating before submitting your review.");
-      return;
-    }
-
+  const handleSave = async () => {
     try {
-      const response = await authAxios("http://127.0.0.1:8000/api/review/reviews/", {
-        method: "POST",
+      await authAxios("http://localhost:8000/api/review/reviews/", {
+        method: "PATCH",
         data: {
-          movie_id: movie.id,
-          title: movie.title,
-          rating: rating,
-          review: reviewText,
-          image_path: `https://image.tmdb.org/t/p/original${movie.backdrop_path}`,
+            id: review.id,
+            review: reviewText,
+            rating: rating,
         }
       });
-
-      if (response.status === 201) {
-        alert("Review submitted successfully!");
-        setWritingReview(false);
-        setReviewText("");
-        setRating(0);
-      } else {
-        alert("Failed to submit review. Please try again.");
-      }
+      onSave();  // Refresh the list after saving
+      setIsEditing(false);  // Close editing mode
     } catch (error) {
-      console.error("Error submitting review:", error);
-      alert("Something went wrong. Please try again.");
+      console.error("Failed to save the review.", error);
+      alert("Failed to save the review. Please try again.");
+    }
+  };
+
+  const handleDelete = async () => {
+    if (window.confirm("Are you sure you want to delete this review?")) {
+      try {
+        await authAxios(`http://localhost:8000/api/review/reviews/`, {
+          method: "DELETE",
+          data: {
+            id: review.id
+          },
+        });
+
+        onSave();  // Refresh the list after deleting
+        onClose(); // Close the modal
+      } catch (error) {
+        console.error("Failed to delete the review.", error);
+        alert("Failed to delete the review. Please try again.");
+      }
     }
   };
 
@@ -62,17 +62,15 @@ const MovieModal: React.FC<MovieModalProps> = ({ movie, onClose }) => {
         display: "flex",
         alignItems: "center",
         justifyContent: "center",
-        opacity: isVisible ? 1 : 0,
-        transition: "opacity 0.3s ease",
       }}
       onClick={onClose}
     >
       <div
         style={{
-          backgroundImage: movie.backdrop_path
-            ? `url(https://image.tmdb.org/t/p/original${movie.backdrop_path})`
+          backgroundImage: review.image_path
+            ? `url(https://image.tmdb.org/t/p/original${review.image_path})`
             : "none",
-          backgroundColor: movie.backdrop_path ? "transparent" : "#2a2a2a",
+          backgroundColor: review.image_path ? "transparent" : "#2a2a2a",
           backgroundSize: "cover",
           backgroundPosition: "center",
           padding: "20px",
@@ -88,7 +86,7 @@ const MovieModal: React.FC<MovieModalProps> = ({ movie, onClose }) => {
         }}
         onClick={(e) => e.stopPropagation()}
       >
-        {!writingReview ? (
+        {!isEditing ? (
           <>
             <h2
               style={{
@@ -100,10 +98,10 @@ const MovieModal: React.FC<MovieModalProps> = ({ movie, onClose }) => {
                 marginBottom: "10px"
               }}
             >
-              {movie.title} ({movie.original_title})
+              {review.title}
             </h2>
             <br></br>
-            <p
+            <div
               style={{
                 backgroundColor: "rgba(0, 0, 0, 0.6)",
                 color: "white",
@@ -113,34 +111,43 @@ const MovieModal: React.FC<MovieModalProps> = ({ movie, onClose }) => {
                 marginBottom: "10px"
               }}
             >
-              <strong>Director:</strong> {movie.directors}
-            </p>
+              {[1, 2, 3, 4, 5].map((star) => (
+                <span
+                  key={star}
+                  style={{
+                    cursor: "pointer",
+                    fontSize: "24px",
+                    color: star <= review.rating ? "#FFD700" : "#ccc",
+                  }}
+                >
+                  ★
+                </span>
+              ))}
+            </div>
             <br></br>
-            <p
+            <div
               style={{
-                backgroundColor: "rgba(0, 0, 0, 0.6)",
-                color: "white",
-                padding: "5px 10px",
-                borderRadius: "4px",
-                display: "inline-block",
-                marginBottom: "10px"
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "center",
+                height: "30%", // Takes up the full height of the modal
+                padding: "20px",
               }}
             >
-              <strong>Release Date:</strong> {movie.release_date}
-            </p>
-            <p
-              style={{
-                backgroundColor: "rgba(0, 0, 0, 0.6)",
-                color: "white",
-                padding: "5px 10px",
-                borderRadius: "4px",
-                display: "inline-block",
-                marginBottom: "10px"
-              }}
-            >
-              <strong>Overview:</strong> {movie.overview || "No description available."}
-            </p>
-            <br></br>
+              <p
+                style={{
+                  backgroundColor: "rgba(0, 0, 0, 0.6)",
+                  color: "white",
+                  padding: "5px 10px",
+                  borderRadius: "4px",
+                  display: "inline-block",
+                  maxWidth: "60%",
+                  textAlign: "center",
+                }}
+              >
+                "{review.review}"
+              </p>
+            </div>
             <div
               style={{
                 position: "absolute", // Make it stick to the bottom
@@ -152,7 +159,7 @@ const MovieModal: React.FC<MovieModalProps> = ({ movie, onClose }) => {
               }}
             >
               <button
-                onClick={() => setWritingReview(true)}
+                onClick={() => setIsEditing(true)}
                 style={{
                   marginRight: "10px",
                   padding: "6px 12px",
@@ -163,7 +170,7 @@ const MovieModal: React.FC<MovieModalProps> = ({ movie, onClose }) => {
                   border: "none",
                 }}
               >
-                Write a Review
+                Edit
               </button>
               <button
                 onClick={onClose}
@@ -190,10 +197,9 @@ const MovieModal: React.FC<MovieModalProps> = ({ movie, onClose }) => {
                 marginBottom: "10px"
               }}
             >
-              Review for {movie.title} ({movie.original_title})
+              Edit Review for {review.title}
             </h2>
             <br></br>
-            {/* Rating System */}
             <div
               style={{
                 backgroundColor: "rgba(0, 0, 0, 0.6)",
@@ -219,7 +225,6 @@ const MovieModal: React.FC<MovieModalProps> = ({ movie, onClose }) => {
               ))}
             </div>
 
-            {/* Review Textarea */}
             <textarea
               value={reviewText}
               onChange={(e) => setReviewText(e.target.value)}
@@ -247,7 +252,7 @@ const MovieModal: React.FC<MovieModalProps> = ({ movie, onClose }) => {
               }}
             >
               <button
-                onClick={handleSubmitReview}
+                onClick={handleSave}
                 style={{
                   marginRight: "10px",
                   padding: "6px 12px",
@@ -258,10 +263,10 @@ const MovieModal: React.FC<MovieModalProps> = ({ movie, onClose }) => {
                   border: "none",
                 }}
               >
-                Submit Review
+                Save
               </button>
               <button
-                onClick={() => setWritingReview(false)}
+                onClick={() => setIsEditing(false)}
                 style={{
                   padding: "6px 12px",
                   borderRadius: "4px",
@@ -271,6 +276,21 @@ const MovieModal: React.FC<MovieModalProps> = ({ movie, onClose }) => {
               >
                 Cancel
               </button>
+              {/* add Delete button */}
+              <button
+                onClick={handleDelete}
+                style={{
+                  marginLeft: "10px",
+                  padding: "6px 12px",
+                  borderRadius: "4px",
+                  cursor: "pointer",
+                  backgroundColor: "#FF4444",
+                  color: "white",
+                  border: "none",
+                }}
+              >
+                Delete
+              </button>
             </div>
           </>
         )}
@@ -279,4 +299,4 @@ const MovieModal: React.FC<MovieModalProps> = ({ movie, onClose }) => {
   );
 };
 
-export default MovieModal;
+export default ReviewDetailModal;
