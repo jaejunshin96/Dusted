@@ -1,0 +1,24 @@
+h1 {
+  font-size: clamp(1.8rem, 5vw, 3rem); /* Scales between 1.8rem and 3rem depending on viewport width */
+  text-align: center;
+}
+
+p {
+  font-size: clamp(0.9rem, 2.5vw, 1.2rem); /* Scales between 0.9rem and 1.2rem depending on viewport width */
+  text-align: center;
+  margin-bottom: 20px;
+}
+
+.searchContainer {
+  width: clamp(300px, 80vw, 600px); /* Scales from 300px to 600px depending on viewport size */
+  height: 40vh; /* Keeps the height consistent */
+  margin: auto; /* Centers the container */
+}
+
+.buttonContainer {
+  margin-top: 20px;
+  display: flex;
+  gap: 10px;
+  justify-content: center;
+  flex-wrap: wrap; /* Allows buttons to wrap on smaller screens */
+}

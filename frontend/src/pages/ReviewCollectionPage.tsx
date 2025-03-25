@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from "react";
 import { Container, Row, Card, CardBody, CardTitle, CardText, Button } from "reactstrap";
-import { useNavigate } from "react-router-dom";
 import authAxios from "../utils/authentications/authFetch";
 import ReviewDetailModal from "../components/ReviewDetailModal";
+import styles from "./ReviewCollectionPage.module.css"
 
 export interface Review {
   id: number;
@@ -25,7 +25,6 @@ const ReviewCollectionPage: React.FC = () => {
   const [currentQuery, setCurrentQuery] = useState("");
   const [sorting, setSorting] = useState("-created_at");
   const username = localStorage.getItem("username") || "User";
-  const navigate = useNavigate();
   let debounceTimeout: NodeJS.Timeout;
 
   const [selectedReview, setSelectedReview] = useState<Review | null>(null);
@@ -79,42 +78,25 @@ const ReviewCollectionPage: React.FC = () => {
 
   return (
     <Container fluid>
-      <div style={{ position: "relative", marginBottom: "20px", minWidth: "" }}>
-        <Button
-          style={{
-            position: "absolute",
-            left: "0",
-            transform: "translateY(-50%)",
-            padding: "6px 12px",
-            cursor: "pointer",
-            border: "none",
-            //backgroundColor: "#4CAF50",
-          }}
-          onClick={() => navigate(-1)}
-        >
-          Back
-        </Button>
-        <h1 className="text-center mt-2">Reviews by {username}</h1>
-      </div>
+      <h1 className={styles.h1}>Reviews by {username}</h1>
 
-      <div className="text-center mb-5 d-flex justify-content-center align-items-center" style={{ marginBottom: "20px" }}>
+      <div className={styles.searchSection}>
         <input
           type="search"
           value={searchQuery}
           onChange={handleInputChange}
           placeholder="Search for reviews..."
-          style={{ padding: "8px", width: "300px", marginRight: "10px" }}
+          className={styles.searchInput}
         />
 
-        {/* Toggle Switch for Sorting */}
-        <div style={{ display: "flex", alignItems: "center", marginLeft: "20px" }}>
-          <label style={{ marginRight: "10px" }}>Sort by Rating</label>
+        <div className={styles.toggleSwitch}>
+          <label style={{ marginRight: "10px", marginLeft: "20px" }}>Sort by Rating</label>
           <input
             type="checkbox"
             checked={sorting === "-rating"}
             onChange={(e) => {
               const isChecked = e.target.checked;
-              setPage(1); // Reset to first page
+              setPage(1);
               setSorting(isChecked ? "-rating" : "-created_at");
             }}
           />
@@ -123,22 +105,9 @@ const ReviewCollectionPage: React.FC = () => {
 
       {errorMessage && <p className="text-danger text-center">{errorMessage}</p>}
 
-      <Row
-        className="mt-4"
-        style={{
-          display: "grid",
-          gridTemplateColumns: "repeat(4, 1fr)",
-          gap: "20px",
-        }}
-      >
+      <Row className={styles.rowContainer}>
         {reviews.length === 0 && (
-          <div style={{
-            gridColumn: "1 / -1",
-            textAlign: "center",
-            color: "#888",
-            paddingTop: "20px",
-            //width: "50vw",
-          }}>
+          <div className={styles.noReviews}>
             No reviews found.
           </div>
         )}
@@ -146,69 +115,41 @@ const ReviewCollectionPage: React.FC = () => {
         {reviews.map((review) => (
           <Card
             key={review.id}
-            onClick={() => {
-              setSelectedReview(review);
-            }}
+            onClick={() => setSelectedReview(review)}
+            className={styles.card}
             style={{
-              backgroundImage: review.image_path
-                ? `url(${review.image_path})`
-                : "none",
+              backgroundImage: review.image_path ? `url(${review.image_path})` : "none",
               backgroundColor: review.image_path ? "transparent" : "#2a2a2a",
-              backgroundSize: "cover",
-              backgroundPosition: "center",
-              cursor: "pointer",
-              color: "white",
-              height: "250px",
-              overflow: "hidden",
-              borderRadius: "8px",
-              maxWidth: "200px",
             }}
           >
             <CardBody>
-              <CardTitle
-                tag="h5"
-                style={{
-                  backgroundColor: "rgba(0, 0, 0, 0.6)",
-                  color: "white",
-                  padding: "5px 10px",
-                  borderRadius: "4px",
-                  display: "inline-block",
-                  marginBottom: "10px"
-                }}
-              >
-                {review.title}
-              </CardTitle>
               <CardText>
-                <div>
+                <div className={styles.ratingBackground}>
                   {[1, 2, 3, 4, 5].map((star) => (
                     <span
                       key={star}
-                      style={{
-                        cursor: "pointer",
-                        fontSize: "24px",
-                        color: star <= review.rating ? "#FFD700" : "#ccc",
-                      }}
+                      className={styles.ratingStars}
+                      style={{ color: star <= review.rating ? "#FFD700" : "#ccc" }}
                     >
                       ★
                     </span>
                   ))}
                 </div>
                 <br />
-                {/*{review.review.length > 50 ? `${review.review.substring(0, 50)}...` : review.review}*/}
               </CardText>
-              {/*<CardText>
-                <small className="text-muted">Posted on: {new Date(review.created_at).toLocaleDateString()}</small>
-              </CardText>*/}
+              <CardTitle tag="h5" className={styles.cardTitle}>
+                {review.title}
+              </CardTitle>
             </CardBody>
           </Card>
         ))}
       </Row>
 
-      <div className="text-center mt-4" style={{ paddingTop: "20px" }}>
-        <Button
-          disabled={page <= 1}
-          onClick={() => handlePageChange(page - 1)}
-          className="me-2"
+      <div className={styles.pageButtons}>
+        <Button disabled={page <= 1} onClick={() => handlePageChange(page - 1)} className="me-2"
+          style={{
+            marginRight: "10px"
+          }}
         >
           Previous
         </Button>
@@ -225,10 +166,10 @@ const ReviewCollectionPage: React.FC = () => {
           </Button>
         ))}
 
-        <Button
-          disabled={page >= totalPages}
-          onClick={() => handlePageChange(page + 1)}
-          className="ms-2"
+        <Button disabled={page >= totalPages} onClick={() => handlePageChange(page + 1)} className="ms-2"
+          style={{
+            marginLeft: "10px"
+          }}
         >
           Next
         </Button>
