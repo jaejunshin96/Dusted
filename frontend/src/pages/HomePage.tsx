@@ -1,6 +1,7 @@
 import { useNavigate } from "react-router-dom";
 import LogoutButton from "../components/LogoutButton";
 import MovieSearch from "../components/MovieSearch";
+import styles from "./HomePage.module.css"
 
 const HomePage: React.FC = () => {
   const username = localStorage.getItem("username");
@@ -8,19 +9,12 @@ const HomePage: React.FC = () => {
 
   return (
     <div>
-      <h1>Dusted</h1>
-      <p>
-        Welcome, <strong>{username}</strong>
-      </p>
-      <div style={{
-        width: "600px",
-        maxWidth: "600px",     // Prevents the content from expanding too wide
-        height: "40vh",
-        margin: "auto",         // Centers the search box and list
-      }}>
+      <h1 className={styles.h1}>Dusted</h1>
+      <p className={styles.p}>Welcome, <strong>{username}</strong></p>
+      <div className={styles.searchContainer}>
         <MovieSearch />
       </div>
-      <div style={{ marginTop: "20px", display: "flex", gap: "10px", justifyContent: "center" }}>
+      <div className={styles.buttonContainer}>
         <button
           onClick={() => navigate("/reviews")}
         >
