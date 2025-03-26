@@ -1,4 +1,5 @@
 import { useNavigate } from "react-router-dom";
+import styles from "./Header.module.css";
 
 const LogoutButton = () => {
   const navigate = useNavigate();
@@ -12,9 +13,9 @@ const LogoutButton = () => {
   };
 
   return (
-    <button onClick={handleLogout}>
+    <text onClick={handleLogout} className={styles.navLink} style={{ cursor: "pointer" }}>
       Logout
-    </button>
+    </text>
   );
 };
 
