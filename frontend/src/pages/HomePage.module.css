@@ -1,25 +1,64 @@
-h1 {
-  font-size: clamp(1.8rem, 5vw, 3rem); /* Scales between 1.8rem and 3rem depending on viewport width */
+/* HomePage.module.css */
+
+body {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  background-color: #f0f2f5;
+  font-family: Arial, sans-serif;
+}
+
+.container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 100vh;
+  padding: 20px;
+}
+
+.header {
+  margin-bottom: 30px;
   text-align: center;
 }
 
-p {
-  font-size: clamp(0.9rem, 2.5vw, 1.2rem); /* Scales between 0.9rem and 1.2rem depending on viewport width */
-  text-align: center;
+.title {
+  font-size: clamp(2.5rem, 6vw, 4rem);
+  color: #333;
+  margin-bottom: 10px;
+}
+
+.welcome {
+  font-size: clamp(1rem, 2.5vw, 1.5rem);
+  color: #666;
   margin-bottom: 20px;
-  color: black;
 }
 
-.searchContainer {
-  width: clamp(300px, 80vw, 600px); /* Scales from 300px to 600px depending on viewport size */
-  height: 40vh; /* Keeps the height consistent */
-  margin: auto; /* Centers the container */
+.searchSection {
+  width: clamp(300px, 80vw, 600px);
+  margin-bottom: 30px;
 }
 
 .buttonContainer {
   margin-top: 20px;
   display: flex;
-  gap: 10px;
+  gap: 15px;
   justify-content: center;
-  flex-wrap: wrap; /* Allows buttons to wrap on smaller screens */
+  flex-wrap: wrap;
+}
+
+.button {
+  padding: 12px 20px;
+  background-color: #8090ff;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background-color 0.3s, transform 0.2s;
+  font-size: 1rem;
+}
+
+.button:hover {
+  background-color: #5a6ccc;
+  transform: scale(1.05);
 }

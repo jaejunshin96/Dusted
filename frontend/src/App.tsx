@@ -1,7 +1,7 @@
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import LoginPage from "./pages/authentications/LoginPage";
 import RegisterPage from "./pages/authentications/RegisterPage";
-import VerifyEmailPage from "./pages/authentications/VerifyEmailPage";
+//import VerifyEmailPage from "./pages/authentications/VerifyEmailPage";
 import ActivationConfirmPage from "./pages/authentications/ActivationConfirmPage";
 import PasswordResetPage from "./pages/authentications/PasswordResetPage";
 import NewPasswordPage from "./pages/authentications/NewPasswordPage";
@@ -10,12 +10,14 @@ import NotFoundPage from "./pages/404/NotFoundPage";
 import { AuthProvider } from "./utils/authentications/useAuth";
 import ProtectedRoute from "./utils/authentications/ProtectedRoute";
 import ReviewCollectionPage from "./pages/ReviewCollectionPage";
+import Header from "./components/Header";
 import "./App.css";
 
 function App() {
   return (
     <AuthProvider>
       <Router>
+        <Header />
         <Routes>
           {/* authenticated access */}
           <Route element={<ProtectedRoute />}>
