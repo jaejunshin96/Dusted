@@ -26,7 +26,7 @@ function App() {
           {/* public access */}
           <Route path="/login" element={<LoginPage />} />
           <Route path="/register" element={<RegisterPage />} />
-          <Route path="/verify-email" element={<VerifyEmailPage />} />
+          {/*<Route path="/verify-email" element={<VerifyEmailPage />} />*/}
           <Route path="/activation-confirm" element={<ActivationConfirmPage />} />
           <Route path="/password-reset" element={<PasswordResetPage />} />
           <Route path="/password-reset-complete" element={<NewPasswordPage />} />

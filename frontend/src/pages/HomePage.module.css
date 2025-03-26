@@ -7,6 +7,7 @@ p {
   font-size: clamp(0.9rem, 2.5vw, 1.2rem); /* Scales between 0.9rem and 1.2rem depending on viewport width */
   text-align: center;
   margin-bottom: 20px;
+  color: black;
 }
 
 .searchContainer {

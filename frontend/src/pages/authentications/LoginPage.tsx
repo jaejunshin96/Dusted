@@ -3,6 +3,8 @@ import { useNavigate } from "react-router-dom";
 import { GoogleOAuthProvider } from "@react-oauth/google";
 import GoogleLoginButton from "../../components/GoogleLoginButton";
 import axios from "axios";
+import styles from "./LoginPage.module.css";
+import videoSrc from "../../assets/The horse in motion.mp4";
 
 interface LoginResponse {
   email: string;
@@ -42,32 +44,42 @@ const LoginPage: React.FC = () => {
   };
 
   return (
-    <div>
-      <h2>Login</h2>
-      {error && <p style={{ color: "red" }}>{error}</p>}
-      <form onSubmit={handleLogin}>
-        <input
-          type="email"
-          placeholder="Email"
-          value={email}
-          onChange={(e) => setEmail(e.target.value)}
-          required
-        />
-        <input
-          type="password"
-          placeholder="Password"
-          value={password}
-          onChange={(e) => setPassword(e.target.value)}
-          required
-        />
-        <button type="submit">Login</button>
-      </form>
-      <p>
-        <a href="/register">Register</a> | <a href="/password-reset">Forgot Password?</a>
-      </p>
-        <GoogleOAuthProvider clientId={import.meta.env.VITE_GOOGLE_CLIENT_ID}>
-          <GoogleLoginButton />
-        </GoogleOAuthProvider>
+    <div className={styles.container}>
+      <div className={styles.contentWrapper}>
+        {/* Video Section */}
+        <div className={styles.videoContainer}>
+          <video src={videoSrc} autoPlay loop muted playsInline className={styles.video} />
+        </div>
+
+        {/* Login Section */}
+        <div className={styles.loginBox}>
+          <h2>Sign In</h2>
+          {error && <p className={styles.error}>{error}</p>}
+          <form onSubmit={handleLogin}>
+            <input
+              type="email"
+              placeholder="Email"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+              required
+            />
+            <input
+              type="password"
+              placeholder="Password"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+              required
+            />
+            <button type="submit">Login</button>
+          </form>
+          <p>
+            <a href="/register">Create Account</a> | <a href="/password-reset">Forgot Password?</a>
+          </p>
+          <GoogleOAuthProvider clientId={import.meta.env.VITE_GOOGLE_CLIENT_ID}>
+            <GoogleLoginButton />
+          </GoogleOAuthProvider>
+        </div>
+      </div>
     </div>
   );
 };
