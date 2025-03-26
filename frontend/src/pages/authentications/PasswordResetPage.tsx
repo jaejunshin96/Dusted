@@ -1,5 +1,6 @@
 import { useState } from "react";
 import axios from "axios";
+import styles from "./PasswordResetPage.module.css";
 
 interface PasswordResetResponse {
   success?: string;
@@ -25,13 +26,21 @@ const PasswordResetPage: React.FC = () => {
   };
 
   return (
-    <div>
-      <h2>Reset Password</h2>
-      {message && <p>{message}</p>}
-      <form onSubmit={handleResetRequest}>
-        <input type="email" placeholder="Enter your email" value={email} onChange={(e) => setEmail(e.target.value)} required />
-        <button type="submit">Send Reset Link</button>
-      </form>
+    <div className={styles.container}>
+      <div className={styles.resetBox}>
+        <h2>Reset Password</h2>
+        {message && <p>{message}</p>}
+        <form onSubmit={handleResetRequest}>
+          <input
+            type="email"
+            placeholder="Enter your email"
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
+            required
+          />
+          <button type="submit">Send Reset Link</button>
+        </form>
+      </div>
     </div>
   );
 };

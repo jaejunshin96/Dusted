@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
 import axios from "axios";
+import styles from "./ActivationConfirmPage.module.css";
 
 const ActivationConfirmPage: React.FC = () => {
   const [isValid, setIsValid] = useState<boolean | null>(null);
@@ -16,10 +17,9 @@ const ActivationConfirmPage: React.FC = () => {
       return;
     }
 
-    // Validate token with Axios
     axios
       .get(`http://127.0.0.1:8000/api/validate-activation-token/`, {
-        params: { token }, // Pass token as query param
+        params: { token },
       })
       .then((response) => {
         if (response.data.success) {
@@ -37,10 +37,20 @@ const ActivationConfirmPage: React.FC = () => {
   }, [location, navigate]);
 
   return (
-    <div>
-      {isValid === null && <p>Validating...</p>}
-      {isValid === false && <p style={{ color: "red" }}>Invalid or expired activation link.</p>}
-      {isValid === true && <p>Your email has been verified. Redirecting to login...</p>}
+    <div className={styles.container}>
+      <div className={styles.activationBox}>
+        {isValid === null && <p className={styles.message}>Validating...</p>}
+        {isValid === false && (
+          <p className={`${styles.message} ${styles.error}`}>
+            Invalid or expired activation link. Redirecting to homepage...
+          </p>
+        )}
+        {isValid === true && (
+          <p className={`${styles.message} ${styles.success}`}>
+            Your email has been verified! Redirecting to login...
+          </p>
+        )}
+      </div>
     </div>
   );
 };

@@ -1,5 +1,7 @@
 import { useState } from "react";
 import axios from "axios";
+import styles from "./RegisterPage.module.css";
+import { text } from "stream/consumers";
 
 interface RegisterResponse {
   success?: string;
@@ -24,24 +26,54 @@ const RegisterPage: React.FC = () => {
         { headers: { "Content-Type": "application/json" } }
       );
 
-      setMessage("Registration successful. Please check your email for verification.");
+      setMessage("Registration successful. \nPlease check your email for verification.");
     } catch (err: any) {
       setError(err.response?.data?.Error || "Registration failed");
     }
   };
 
   return (
-    <div>
-      <h2>Register</h2>
-      {error && <p style={{ color: "red" }}>{error}</p>}
-      {message && <p style={{ color: "green" }}>{message}</p>}
-      <form onSubmit={handleRegister}>
-        <input type="text" placeholder="Username" value={username} onChange={(e) => setUsername(e.target.value)} required />
-        <input type="email" placeholder="Email" value={email} onChange={(e) => setEmail(e.target.value)} required />
-        <input type="password" placeholder="Password" value={password} onChange={(e) => setPassword(e.target.value)} required />
-        <input type="password" placeholder="Confirm Password" value={password2} onChange={(e) => setPassword2(e.target.value)} required />
-        <button type="submit">Register</button>
-      </form>
+    <div className={styles.container}>
+      <div className={styles.registerBox}>
+        <h2>Register</h2>
+        {error && <p className={styles.error}>{error}</p>}
+        {message && <p className={styles.message}>{message}</p>}
+        <form onSubmit={handleRegister}>
+          <input
+            type="email"
+            placeholder="Email"
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
+            required
+          />
+          <input
+            type="text"
+            placeholder="Username"
+            value={username}
+            onChange={(e) => setUsername(e.target.value)}
+            required
+          />
+          <input
+            type="password"
+            placeholder="Password"
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
+            required
+          />
+          <input
+            type="password"
+            placeholder="Confirm Password"
+            value={password2}
+            onChange={(e) => setPassword2(e.target.value)}
+            required
+          />
+          <button type="submit">Register</button>
+        </form>
+        <div className={styles.loginPrompt}>
+          <span>Already have an account?</span>
+          <a href="/login" className={styles.loginLink}>Sign In</a>
+        </div>
+      </div>
     </div>
   );
 };

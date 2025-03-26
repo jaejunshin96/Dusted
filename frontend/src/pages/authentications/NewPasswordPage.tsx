@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
 import axios from "axios";
+import styles from "./NewPasswordPage.module.css";
 
 interface ResetResponse {
   success?: boolean;
@@ -54,15 +55,29 @@ const NewPasswordPage: React.FC = () => {
   };
 
   return (
-    <div>
-      <h2>Reset Password</h2>
-      {error && <p style={{ color: "red" }}>{error}</p>}
-      {message && <p style={{ color: "green" }}>{message}</p>}
-      <form onSubmit={handleResetPassword}>
-        <input type="password" placeholder="New Password" value={password} onChange={(e) => setPassword(e.target.value)} required />
-        <input type="password" placeholder="Confirm Password" value={password2} onChange={(e) => setPassword2(e.target.value)} required />
-        <button type="submit">Reset Password</button>
-      </form>
+    <div className={styles.container}>
+      <div className={styles.resetBox}>
+        <h2>Reset Password</h2>
+        {error && <p className={styles.error}>{error}</p>}
+        {message && <p className={styles.message}>{message}</p>}
+        <form onSubmit={handleResetPassword}>
+          <input
+            type="password"
+            placeholder="New Password"
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
+            required
+          />
+          <input
+            type="password"
+            placeholder="Confirm Password"
+            value={password2}
+            onChange={(e) => setPassword2(e.target.value)}
+            required
+          />
+          <button type="submit">Reset Password</button>
+        </form>
+      </div>
     </div>
   );
 };
