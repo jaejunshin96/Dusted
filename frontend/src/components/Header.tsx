@@ -14,8 +14,7 @@ const Header: React.FC = () => {
       </div>
       <nav className={styles.nav}>
         <Link to="/" className={styles.navLink}>Home</Link>
-        <Link to="/reviews" className={styles.navLink}>Reviews</Link>
-        {/*{username && <span className={styles.welcome}>Hello, {username}</span>}*/}
+        {username && <Link to="/reviews" className={styles.navLink}>Reviews</Link>}
         {username && <LogoutButton />}
       </nav>
     </header>

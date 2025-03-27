@@ -76,6 +76,7 @@ const MovieModal: React.FC<MovieModalProps> = ({ movie, onClose }) => {
           backgroundSize: "cover",
           backgroundPosition: "center",
           padding: "20px",
+          marginTop: "40px",
           borderRadius: "8px",
           width: "100%",
           maxWidth: "900px",
@@ -222,6 +223,7 @@ const MovieModal: React.FC<MovieModalProps> = ({ movie, onClose }) => {
             {/* Review Textarea */}
             <textarea
               value={reviewText}
+              placeholder="What did you like from this film?"
               onChange={(e) => setReviewText(e.target.value)}
               rows={7}
               style={{

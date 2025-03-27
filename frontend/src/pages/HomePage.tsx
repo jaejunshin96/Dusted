@@ -1,11 +1,11 @@
-import { useNavigate } from "react-router-dom";
-import LogoutButton from "../components/LogoutButton";
+//import { useNavigate } from "react-router-dom";
+//import LogoutButton from "../components/LogoutButton";
 import MovieSearch from "../components/MovieSearch";
 import styles from "./HomePage.module.css";
 
 const HomePage: React.FC = () => {
   const username = localStorage.getItem("username");
-  const navigate = useNavigate();
+  //const navigate = useNavigate();
 
   return (
     <div className={styles.container}>
@@ -17,13 +17,6 @@ const HomePage: React.FC = () => {
       <div className={styles.searchSection}>
         <MovieSearch />
       </div>
-
-      {/*<div className={styles.buttonContainer}>
-        <button className={styles.button} onClick={() => navigate("/reviews")}>
-          Reviews
-        </button>
-        <LogoutButton />
-      </div>*/}
     </div>
   )
 };
