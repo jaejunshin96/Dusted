@@ -96,21 +96,22 @@ p {
 .pageButtons {
 	text-align: center;
 	margin-top: 20px;
+	margin-right: 20px;
 }
 
 
 /* Tablet View (Max width: 1024px) */
 @media (max-width: 1024px) {
   .rowContainer {
-    grid-template-columns: repeat(3, 1fr); /* 3 columns for tablets */
+    grid-template-columns: repeat(3, 1fr);
   }
 }
 
 /* Mobile View (Max width: 768px) */
 @media (max-width: 768px) {
   .rowContainer {
-    grid-template-columns: repeat(3, 1fr); /* 2 columns for mobile */
-    gap: 15px; /* Reduce gap for better fit */
+    grid-template-columns: repeat(3, 1fr);
+    gap: 15px;
   }
 }
 
@@ -122,13 +123,16 @@ p {
   }
   .rowContainer {
     grid-template-columns: repeat(3, 1fr); /* Single column for small mobile devices */
-    gap: 5px;
+    gap: 2px;
   }
 	.card {
-		width: clamp(80px, 17vw, 120px);
-		height: clamp(100px, 17vh, 150px);
+    width: clamp(20px, 11vw, 60px);
+    height: clamp(100px, 13vh, 150px);
 		transition: transform 0.2s;
 		border-radius: 0;
+		display: flex;
+		flex-direction: column;
+		align-items: center;
 	}
 	.cardTitle {
     visibility: hidden; /* Hides the text but preserves space */
@@ -138,6 +142,12 @@ p {
 		padding: 4px 8px; /* Padding to give some spacing around the stars */
 		border-radius: 4px; /* Rounded corners for a nice look */
 		display: inline-block; /* Keeps it tight around the stars */
+	}
+}
+
+@media (max-width: 375px) {
+	.card {
+		width: clamp(20px, 10vw, 60px);
 	}
 }
 

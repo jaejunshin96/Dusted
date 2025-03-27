@@ -9,11 +9,8 @@ body {
 }
 
 .container {
-  display: flex;
-  flex-direction: column;
   align-items: center;
-  justify-content: center;
-  min-height: 100vh;
+  min-height: 80vh;
   padding: 20px;
 }
 
@@ -61,4 +58,14 @@ body {
 .button:hover {
   background-color: #5a6ccc;
   transform: scale(1.05);
+}
+
+@media (max-width: 430px) {
+  .container {
+    min-height: 80vh;
+  }
+  .searchSection {
+    width: 70vw;
+    margin-bottom: 20px;
+  }
 }

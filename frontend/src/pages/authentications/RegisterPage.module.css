@@ -4,10 +4,9 @@
   display: flex;
   justify-content: center;
   align-items: center;
-  height: 100vh;
+  height: 90vh;
   background-color: #f0f2f5;
-  padding-left: 20px;
-  padding-right: 20px;
+  margin-top: 20px;
 }
 
 .registerBox {
@@ -83,9 +82,6 @@ a:hover {
 
 .loginPrompt {
   margin-top: 20px;
-  display: flex;
-  justify-content: center;
-  align-items: center;
   gap: 6px;
   font-size: 0.9rem;
   color: #666;
@@ -105,4 +101,11 @@ a:hover {
 
 p {
   color: black;
+  font-size: clamp(0.9rem, 2.5vw, 1.2rem);
+}
+
+@media (max-width: 430px) {
+  .registerBox {
+    width: 50vw;
+  }
 }

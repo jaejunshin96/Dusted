@@ -77,7 +77,7 @@ const ReviewCollectionPage: React.FC = () => {
   };
 
   return (
-    <Container fluid>
+    <Container fluid style={{ marginTop: "30px" }}>
       <h1 className={styles.h1}>Reviews by {username}</h1>
 
       <div className={styles.searchSection}>
@@ -160,7 +160,7 @@ const ReviewCollectionPage: React.FC = () => {
             onClick={() => handlePageChange(index + 1)}
             color={page === index + 1 ? "primary" : "secondary"}
             className="me-1"
-            style={page === index + 1 ? { fontWeight: "bold", border: "2px solid #007bff" } : {}}
+            style={page === index + 1 ? { fontWeight: "bold" } : {}}
           >
             {index + 1}
           </Button>

@@ -71,6 +71,7 @@ const RegisterPage: React.FC = () => {
         </form>
         <div className={styles.loginPrompt}>
           <span>Already have an account?</span>
+          <br></br>
           <a href="/login" className={styles.loginLink}>Sign In</a>
         </div>
       </div>
