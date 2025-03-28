@@ -16,10 +16,12 @@ class ReviewsList(APIView):
 		if query:
 			reviews = reviews.filter(title__icontains=query)
 
+		page = request.GET.get('page', 1)
 		sorting = request.GET.get('sorting', '')
 
 		reviews = reviews.order_by(sorting)
 		paginator = PageNumberPagination()
+		paginator.page = int(page)
 		paginator.page_size = 12
 		result_page = paginator.paginate_queryset(reviews, request)
 		serializer = ReviewsSerializer(result_page, many=True)
