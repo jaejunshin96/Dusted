@@ -8,6 +8,7 @@ h1 {
 p {
 	font-size: clamp(0.875rem, 1.5vw, 1.25rem); /* Min: 0.875rem, Max: 1.25rem */
 	text-align: center;
+	color: red;
 }
 
 .container {
@@ -18,22 +19,32 @@ p {
 }
 
 .searchSection {
+	justify-content: center;
 	text-align: center;
 	margin-bottom: 20px;
-	justify-content: center;
 	align-items: center;
 }
 
 .searchInput {
   padding: 8px;
-  width: clamp(20vw, 40vw, 40vw); /* Min: 200px, Max: 300px, Responsive scaling */
+  width: clamp(200px, 40vw, 300px); /* Min: 200px, Max: 300px, Responsive scaling */
   margin-right: 10px;
 }
 
-.toggleSwitch {
-	display: flex;
-	align-items: center;
-	margin-top: 20px;
+.sortDropdown {
+  padding: 8px;
+  background-color: #f0f2f5;
+  border: 1px solid #ddd;
+  border-radius: 5px;
+  cursor: pointer;
+  font-size: 0.9rem;
+  transition: border-color 0.3s;
+	color: black;
+}
+
+.sortDropdown:focus {
+  border-color: #8090ff;
+  outline: none;
 }
 
 .bodyContainer {
@@ -133,6 +144,9 @@ p {
     width: 80vw; /* Takes more space on smaller screens */
     margin-right: 0; /* Remove margin for better fit */
   }
+	.sortDropdown {
+		margin-top: 10px;
+	}
   .rowContainer {
     grid-template-columns: repeat(3, 1fr); /* Single column for small mobile devices */
     gap: 2px;
