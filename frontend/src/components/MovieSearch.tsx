@@ -23,6 +23,7 @@ const MovieSearch = () => {
   const [error, setError] = useState("");
   const [selectedMovie, setSelectedMovie] = useState<Movie | null>(null);
   const [hasMore, setHasMore] = useState(false);
+  const backendUrl = import.meta.env.VITE_BACKEND_URL;
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setQuery(e.target.value);
@@ -46,7 +47,7 @@ const MovieSearch = () => {
     setError("");
 
     try {
-      const response = await authAxios("http://127.0.0.1:8000/api/film/search/", {
+      const response = await authAxios(`${backendUrl}/api/film/search/`, {
         method: "GET",
         params: {
           query: searchTerm,

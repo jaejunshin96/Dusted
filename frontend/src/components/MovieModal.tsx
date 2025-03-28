@@ -12,6 +12,7 @@ const MovieModal: React.FC<MovieModalProps> = ({ movie, onClose }) => {
   const [writingReview, setWritingReview] = useState(false);
   const [reviewText, setReviewText] = useState("");
   const [rating, setRating] = useState(0);
+  const backendUrl = import.meta.env.VITE_BACKEND_URL;
 
   useEffect(() => {
     setIsVisible(true);
@@ -25,7 +26,7 @@ const MovieModal: React.FC<MovieModalProps> = ({ movie, onClose }) => {
     }
 
     try {
-      const response = await authAxios("http://127.0.0.1:8000/api/review/reviews/", {
+      const response = await authAxios(`${backendUrl}/api/review/reviews/`, {
         method: "POST",
         data: {
           movie_id: movie.id,

@@ -12,10 +12,11 @@ const ReviewDetailModal: React.FC<ReviewDetailModalProps> = ({ review, onClose, 
   const [isEditing, setIsEditing] = useState(false);
   const [reviewText, setReviewText] = useState(review.review);
   const [rating, setRating] = useState(review.rating);
+  const backendUrl = import.meta.env.VITE_BACKEND_URL;
 
   const handleSave = async () => {
     try {
-      await authAxios("http://localhost:8000/api/review/reviews/", {
+      await authAxios(`${backendUrl}/api/review/reviews/`, {
         method: "PATCH",
         data: {
             id: review.id,
@@ -34,7 +35,7 @@ const ReviewDetailModal: React.FC<ReviewDetailModalProps> = ({ review, onClose, 
   const handleDelete = async () => {
     if (window.confirm("Are you sure you want to delete this review?")) {
       try {
-        await authAxios(`http://localhost:8000/api/review/reviews/`, {
+        await authAxios(`${backendUrl}/api/review/reviews/`, {
           method: "DELETE",
           data: {
             id: review.id

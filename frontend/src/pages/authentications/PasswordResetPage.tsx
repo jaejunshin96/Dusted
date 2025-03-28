@@ -2,20 +2,21 @@ import { useState } from "react";
 import axios from "axios";
 import styles from "./PasswordResetPage.module.css";
 
-interface PasswordResetResponse {
-  success?: string;
-  Error?: string;
-}
+//interface PasswordResetResponse {
+//  success?: string;
+//  Error?: string;
+//}
 
 const PasswordResetPage: React.FC = () => {
   const [email, setEmail] = useState<string>("");
   const [message, setMessage] = useState<string | null>(null);
+  const backendUrl = import.meta.env.VITE_BACKEND_URL;
 
   const handleResetRequest = async (e: React.FormEvent) => {
     e.preventDefault();
 
     try {
-      const response = await axios.post("http://127.0.0.1:8000/api/request-password-reset-email/",
+      const response = await axios.post(`${backendUrl}/api/request-password-reset-email/`,
         { email },
         { headers: { "Content-Type": "application/json" } }
       );
