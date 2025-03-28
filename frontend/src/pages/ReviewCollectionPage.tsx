@@ -20,7 +20,7 @@ const ReviewCollectionPage: React.FC = () => {
   const [errorMessage, setErrorMessage] = useState("");
   const [loading, setLoading] = useState(false);
   const [page, setPage] = useState(1);
-  const [totalPages, setTotalPages] = useState(1);
+  const [hasMore, setHasMore] = useState(false);
   const [searchQuery, setSearchQuery] = useState("");
   const [currentQuery, setCurrentQuery] = useState("");
   const [sorting, setSorting] = useState("-created_at");
@@ -31,22 +31,29 @@ const ReviewCollectionPage: React.FC = () => {
 
   const handleCloseModal = () => setSelectedReview(null);
 
-  const fetchReviews = async (pageNumber: number, query: string = "") => {
+  const fetchReviews = async (pageNumber: number, query: string = "", fetchMore: boolean = false) => {
     setLoading(true);
+    setHasMore(false);
     try {
       const response = await authAxios("http://localhost:8000/api/review/reviews/", {
         method: "GET",
-        params: { page: pageNumber, query, sorting },
+        params: {
+          page: fetchMore ? pageNumber : 1,
+          query,
+          sorting
+        },
       });
 
       const fetchedReviews = response.data.results || [];
-      setReviews(fetchedReviews);
 
-      const totalReviews = response.data.count;
-      setTotalPages(Math.ceil(totalReviews / 12));
-    } catch (error) {
-      console.error("Failed to fetch reviews", error);
-      setErrorMessage("Failed to load reviews. Please try again.");
+      fetchMore ?
+        setReviews(prevReviews => [...prevReviews, ...fetchedReviews]) :
+        setReviews(fetchedReviews);
+
+      setHasMore(fetchedReviews.length >= 12);
+
+    } catch (err: any) {
+      setErrorMessage(err.response?.data?.Error || "Failed to fetch reviews.");
     } finally {
       setLoading(false);
     }
@@ -54,7 +61,7 @@ const ReviewCollectionPage: React.FC = () => {
 
   useEffect(() => {
     fetchReviews(page, currentQuery);
-  }, [page, currentQuery, sorting]);
+  }, [currentQuery, sorting]);
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const value = e.target.value;
@@ -62,13 +69,15 @@ const ReviewCollectionPage: React.FC = () => {
 
     clearTimeout(debounceTimeout);
     debounceTimeout = setTimeout(() => {
-      setPage(1); // Reset to the first page for new search
+      setPage(1);
       setCurrentQuery(value);
-    }, 300); // Adjust the delay as needed (300ms is a good starting point)
+    }, 300);
   };
 
-  const handlePageChange = (newPage: number) => {
-    if (newPage > 0 && newPage <= totalPages) setPage(newPage);
+  const handleLoadMore = async () => {
+    const nextPage = page + 1;
+    setPage(nextPage);
+    fetchReviews(nextPage, currentQuery, true);
   };
 
   const handleEditSave = async () => {
@@ -77,7 +86,7 @@ const ReviewCollectionPage: React.FC = () => {
   };
 
   return (
-    <Container fluid style={{ marginTop: "30px" }}>
+    <Container fluid className={styles.container}>
       <h1 className={styles.h1}>Reviews by {username}</h1>
 
       <div className={styles.searchSection}>
@@ -105,83 +114,63 @@ const ReviewCollectionPage: React.FC = () => {
 
       {errorMessage && <p className="text-danger text-center">{errorMessage}</p>}
 
-      <Row className={styles.rowContainer}>
-        {reviews.length === 0 && (
-          <div className={styles.noReviews}>
-            No reviews found.
+      <div className={styles.bodyContainer}>
+        <Row className={styles.rowContainer}>
+          {reviews.length === 0 && (
+            <div className={styles.noReviews}>
+              No reviews found.
+            </div>
+          )}
+
+          {reviews.map((review) => (
+            <Card
+              key={review.id}
+              onClick={() => setSelectedReview(review)}
+              className={styles.card}
+              style={{
+                backgroundImage: review.image_path ? `url(${review.image_path})` : "none",
+                backgroundColor: review.image_path ? "transparent" : "#2a2a2a",
+              }}
+            >
+              <CardBody>
+                <CardText>
+                  <div className={styles.ratingBackground}>
+                    {[1, 2, 3, 4, 5].map((star) => (
+                      <span
+                        key={star}
+                        className={styles.ratingStars}
+                        style={{ color: star <= review.rating ? "#FFD700" : "#ccc" }}
+                      >
+                        ★
+                      </span>
+                    ))}
+                  </div>
+                  <br />
+                </CardText>
+                <CardTitle tag="h5" className={styles.cardTitle}>
+                  {review.title}
+                </CardTitle>
+              </CardBody>
+            </Card>
+          ))}
+        </Row>
+
+        {hasMore && (
+          <div className={styles.loadMoreContainer}>
+            <button className={styles.loadMoreButton} onClick={handleLoadMore}>
+              {loading ? "Loading..." : "Load More"}
+            </button>
           </div>
         )}
-
-        {reviews.map((review) => (
-          <Card
-            key={review.id}
-            onClick={() => setSelectedReview(review)}
-            className={styles.card}
-            style={{
-              backgroundImage: review.image_path ? `url(${review.image_path})` : "none",
-              backgroundColor: review.image_path ? "transparent" : "#2a2a2a",
-            }}
-          >
-            <CardBody>
-              <CardText>
-                <div className={styles.ratingBackground}>
-                  {[1, 2, 3, 4, 5].map((star) => (
-                    <span
-                      key={star}
-                      className={styles.ratingStars}
-                      style={{ color: star <= review.rating ? "#FFD700" : "#ccc" }}
-                    >
-                      ★
-                    </span>
-                  ))}
-                </div>
-                <br />
-              </CardText>
-              <CardTitle tag="h5" className={styles.cardTitle}>
-                {review.title}
-              </CardTitle>
-            </CardBody>
-          </Card>
-        ))}
-      </Row>
-
-      <div className={styles.pageButtons}>
-        <Button disabled={page <= 1} onClick={() => handlePageChange(page - 1)} className="me-2"
-          style={{
-            marginRight: "10px"
-          }}
-        >
-          Previous
-        </Button>
-
-        {[...Array(totalPages)].map((_, index) => (
-          <Button
-            key={index + 1}
-            onClick={() => handlePageChange(index + 1)}
-            color={page === index + 1 ? "primary" : "secondary"}
-            className="me-1"
-            style={page === index + 1 ? { fontWeight: "bold" } : {}}
-          >
-            {index + 1}
-          </Button>
-        ))}
-
-        <Button disabled={page >= totalPages} onClick={() => handlePageChange(page + 1)} className="ms-2"
-          style={{
-            marginLeft: "10px"
-          }}
-        >
-          Next
-        </Button>
-
-        {selectedReview && (
-          <ReviewDetailModal
-            review={selectedReview}
-            onClose={handleCloseModal}
-            onSave={handleEditSave}
-          />
-        )}
       </div>
+
+      {selectedReview && (
+        <ReviewDetailModal
+          review={selectedReview}
+          onClose={handleCloseModal}
+          onSave={handleEditSave}
+        />
+      )}
     </Container>
   );
 };

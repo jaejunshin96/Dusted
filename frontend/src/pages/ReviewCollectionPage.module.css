@@ -12,15 +12,9 @@ p {
 
 .container {
 	position: relative;
+	margin-top: 40px;
 	margin-bottom: 20px;
-}
-
-.backButton {
-	/*position: absolute;*/
-	/*left: 0;*/
-	padding: 6px 12px;
-	cursor: pointer;
-	border: none;
+	justify-content: center;
 }
 
 .searchSection {
@@ -34,8 +28,6 @@ p {
   padding: 8px;
   width: clamp(20vw, 40vw, 40vw); /* Min: 200px, Max: 300px, Responsive scaling */
   margin-right: 10px;
-  /*border: 1px solid #ccc;*/
-  /*border-radius: 4px;*/
 }
 
 .toggleSwitch {
@@ -44,13 +36,19 @@ p {
 	margin-top: 20px;
 }
 
+.bodyContainer {
+	align-items: start;
+	justify-content: start;
+	min-height: 80vh;
+}
+
 .rowContainer {
 	display: grid;
 	grid-template-columns: repeat(4, 1fr);
 	gap: 20px;
-	margin-top: 20px;
 	align-items: center;
 	width: 100%;
+  scrollbar-gutter: stable;
 }
 
 .noReviews {
@@ -93,10 +91,24 @@ p {
 	color: #FFD700;
 }
 
-.pageButtons {
-	text-align: center;
-	margin-top: 20px;
-	margin-right: 20px;
+.loadMoreContainer {
+  display: flex;
+  justify-content: center;
+  padding: 10px 0;
+}
+
+.loadMoreButton {
+  padding: 10px 20px;
+  background-color: #8090ff;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
+
+.loadMoreButton:hover {
+  background-color: #5a6ccc;
 }
 
 

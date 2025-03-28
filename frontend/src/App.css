@@ -2,7 +2,7 @@
   margin: 0 auto;
   padding: 2rem;
   text-align: center;
-  width: 100;
+  /*min-height: 100vh;*/
   background-color: #f0f2f5;
 }
 
@@ -10,10 +10,10 @@ body, html {
   margin: 0;
   padding: 0;
   box-sizing: border-box;
-  /*width: 100%;*/
-  /*height: 100%;*/
+  width: 100%;
+  min-height: 100vh;
   background-color: #f0f2f5;
-  /*overflow-x: hidden;*/
+  overflow-x: hidden;
   color: black;
 }
 
