@@ -24,7 +24,7 @@ const ReviewCollectionPage: React.FC = () => {
   const [searchQuery, setSearchQuery] = useState("");
   const [currentQuery, setCurrentQuery] = useState("");
   const [sorting, setSorting] = useState("");
-  const username = localStorage.getItem("username") || "User";
+  const username = localStorage.getItem("username");
   let debounceTimeout: NodeJS.Timeout;
   const backendUrl = import.meta.env.VITE_BACKEND_URL;
 
