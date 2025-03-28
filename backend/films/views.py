@@ -7,11 +7,12 @@ from rest_framework import status
 class SearchMovieAPIView(APIView):
     def get(self, request):
         query = request.GET.get("query")
+        page = request.GET.get("page", 1)
 
         if not query:
             return Response({"error": "Query parameter is required"}, status=status.HTTP_400_BAD_REQUEST)
 
-        url = f"https://api.themoviedb.org/3/search/movie?query={query}&include_adult=false&language=en-US&page=1"
+        url = f"https://api.themoviedb.org/3/search/movie?query={query}&include_adult=false&language=en-US&page={page}"
 
         headers = {
             "accept": "application/json",
