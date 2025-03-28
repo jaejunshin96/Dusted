@@ -10,7 +10,7 @@ from django.contrib.auth.tokens import PasswordResetTokenGenerator
 class UserSerializer(serializers.ModelSerializer):
     class Meta:
         model = CustomUser
-        fields = ["id", "email", 'username', "is_staff", "is_active", "date_joined"]
+        fields = ["id", "email", 'username', "is_staff", "is_active", "date_joined", 'language_preference']
 
 class UserRegisterationSerializer(serializers.ModelSerializer):
 	password = serializers.CharField(max_length=68, min_length=6, write_only=True)
@@ -49,7 +49,7 @@ class LoginSerializer(serializers.Serializer):
 
 	class Meta:
 		model = CustomUser
-		fields = ['id', 'email', 'username', 'password', 'access_token', 'refresh_token']
+		fields = ['id', 'email', 'username', 'password', 'access_token', 'refresh_token', 'language_preference']
 
 	def validate(self, attrs):
 		email = attrs.get('email')
@@ -73,7 +73,8 @@ class LoginSerializer(serializers.Serializer):
 			'email': user.email,
 			'username': user.username,
 			'access_token': str(user_tokens.get('access')),
-			'refresh_token': str(user_tokens.get('refresh'))
+			'refresh_token': str(user_tokens.get('refresh')),
+			'language_perference': user.language_preference,
 		}
 
 class LogoutSerializer(serializers.Serializer):
