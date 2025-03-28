@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { Movie } from "./MovieSearch";
+import styles from "./MovieListItem.module.css";
 
 interface MovieListItemProps {
   movie: Movie;
@@ -16,21 +17,15 @@ const MovieListItem: React.FC<MovieListItemProps> = ({ movie, onClick }) => {
 
   return (
     <li
+      className={styles.movieListItem}
+      onClick={() => onClick(movie)}
       style={{
-        padding: "8px",
-        cursor: "pointer",
-        borderBottom: "1px solid #ddd",
-        boxSizing: "border-box",
         opacity: isVisible ? 1 : 0,
         transform: isVisible ? "translateY(0)" : "translateY(10px)",
-        transition: "opacity 1.0s ease, transform 1.0s ease",
       }}
-      onClick={() => onClick(movie)}
     >
-      <div>
-        <div>{movie.title}</div>
-        <div>(Directed by {movie.directors.join(", ")})</div>
-      </div>
+      <div className={styles.title}>{movie.title}</div>
+      <div className={styles.director}>Directed by: {movie.directors.join(", ")}</div>
     </li>
   );
 };

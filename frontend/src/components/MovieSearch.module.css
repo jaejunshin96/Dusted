@@ -1,0 +1,80 @@
+/* MovieSearch.module.css */
+
+.container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-top: 20px;
+  width: 100%;
+}
+
+.searchBar {
+  display: flex;
+  gap: 10px;
+  margin-bottom: 20px;
+  width: clamp(300px, 80%, 600px);
+}
+
+.searchBar input {
+  flex: 1;
+  padding: 10px;
+  border: 1px solid #ddd;
+  border-radius: 5px;
+  outline: none;
+  transition: border 0.3s;
+  font-size: 1rem;
+  background-color: #f5f5f5;
+}
+
+.searchBar input:focus {
+  border-color: #8090ff;
+  background-color: white;
+}
+
+.searchBar button {
+  padding: 10px 20px;
+  background-color: #8090ff;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
+
+.searchBar button:hover {
+  background-color: #5a6ccc;
+}
+
+.movieList {
+  width: clamp(300px, 80%, 600px);
+  max-height: 400px;
+  overflow-y: auto;
+  list-style-type: none;
+  padding-left: 10px;
+  padding-right: 10px;
+  margin: 0;
+  border-radius: 8px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+  background-color: #f5f5f5;
+  scrollbar-width: thin; /* Firefox */
+  scrollbar-color: #8090ff #f0f2f5; /* Firefox */
+}
+
+/* Chrome, Edge, and Safari */
+.movieList::-webkit-scrollbar {
+  width: 8px; /* Width of the scrollbar */
+}
+
+.movieList::-webkit-scrollbar-track {
+  background: #f0f2f5; /* Track color */
+}
+
+.movieList::-webkit-scrollbar-thumb {
+  background-color: #8090ff; /* Thumb color */
+  border-radius: 10px;
+  border: 2px solid #f0f2f5; /* Adds a little space around the thumb */
+}
+
+.movieList::-webkit-scrollbar-thumb:hover {
+  background-color: #5a6ccc; /* Color when hovered */
+}

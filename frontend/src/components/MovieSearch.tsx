@@ -3,6 +3,7 @@ import authAxios from "../utils/authentications/authFetch";
 import LoadingErrorItem from "./LoadingErrorItem";
 import MovieListItem from "./MovieListItem";
 import MovieModal from "./MovieModal";
+import styles from "./MovieSearch.module.css";  // ✅ Import the new CSS module
 
 export interface Movie {
   id: number;
@@ -55,34 +56,20 @@ const MovieSearch = () => {
   const handleCloseModal = () => setSelectedMovie(null);
 
   return (
-    <div style={{
-      display: "flex",
-      flexDirection: "column",
-      alignItems: "center",
-    }}>
-      <div style={{ display: "flex", gap: "10px", marginBottom: "10px", width: "100%" }}>
+    <div className={styles.container}>
+      <div className={styles.searchBar}>
         <input
           type="text"
           placeholder="Search for a movie..."
           value={query}
           onChange={handleInputChange}
           onKeyDown={(e) => e.key === "Enter" && handleSearch()}
-          style={{ flex: 1, padding: "8px", fontSize: "16px" }}
         />
 
-        <button onClick={handleSearch} style={{ padding: "8px 16px", cursor: "pointer" }}>
-          Search
-        </button>
+        <button onClick={handleSearch}>Search</button>
       </div>
 
-      <ul style={{
-        width: "100%",
-        //border: "1px solid #ddd",
-        padding: 0,
-        maxHeight: "250px",
-        overflowY: "auto",
-        listStyleType: "none",
-      }}>
+      <ul className={styles.movieList}>
         {loading && <LoadingErrorItem message="Loading..." />}
         {error && <LoadingErrorItem message={error} isError />}
         {movies.map(movie => (
