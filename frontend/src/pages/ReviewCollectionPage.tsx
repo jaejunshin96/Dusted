@@ -23,7 +23,7 @@ const ReviewCollectionPage: React.FC = () => {
   const [hasMore, setHasMore] = useState(false);
   const [searchQuery, setSearchQuery] = useState("");
   const [currentQuery, setCurrentQuery] = useState("");
-  const [sorting, setSorting] = useState("-created_at");
+  const [sorting, setSorting] = useState("");
   const username = localStorage.getItem("username") || "User";
   let debounceTimeout: NodeJS.Timeout;
   const backendUrl = import.meta.env.VITE_BACKEND_URL;
@@ -75,6 +75,11 @@ const ReviewCollectionPage: React.FC = () => {
     }, 300);
   };
 
+  const handleSortingChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
+    setPage(1);
+    setSorting(e.target.value);
+  };
+
   const handleLoadMore = async () => {
     const nextPage = page + 1;
     setPage(nextPage);
@@ -99,18 +104,15 @@ const ReviewCollectionPage: React.FC = () => {
           className={styles.searchInput}
         />
 
-        <div className={styles.toggleSwitch}>
-          <label style={{ marginRight: "10px", marginLeft: "20px" }}>Sort by Rating</label>
-          <input
-            type="checkbox"
-            checked={sorting === "-rating"}
-            onChange={(e) => {
-              const isChecked = e.target.checked;
-              setPage(1);
-              setSorting(isChecked ? "-rating" : "-created_at");
-            }}
-          />
-        </div>
+        <select className={styles.sortDropdown} value={sorting} onChange={handleSortingChange}>
+          <option value="">by Created</option>
+          {/*<option value="-rating">by Rating</option>*/}
+          <option value="5">5 Stars</option>
+          <option value="4">4 Stars</option>
+          <option value="3">3 Stars</option>
+          <option value="2">2 Stars</option>
+          <option value="1">1 Star</option>
+        </select>
       </div>
 
       {errorMessage && <p className="text-danger text-center">{errorMessage}</p>}
