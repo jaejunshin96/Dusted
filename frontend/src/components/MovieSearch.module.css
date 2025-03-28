@@ -78,3 +78,23 @@
 .movieList::-webkit-scrollbar-thumb:hover {
   background-color: #5a6ccc; /* Color when hovered */
 }
+
+.loadMoreContainer {
+  display: flex;
+  justify-content: center;
+  padding: 10px 0;
+}
+
+.loadMoreButton {
+  padding: 10px 20px;
+  background-color: #8090ff;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
+
+.loadMoreButton:hover {
+  background-color: #5a6ccc;
+}
