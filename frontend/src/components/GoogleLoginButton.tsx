@@ -4,10 +4,11 @@ import { useNavigate } from "react-router-dom";
 
 const GoogleLoginButton = () => {
   const navigate = useNavigate();
+  const backendUrl = import.meta.env.VITE_BACKEND_URL;
 
   const handleSuccess = async (response: any) => {
     try {
-      const res = await axios.post("http://localhost:8000/social_auth/google/", {
+      const res = await axios.post(`${backendUrl}/social_auth/google/`, {
         auth_token: response.credential, // Send Google token to Django backend
       });
 

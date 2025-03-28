@@ -3,11 +3,11 @@ import { useNavigate, useLocation } from "react-router-dom";
 import axios from "axios";
 import styles from "./NewPasswordPage.module.css";
 
-interface ResetResponse {
-  success?: boolean;
-  message?: string;
-  Error?: string;
-}
+//interface ResetResponse {
+//  success?: boolean;
+//  message?: string;
+//  Error?: string;
+//}
 
 const NewPasswordPage: React.FC = () => {
   const [password, setPassword] = useState<string>("");
@@ -16,6 +16,7 @@ const NewPasswordPage: React.FC = () => {
   const [message, setMessage] = useState<string | null>(null);
   const navigate = useNavigate();
   const location = useLocation();
+  const backendUrl = import.meta.env.VITE_BACKEND_URL;
 
   const searchParams = new URLSearchParams(location.search);
   const uidb64 = searchParams.get("uidb64");
@@ -42,7 +43,7 @@ const NewPasswordPage: React.FC = () => {
     }
 
     try {
-      const response = await axios.patch("http://127.0.0.1:8000/api/password-reset-complete/",
+      await axios.patch(`${backendUrl}/api/password-reset-complete/`,
         { uidb64, token, password, password2 },
         { headers: { "Content-Type": "application/json" } }
       );

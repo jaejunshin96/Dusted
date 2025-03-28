@@ -1,12 +1,11 @@
 import { useState } from "react";
 import axios from "axios";
 import styles from "./RegisterPage.module.css";
-import { text } from "stream/consumers";
 
-interface RegisterResponse {
-  success?: string;
-  Error?: string;
-}
+//interface RegisterResponse {
+//  success?: string;
+//  Error?: string;
+//}
 
 const RegisterPage: React.FC = () => {
   const [username, setUsername] = useState<string>("");
@@ -15,13 +14,14 @@ const RegisterPage: React.FC = () => {
   const [password2, setPassword2] = useState<string>("");
   const [error, setError] = useState<string | null>(null);
   const [message, setMessage] = useState<string | null>(null);
+  const backendUrl = import.meta.env.VITE_BACKEND_URL;
 
   const handleRegister = async (e: React.FormEvent) => {
     e.preventDefault();
     setError(null);
 
     try {
-      const response = await axios.post("http://127.0.0.1:8000/api/register/",
+      await axios.post(`${backendUrl}/api/register/`,
         { username, email, password, password2 },
         { headers: { "Content-Type": "application/json" } }
       );

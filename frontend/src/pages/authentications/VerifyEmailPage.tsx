@@ -7,13 +7,14 @@ const VerifyEmailPage: React.FC = () => {
   const [message, setMessage] = useState<string>("Verifying...");
   const location = useLocation();
   const navigate = useNavigate();
+  const backendUrl = import.meta.env.VITE_BACKEND_URL;
 
   useEffect(() => {
     const token = new URLSearchParams(location.search).get("token");
 
     if (token) {
       axios
-        .get(`http://127.0.0.1:8000/api/verify-email/`, {
+        .get(`${backendUrl}/api/verify-email/`, {
           params: { token }, // Pass token as a query parameter
         })
         .then((response) => {

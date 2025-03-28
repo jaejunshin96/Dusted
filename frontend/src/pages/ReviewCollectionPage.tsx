@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { Container, Row, Card, CardBody, CardTitle, CardText, Button } from "reactstrap";
+import { Container, Row, Card, CardBody, CardTitle, CardText } from "reactstrap";
 import authAxios from "../utils/authentications/authFetch";
 import ReviewDetailModal from "../components/ReviewDetailModal";
 import styles from "./ReviewCollectionPage.module.css"
@@ -26,6 +26,7 @@ const ReviewCollectionPage: React.FC = () => {
   const [sorting, setSorting] = useState("-created_at");
   const username = localStorage.getItem("username") || "User";
   let debounceTimeout: NodeJS.Timeout;
+  const backendUrl = import.meta.env.VITE_BACKEND_URL;
 
   const [selectedReview, setSelectedReview] = useState<Review | null>(null);
 
@@ -35,7 +36,7 @@ const ReviewCollectionPage: React.FC = () => {
     setLoading(true);
     setHasMore(false);
     try {
-      const response = await authAxios("http://localhost:8000/api/review/reviews/", {
+      const response = await authAxios(`${backendUrl}/api/review/reviews/`, {
         method: "GET",
         params: {
           page: fetchMore ? pageNumber : 1,
