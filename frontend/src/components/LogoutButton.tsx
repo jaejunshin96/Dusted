@@ -1,7 +1,11 @@
 import { useNavigate } from "react-router-dom";
 import styles from "./Header.module.css";
 
-const LogoutButton = () => {
+interface LogoutButtonProps {
+  onLogout?: () => void; // ✅ Accepting the prop as an optional function
+}
+
+const LogoutButton: React.FC<LogoutButtonProps> = ({ onLogout }) => {
   const navigate = useNavigate();
 
   const handleLogout = () => {
@@ -9,13 +13,14 @@ const LogoutButton = () => {
     localStorage.removeItem("username");
     localStorage.removeItem("access_token");
     localStorage.removeItem("refresh_token");
+    if (onLogout) onLogout();
     navigate("/login");
   };
 
   return (
-    <text onClick={handleLogout} className={styles.navLink} style={{ cursor: "pointer" }}>
+    <span onClick={handleLogout} className={styles.navLink}>
       Logout
-    </text>
+    </span>
   );
 };
 

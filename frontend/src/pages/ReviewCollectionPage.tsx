@@ -3,6 +3,7 @@ import { Container, Row, Card, CardBody, CardTitle, CardText } from "reactstrap"
 import authAxios from "../utils/authentications/authFetch";
 import ReviewDetailModal from "../components/ReviewDetailModal";
 import styles from "./ReviewCollectionPage.module.css"
+import { useTranslation } from "react-i18next";
 
 export interface Review {
   id: number;
@@ -15,7 +16,7 @@ export interface Review {
 }
 
 const ReviewCollectionPage: React.FC = () => {
-
+  const { t } = useTranslation();
   const [reviews, setReviews] = useState<Review[]>([]);
   const [errorMessage, setErrorMessage] = useState("");
   const [loading, setLoading] = useState(false);
@@ -93,7 +94,7 @@ const ReviewCollectionPage: React.FC = () => {
 
   return (
     <Container fluid className={styles.container}>
-      <h1 className={styles.h1}>Reviews by {username}</h1>
+      <h1 className={styles.h1}>{t("Reviews by")} {username}</h1>
 
       <div className={styles.searchSection}>
         <input
