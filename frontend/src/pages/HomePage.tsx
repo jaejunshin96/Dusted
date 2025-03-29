@@ -2,16 +2,17 @@
 //import LogoutButton from "../components/LogoutButton";
 import MovieSearch from "../components/MovieSearch";
 import styles from "./HomePage.module.css";
+import { useTranslation } from "react-i18next";
 
 const HomePage: React.FC = () => {
+  const { t } = useTranslation();
   const username = localStorage.getItem("username");
-  //const navigate = useNavigate();
 
   return (
     <div className={styles.container}>
       <div className={styles.header}>
         <h1 className={styles.title}>Dusted</h1>
-        <p className={styles.welcome}>Welcome, <strong>{username}</strong></p>
+        <p className={styles.welcome}>{t("WelcomeMessage", { username })}</p>
       </div>
 
       <div className={styles.searchSection}>

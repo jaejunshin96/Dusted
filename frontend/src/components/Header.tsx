@@ -19,7 +19,7 @@ const Header: React.FC = () => {
   const handleLanguageChange = (lang: string) => {
     i18n.changeLanguage(lang);
     localStorage.setItem("language", lang); // Persist user choice
-    setShowDropdown(false); // Close the dropdown after selection
+    setShowDropdown(false);
   };
 
   useEffect(() => {

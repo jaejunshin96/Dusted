@@ -1,14 +1,17 @@
 import React, { useState } from "react";
 import { Review } from "../pages/ReviewCollectionPage";
 import authAxios from "../utils/authentications/authFetch";
+import { useTranslation } from "react-i18next";
+import styles from "./ReviewDetailModal.module.css";
 
 interface ReviewDetailModalProps {
   review: Review;
   onClose: () => void;
-  onSave: () => void; // To refresh the list after editing
+  onSave: () => void;
 }
 
 const ReviewDetailModal: React.FC<ReviewDetailModalProps> = ({ review, onClose, onSave }) => {
+  const { t } = useTranslation();
   const [isEditing, setIsEditing] = useState(false);
   const [reviewText, setReviewText] = useState(review.review);
   const [rating, setRating] = useState(review.rating);
@@ -19,280 +22,104 @@ const ReviewDetailModal: React.FC<ReviewDetailModalProps> = ({ review, onClose, 
       await authAxios(`${backendUrl}/api/review/reviews/`, {
         method: "PATCH",
         data: {
-            id: review.id,
-            review: reviewText,
-            rating: rating,
+          id: review.id,
+          review: reviewText,
+          rating: rating,
         }
       });
-      onSave();  // Refresh the list after saving
-      setIsEditing(false);  // Close editing mode
+      onSave();
+      setIsEditing(false);
     } catch (error) {
-      console.error("Failed to save the review.", error);
-      alert("Failed to save the review. Please try again.");
+      alert(t("Failed to save the review. Please try again."));
     }
   };
 
   const handleDelete = async () => {
-    if (window.confirm("Are you sure you want to delete this review?")) {
+    if (window.confirm(t("Are you sure you want to delete this review?"))) {
       try {
         await authAxios(`${backendUrl}/api/review/reviews/`, {
           method: "DELETE",
-          data: {
-            id: review.id
-          },
+          data: { id: review.id }
         });
 
-        onSave();  // Refresh the list after deleting
-        onClose(); // Close the modal
+        onSave();
+        onClose();
       } catch (error) {
-        console.error("Failed to delete the review.", error);
-        alert("Failed to delete the review. Please try again.");
+        alert(t("Failed to delete the review. Please try again."));
       }
     }
   };
 
   return (
-    <div
-      style={{
-        position: "fixed",
-        top: 0,
-        left: 0,
-        right: 0,
-        bottom: 0,
-        backgroundColor: "rgba(0, 0, 0, 0.5)",
-        display: "flex",
-        alignItems: "center",
-        justifyContent: "center",
-      }}
-      onClick={onClose}
-    >
+    <div className={styles.overlay} onClick={onClose}>
       <div
+        className={`${styles.modalContainer} ${styles.modalBackgroundImage}`}
         style={{
           backgroundImage: review.image_path
             ? `url(https://image.tmdb.org/t/p/original${review.image_path})`
             : "none",
-          backgroundColor: review.image_path ? "transparent" : "#2a2a2a",
-          backgroundSize: "cover",
-          backgroundPosition: "center",
-          padding: "20px",
-          marginTop: "40px",
-          borderRadius: "8px",
-          width: "100%",
-          maxWidth: "900px",
-          height: "500px",
-          textAlign: "left",
-          color: "white",
-          boxShadow: "0 0 10px rgba(0,0,0,0.7)",
-          position: "relative",
-          animation: "slideUp 1.0s ease",
         }}
         onClick={(e) => e.stopPropagation()}
       >
         {!isEditing ? (
           <>
-            <h2
-              style={{
-                backgroundColor: "rgba(0, 0, 0, 0.6)",
-                color: "white",
-                padding: "5px 10px",
-                borderRadius: "4px",
-                display: "inline-block",
-                marginBottom: "10px"
-              }}
-            >
-              {review.title}
-            </h2>
-            <br></br>
-            <div
-              style={{
-                backgroundColor: "rgba(0, 0, 0, 0.6)",
-                color: "white",
-                padding: "5px 10px",
-                borderRadius: "4px",
-                display: "inline-block",
-                marginBottom: "10px"
-              }}
-            >
-              {[1, 2, 3, 4, 5].map((star) => (
-                <span
-                  key={star}
-                  style={{
-                    cursor: "pointer",
-                    fontSize: "24px",
-                    color: star <= review.rating ? "#FFD700" : "#ccc",
-                  }}
-                >
-                  ★
-                </span>
-              ))}
+            <div className={styles.detailsContainer}>
+              <h2 className={styles.textBlock}>{review.title}</h2>
+
+              <div className={styles.ratingStars}>
+                {[1, 2, 3, 4, 5].map((star) => (
+                  <span
+                    key={star}
+                    className={star <= review.rating ? styles.starActive : styles.star}
+                    style={{ fontSize: "24px" }}
+                  >
+                    ★
+                  </span>
+                ))}
+              </div>
             </div>
-            <br></br>
-            <div
-              style={{
-                display: "flex",
-                alignItems: "center",
-                justifyContent: "center",
-                height: "30%", // Takes up the full height of the modal
-                padding: "20px",
-              }}
-            >
-              <p
-                style={{
-                  backgroundColor: "rgba(0, 0, 0, 0.6)",
-                  color: "white",
-                  padding: "5px 10px",
-                  borderRadius: "4px",
-                  display: "inline-block",
-                  maxWidth: "60%",
-                  textAlign: "center",
-                }}
-              >
+
+            <div className={styles.reviewContainer}>
+              <p className={`${styles.textBlock} ${styles.reviewBlock}`}>
                 "{review.review}"
               </p>
             </div>
-            <div
-              style={{
-                position: "absolute", // Make it stick to the bottom
-                bottom: "20px",        // Distance from the bottom of the modal
-                left: "0",
-                right: "0",
-                display: "flex",
-                justifyContent: "center"
-              }}
-            >
-              <button
-                onClick={() => setIsEditing(true)}
-                style={{
-                  marginRight: "10px",
-                  padding: "6px 12px",
-                  borderRadius: "4px",
-                  cursor: "pointer",
-                  backgroundColor: "#4CAF50",
-                  color: "white",
-                  border: "none",
-                }}
-              >
-                Edit
-              </button>
-              <button
-                onClick={onClose}
-                style={{
-                  padding: "6px 12px",
-                  borderRadius: "4px",
-                  cursor: "pointer",
-                  border: "none",
-                }}
-              >
-                Close
-              </button>
+
+            <div className={styles.buttonSection}>
+              <button className={`${styles.button}`} onClick={() => setIsEditing(true)}>{t("Edit")}</button>
+              {/*<button className={`${styles.button} ${styles.closeButton}`} onClick={onClose}>Close</button>*/}
             </div>
           </>
         ) : (
           <>
-            <h2
-              style={{
-                backgroundColor: "rgba(0, 0, 0, 0.6)",
-                color: "white",
-                padding: "5px 10px",
-                borderRadius: "4px",
-                display: "inline-block",
-                marginBottom: "10px"
-              }}
-            >
-              Edit Review for {review.title}
-            </h2>
-            <br></br>
-            <div
-              style={{
-                backgroundColor: "rgba(0, 0, 0, 0.6)",
-                color: "white",
-                padding: "5px 10px",
-                borderRadius: "4px",
-                display: "inline-block",
-                marginBottom: "10px"
-              }}
-            >
-              {[1, 2, 3, 4, 5].map((star) => (
-                <span
-                  key={star}
-                  onClick={() => setRating(star)}
-                  style={{
-                    cursor: "pointer",
-                    fontSize: "24px",
-                    color: star <= rating ? "#FFD700" : "#ccc",
-                  }}
-                >
-                  ★
-                </span>
-              ))}
+            <div className={styles.detailsContainer}>
+              <h2 className={styles.textBlock}>{review.title}</h2>
+
+              <div className={styles.ratingStars}>
+                {[1, 2, 3, 4, 5].map((star) => (
+                  <span
+                    key={star}
+                    className={star <= rating ? styles.starActive : styles.star}
+                    style={{ fontSize: "24px", cursor: "pointer" }}
+                    onClick={() => setRating(star)}
+                  >
+                    ★
+                  </span>
+                ))}
+              </div>
             </div>
 
             <textarea
+              className={styles.textarea}
               value={reviewText}
+              rows={6}
+              placeholder={t("What do you think about this film?")}
               onChange={(e) => setReviewText(e.target.value)}
-              rows={7}
-              style={{
-                width: "100%",
-                padding: "10px",
-                marginTop: "10px",
-                borderRadius: "4px",
-                border: "1px solid #ccc",
-                boxSizing: "border-box",
-                resize: "vertical",
-                fontSize: "16px",
-                lineHeight: "1.5",
-              }}
             />
-            <div
-              style={{
-                position: "absolute", // Make it stick to the bottom
-                bottom: "20px",        // Distance from the bottom of the modal
-                left: "0",
-                right: "0",
-                display: "flex",
-                justifyContent: "center"
-              }}
-            >
-              <button
-                onClick={handleSave}
-                style={{
-                  marginRight: "10px",
-                  padding: "6px 12px",
-                  borderRadius: "4px",
-                  cursor: "pointer",
-                  backgroundColor: "#4CAF50",
-                  color: "white",
-                  border: "none",
-                }}
-              >
-                Save
-              </button>
-              <button
-                onClick={() => setIsEditing(false)}
-                style={{
-                  padding: "6px 12px",
-                  borderRadius: "4px",
-                  cursor: "pointer",
-                  border: "none",
-                }}
-              >
-                Cancel
-              </button>
-              {/* add Delete button */}
-              <button
-                onClick={handleDelete}
-                style={{
-                  marginLeft: "10px",
-                  padding: "6px 12px",
-                  borderRadius: "4px",
-                  cursor: "pointer",
-                  backgroundColor: "#FF4444",
-                  color: "white",
-                  border: "none",
-                }}
-              >
-                Delete
-              </button>
+            <div className={styles.buttonSection}>
+              <button className={`${styles.button}`} onClick={handleSave}>{t("Save")}</button>
+              <button className={`${styles.button} ${styles.closeButton}`} onClick={() => setIsEditing(false)}>{t("Cancel")}</button>
+              <button className={`${styles.button} ${styles.deleteButton}`} onClick={handleDelete}>{t("Delete")}</button>
             </div>
           </>
         )}

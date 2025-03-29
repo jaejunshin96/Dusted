@@ -55,7 +55,7 @@ const ReviewCollectionPage: React.FC = () => {
       setHasMore(fetchedReviews.length >= 12);
 
     } catch (err: any) {
-      setErrorMessage(err.response?.data?.Error || "Failed to fetch reviews.");
+      setErrorMessage(err.response?.data?.Error || t("Failed to fetch reviews."));
     } finally {
       setLoading(false);
     }
@@ -94,25 +94,25 @@ const ReviewCollectionPage: React.FC = () => {
 
   return (
     <Container fluid className={styles.container}>
-      <h1 className={styles.h1}>{t("Reviews by")} {username}</h1>
+      <h1 className={styles.h1}>{t("ReviewsByUser", { username })}</h1>
 
       <div className={styles.searchSection}>
         <input
           type="search"
           value={searchQuery}
           onChange={handleInputChange}
-          placeholder="Search for reviews..."
+          placeholder={t("Search for reviews...")}
           className={styles.searchInput}
         />
 
         <select className={styles.sortDropdown} value={sorting} onChange={handleSortingChange}>
-          <option value="">by Created</option>
+          <option value="">{t("by Created")}</option>
           {/*<option value="-rating">by Rating</option>*/}
-          <option value="5">5 Stars</option>
-          <option value="4">4 Stars</option>
-          <option value="3">3 Stars</option>
-          <option value="2">2 Stars</option>
-          <option value="1">1 Star</option>
+          <option value="5">{t("5 Stars")}</option>
+          <option value="4">{t("4 Stars")}</option>
+          <option value="3">{t("3 Stars")}</option>
+          <option value="2">{t("2 Stars")}</option>
+          <option value="1">{t("1 Stars")}</option>
         </select>
       </div>
 
@@ -122,7 +122,7 @@ const ReviewCollectionPage: React.FC = () => {
         <Row className={styles.rowContainer}>
           {reviews.length === 0 && (
             <div className={styles.noReviews}>
-              No reviews found.
+              {t("No reviews found.")}
             </div>
           )}
 
@@ -162,7 +162,7 @@ const ReviewCollectionPage: React.FC = () => {
         {hasMore && (
           <div className={styles.loadMoreContainer}>
             <button className={styles.loadMoreButton} onClick={handleLoadMore}>
-              {loading ? "Loading..." : "Load More"}
+              {loading ? t("Loading...") : t("Load More")}
             </button>
           </div>
         )}

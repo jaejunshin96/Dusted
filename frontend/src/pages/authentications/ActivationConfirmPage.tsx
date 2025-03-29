@@ -2,8 +2,10 @@ import { useEffect, useState } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
 import axios from "axios";
 import styles from "./ActivationConfirmPage.module.css";
+import { useTranslation } from "react-i18next";
 
 const ActivationConfirmPage: React.FC = () => {
+  const { t } = useTranslation();
   const [isValid, setIsValid] = useState<boolean | null>(null);
   const location = useLocation();
   const navigate = useNavigate();
@@ -40,15 +42,15 @@ const ActivationConfirmPage: React.FC = () => {
   return (
     <div className={styles.container}>
       <div className={styles.activationBox}>
-        {isValid === null && <p className={styles.message}>Validating...</p>}
+        {isValid === null && <p className={styles.message}>{t("Validating...")}</p>}
         {isValid === false && (
           <p className={`${styles.message} ${styles.error}`}>
-            Invalid or expired activation link. Redirecting to homepage...
+            {t("Invalid or expired activation link. Redirecting to homepage...")}
           </p>
         )}
         {isValid === true && (
           <p className={`${styles.message} ${styles.success}`}>
-            Your email has been verified! Redirecting to login...
+            {t("Your email has been verified! Redirecting to login...")}
           </p>
         )}
       </div>
