@@ -4,6 +4,7 @@ import LoadingErrorItem from "./LoadingErrorItem";
 import MovieListItem from "./MovieListItem";
 import MovieModal from "./MovieModal";
 import styles from "./MovieSearch.module.css";
+import { useTranslation } from "react-i18next";
 
 export interface Movie {
   id: number;
@@ -16,6 +17,7 @@ export interface Movie {
 }
 
 const MovieSearch = () => {
+  const { t } = useTranslation();
   const [query, setQuery] = useState("");
   const [page, setPage] = useState(1);
   const [movies, setMovies] = useState<Movie[]>([]);
@@ -38,7 +40,7 @@ const MovieSearch = () => {
     } else {
       setMovies([]);
       setHasMore(false);
-      setError("Please enter at least 1 character.");
+      setError(t("Please enter at least 1 character."));
     }
   };
 
@@ -61,7 +63,7 @@ const MovieSearch = () => {
       setHasMore(newMovies.length >= 20);
 
     } catch (err: any) {
-      setError("Failed to fetch movies.");
+      setError(t("Failed to fetch movies."));
     } finally {
       setLoading(false);
     }
@@ -81,17 +83,17 @@ const MovieSearch = () => {
       <div className={styles.searchBar}>
         <input
           type="text"
-          placeholder="Search for a movie..."
+          placeholder={t("Search for a movie...")}
           value={query}
           onChange={handleInputChange}
           onKeyDown={(e) => e.key === "Enter" && handleSearch()}
         />
 
-        <button onClick={handleSearch}>Search</button>
+        <button onClick={handleSearch}>{t("Search")}</button>
       </div>
 
       <ul className={styles.movieList}>
-        {loading && <LoadingErrorItem message="Loading..." />}
+        {loading && <LoadingErrorItem message={t("Loading...")} />}
         {error && <LoadingErrorItem message={error} isError />}
         {movies.map(movie => (
           <MovieListItem key={movie.id} movie={movie} onClick={handleMovieClick} />
@@ -100,7 +102,7 @@ const MovieSearch = () => {
         {hasMore && (
           <li className={styles.loadMoreContainer}>
             <button className={styles.loadMoreButton} onClick={handleLoadMore}>
-              {loading ? "Loading..." : "Load More"}
+              {loading ? t("Loading...") : t("Load More")}
             </button>
           </li>
         )}

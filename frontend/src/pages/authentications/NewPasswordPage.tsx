@@ -2,6 +2,7 @@ import { useState, useEffect } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
 import axios from "axios";
 import styles from "./NewPasswordPage.module.css";
+import { useTranslation } from "react-i18next";
 
 //interface ResetResponse {
 //  success?: boolean;
@@ -10,6 +11,7 @@ import styles from "./NewPasswordPage.module.css";
 //}
 
 const NewPasswordPage: React.FC = () => {
+  const { t } = useTranslation();
   const [password, setPassword] = useState<string>("");
   const [password2, setPassword2] = useState<string>("");
   const [error, setError] = useState<string | null>(null);
@@ -33,12 +35,12 @@ const NewPasswordPage: React.FC = () => {
     setError(null);
 
     if (!uidb64 || !token) {
-      setError("Invalid reset link.");
+      setError(t("Invalid reset link."));
       return;
     }
 
     if (password !== password2) {
-      setError("Passwords do not match");
+      setError(t("Passwords do not match."));
       return;
     }
 
@@ -48,10 +50,10 @@ const NewPasswordPage: React.FC = () => {
         { headers: { "Content-Type": "application/json" } }
       );
 
-      setMessage("Password reset successful. Redirecting to login...");
+      setMessage(t("Password reset successful. Redirecting to login..."));
       setTimeout(() => navigate("/login"), 3000);
     } catch (err: any) {
-      setError(err.response?.data?.Error || "Password reset failed");
+      setError(err.response?.data?.Error || t("Password reset failed"));
     }
   };
 
@@ -64,19 +66,19 @@ const NewPasswordPage: React.FC = () => {
         <form onSubmit={handleResetPassword}>
           <input
             type="password"
-            placeholder="New Password"
+            placeholder={t("New Password")}
             value={password}
             onChange={(e) => setPassword(e.target.value)}
             required
           />
           <input
             type="password"
-            placeholder="Confirm Password"
+            placeholder={t("Confirm Password")}
             value={password2}
             onChange={(e) => setPassword2(e.target.value)}
             required
           />
-          <button type="submit">Reset Password</button>
+          <button type="submit">{t("Reset Password")}</button>
         </form>
       </div>
     </div>

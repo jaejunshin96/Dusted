@@ -1,6 +1,7 @@
 import { useState } from "react";
 import axios from "axios";
 import styles from "./RegisterPage.module.css";
+import { useTranslation } from "react-i18next";
 
 //interface RegisterResponse {
 //  success?: string;
@@ -8,6 +9,7 @@ import styles from "./RegisterPage.module.css";
 //}
 
 const RegisterPage: React.FC = () => {
+  const { t } = useTranslation();
   const [username, setUsername] = useState<string>("");
   const [email, setEmail] = useState<string>("");
   const [password, setPassword] = useState<string>("");
@@ -26,9 +28,9 @@ const RegisterPage: React.FC = () => {
         { headers: { "Content-Type": "application/json" } }
       );
 
-      setMessage("Registration successful. \nPlease check your email for verification.");
+      setMessage(t("Registration successful. Please check your email for verification."));
     } catch (err: any) {
-      setError(err.response?.data?.Error || "Registration failed");
+      setError(err.response?.data?.Error || t("Registration failed"));
     }
   };
 
@@ -41,38 +43,38 @@ const RegisterPage: React.FC = () => {
         <form onSubmit={handleRegister}>
           <input
             type="email"
-            placeholder="Email"
+            placeholder={t("Email")}
             value={email}
             onChange={(e) => setEmail(e.target.value)}
             required
           />
           <input
             type="text"
-            placeholder="Username"
+            placeholder={t("Username")}
             value={username}
             onChange={(e) => setUsername(e.target.value)}
             required
           />
           <input
             type="password"
-            placeholder="Password"
+            placeholder={t("Password")}
             value={password}
             onChange={(e) => setPassword(e.target.value)}
             required
           />
           <input
             type="password"
-            placeholder="Confirm Password"
+            placeholder={t("Confirm Password")}
             value={password2}
             onChange={(e) => setPassword2(e.target.value)}
             required
           />
-          <button type="submit">Register</button>
+          <button type="submit">{t("Register")}</button>
         </form>
         <div className={styles.loginPrompt}>
-          <span>Already have an account?</span>
+          <span>{t("Already have an account?")}</span>
           <br></br>
-          <a href="/login" className={styles.loginLink}>Sign In</a>
+          <a href="/login" className={styles.loginLink}>{t("Sign In")}</a>
         </div>
       </div>
     </div>

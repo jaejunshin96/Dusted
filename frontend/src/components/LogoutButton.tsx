@@ -1,11 +1,13 @@
 import { useNavigate } from "react-router-dom";
 import styles from "./Header.module.css";
+import { useTranslation } from "react-i18next";
 
 interface LogoutButtonProps {
-  onLogout?: () => void; // ✅ Accepting the prop as an optional function
+  onLogout?: () => void;
 }
 
 const LogoutButton: React.FC<LogoutButtonProps> = ({ onLogout }) => {
+  const { t } = useTranslation();
   const navigate = useNavigate();
 
   const handleLogout = () => {
@@ -19,7 +21,7 @@ const LogoutButton: React.FC<LogoutButtonProps> = ({ onLogout }) => {
 
   return (
     <span onClick={handleLogout} className={styles.navLink}>
-      Logout
+      {t("Logout")}
     </span>
   );
 };

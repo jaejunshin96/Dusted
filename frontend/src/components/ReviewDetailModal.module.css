@@ -1,0 +1,169 @@
+/* ReviewDetailModal.module.css */
+
+/* Background Overlay */
+.overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 0.5);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  opacity: 1;
+  transition: opacity 0.3s ease;
+}
+
+/* Modal Container */
+.modalContainer {
+  background-color: #2a2a2a;
+  padding: 20px;
+  margin-top: 40px;
+  border-radius: 8px;
+  width: 100%;
+  max-width: 900px;
+  height: 500px;
+  text-align: left;
+  color: white;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.7);
+  position: relative;
+  animation: slideUp 1.0s ease;
+}
+
+/* Modal Background Image */
+.modalBackgroundImage {
+  background-size: cover;
+  background-position: center;
+}
+
+/* Detail Container */
+.detailsContainer {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+}
+
+/* Text Block */
+.textBlock {
+  background-color: rgba(0, 0, 0, 0.6);
+  color: white;
+  display: inline-block;
+  padding: 5px 10px;
+  border-radius: 4px;
+  line-height: 1.4;
+  text-align: start;
+}
+
+.reviewContainer {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  /*padding: 20px;*/
+  margin-top: 20px;
+}
+
+.reviewBlock {
+  background-color: rgba(0, 0, 0, 0.6);
+  color: white;
+  display: inline-block;
+  padding: 10px;
+  text-align: center;
+  border-radius: 4px;
+  max-width: 40vw;
+}
+
+/* Rating Stars */
+.ratingStars {
+  display: inline-block;
+  background-color: rgba(0, 0, 0, 0.6);
+  padding: 5px 10px;
+  border-radius: 4px;
+  margin-bottom: 10px;
+}
+
+/* Star Icon */
+.star {
+  color: #ccc;
+}
+
+.starActive {
+  color: #FFD700;
+}
+
+/* Review Textarea */
+.textarea {
+  width: 100%;
+  padding: 12px 15px;
+  margin-top: 10px;
+  border-radius: 8px;
+  border: 1px solid #ddd;
+  background-color: #1e1e1e;
+  color: white;
+  box-sizing: border-box;
+  resize: vertical;
+  font-size: 16px;
+  line-height: 1.5;
+  transition: border-color 0.3s, box-shadow 0.3s;
+}
+
+/* Button Section */
+.buttonSection {
+  position: absolute;
+  bottom: 20px;
+  left: 0;
+  right: 0;
+  display: flex;
+  justify-content: center;
+}
+
+/* Buttons */
+.button {
+  margin-right: 10px;
+  padding: 6px 12px;
+  border-radius: 4px;
+  cursor: pointer;
+  border: none;
+  transition: background-color 0.3s;
+}
+
+.editButton {
+  background-color: #8090ff;
+  color: white;
+}
+
+.editButton:hover {
+  background-color: #6b78d1;
+}
+
+.submitButton {
+  background-color: #4CAF50;
+  color: white;
+}
+.submitButton:hover {
+  background-color: #3e8e41;
+}
+
+.closeButton {
+  background-color: #f0f0f0;
+  color: black;
+}
+
+.closeButton:hover {
+  background-color: #ddd;
+}
+
+.deleteButton {
+  background-color: #FF4444;
+  color: white;
+}
+
+.deleteButton:hover {
+  background-color: #cc0000;
+}
+
+/* Slide-up Animation */
+@keyframes slideUp {
+  0% { transform: translateY(30px); opacity: 0; }
+  100% { transform: translateY(0); opacity: 1; }
+}

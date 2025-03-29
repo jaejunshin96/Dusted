@@ -2,8 +2,10 @@ import { useEffect, useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import axios from "axios";
 import styles from "./VerifyEmailPage.module.css";
+import { useTranslation } from "react-i18next";
 
 const VerifyEmailPage: React.FC = () => {
+  const { t } = useTranslation();
   const [message, setMessage] = useState<string>("Verifying...");
   const location = useLocation();
   const navigate = useNavigate();

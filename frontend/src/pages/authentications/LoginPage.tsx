@@ -5,6 +5,7 @@ import GoogleLoginButton from "../../components/GoogleLoginButton";
 import axios from "axios";
 import styles from "./LoginPage.module.css";
 import videoSrc from "../../assets/The horse in motion.mp4";
+import { useTranslation } from "react-i18next";
 
 interface LoginResponse {
   email: string;
@@ -14,6 +15,7 @@ interface LoginResponse {
 }
 
 const LoginPage: React.FC = () => {
+  const { t } = useTranslation();
   const [email, setEmail] = useState<string>("");
   const [password, setPassword] = useState<string>("");
   const [error, setError] = useState<string | null>(null);
@@ -40,7 +42,7 @@ const LoginPage: React.FC = () => {
       console.log(data);
       navigate("/");
     } catch (err: any) {
-      setError(err.response?.data?.message || "Login failed");
+      setError(err.response?.data?.message || t("Login failed"));
     }
   };
 
@@ -54,27 +56,27 @@ const LoginPage: React.FC = () => {
 
         {/* Login Section */}
         <div className={styles.loginBox}>
-          <h2>Sign In</h2>
+          <h2>{t("Sign In")}</h2>
           {error && <p className={styles.error}>{error}</p>}
           <form onSubmit={handleLogin}>
             <input
               type="email"
-              placeholder="Email"
+              placeholder={t("Email")}
               value={email}
               onChange={(e) => setEmail(e.target.value)}
               required
             />
             <input
               type="password"
-              placeholder="Password"
+              placeholder={t("Password")}
               value={password}
               onChange={(e) => setPassword(e.target.value)}
               required
             />
-            <button type="submit">Login</button>
+            <button type="submit">{t("Login")}</button>
           </form>
           <p>
-            <a href="/register">Create Account</a> | <a href="/password-reset">Forgot Password?</a>
+            <a href="/register">{t("Create Account")}</a> | <a href="/password-reset">{t("Forgot Password?")}</a>
           </p>
           <GoogleOAuthProvider clientId={import.meta.env.VITE_GOOGLE_CLIENT_ID}>
             <GoogleLoginButton />

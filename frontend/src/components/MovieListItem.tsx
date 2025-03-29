@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { Movie } from "./MovieSearch";
 import styles from "./MovieListItem.module.css";
+import { useTranslation } from "react-i18next";
 
 interface MovieListItemProps {
   movie: Movie;
@@ -8,6 +9,7 @@ interface MovieListItemProps {
 }
 
 const MovieListItem: React.FC<MovieListItemProps> = ({ movie, onClick }) => {
+  const { t } = useTranslation();
   const [isVisible, setIsVisible] = useState(false);
 
   useEffect(() => {
@@ -25,7 +27,7 @@ const MovieListItem: React.FC<MovieListItemProps> = ({ movie, onClick }) => {
       }}
     >
       <div className={styles.title}>{movie.title}</div>
-      <div className={styles.director}>Directed by: {movie.directors.join(", ")}</div>
+      <div className={styles.director}>{t("Directed by:")} {movie.directors.join(", ")}</div>
     </li>
   );
 };
