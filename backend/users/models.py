@@ -19,7 +19,7 @@ class CustomUser(AbstractBaseUser, PermissionsMixin):
     is_active = models.BooleanField(default=True)
     date_joined = models.DateTimeField(default=timezone.now)
     auth_provider = models.CharField(max_length=255, blank=False, null=False, default=AUTH_PROVIDERS.get("email"))
-    language_preference = models.CharField(max_length=10, default='en')
+    language = models.CharField(max_length=10, default='en')
 
     USERNAME_FIELD = "email"
     REQUIRED_FIELDS = ['username']
