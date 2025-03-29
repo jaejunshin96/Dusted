@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import { Movie } from "./MovieSearch";
 import authAxios from "../utils/authentications/authFetch";
 import { useTranslation } from "react-i18next";
