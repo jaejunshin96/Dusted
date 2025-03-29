@@ -17,7 +17,7 @@ export interface Movie {
 }
 
 const MovieSearch = () => {
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
   const [query, setQuery] = useState("");
   const [page, setPage] = useState(1);
   const [movies, setMovies] = useState<Movie[]>([]);
@@ -25,6 +25,7 @@ const MovieSearch = () => {
   const [error, setError] = useState("");
   const [selectedMovie, setSelectedMovie] = useState<Movie | null>(null);
   const [hasMore, setHasMore] = useState(false);
+  const [searchAttempted, setSearchAttempted] = useState(false);
   const backendUrl = import.meta.env.VITE_BACKEND_URL;
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -33,6 +34,7 @@ const MovieSearch = () => {
 
   const handleSearch = () => {
     if (query.trim().length > 0) {
+      setSearchAttempted(true);
       setMovies([]);
       setPage(1);
       setHasMore(false);
@@ -54,6 +56,7 @@ const MovieSearch = () => {
         params: {
           query: searchTerm,
           page: pageNumber,
+          lang: i18n.language,
         },
       });
 
@@ -80,21 +83,28 @@ const MovieSearch = () => {
 
   return (
     <div className={styles.container}>
-      <div className={styles.searchBar}>
+      <form
+        className={styles.searchBar}
+        onSubmit={(e) => {
+          e.preventDefault();
+          handleSearch();
+        }}
+      >
         <input
           type="text"
           placeholder={t("Search for a movie...")}
           value={query}
           onChange={handleInputChange}
-          onKeyDown={(e) => e.key === "Enter" && handleSearch()}
         />
-
-        <button onClick={handleSearch}>{t("Search")}</button>
-      </div>
+        <button type="submit">{t("Search")}</button>
+      </form>
 
       <ul className={styles.movieList}>
         {loading && <LoadingErrorItem message={t("Loading...")} />}
         {error && <LoadingErrorItem message={error} isError />}
+        {!loading && searchAttempted && movies.length === 0 && !error && (
+          <div className={styles.noResults}>{t("No results found.")}</div>
+        )}
         {movies.map(movie => (
           <MovieListItem key={movie.id} movie={movie} onClick={handleMovieClick} />
         ))}

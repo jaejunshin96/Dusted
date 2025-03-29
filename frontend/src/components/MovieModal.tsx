@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Movie } from "./MovieSearch";
 import authAxios from "../utils/authentications/authFetch";
 import { useTranslation } from "react-i18next";
@@ -15,6 +15,23 @@ const MovieModal: React.FC<MovieModalProps> = ({ movie, onClose }) => {
   const [reviewText, setReviewText] = useState("");
   const [rating, setRating] = useState(0);
   const backendUrl = import.meta.env.VITE_BACKEND_URL;
+
+  const [showFullOverview, setShowFullOverview] = useState(false);
+
+  const truncatedOverview = movie.overview.length > 200
+    ? movie.overview.slice(0, 200) + "..."
+    : movie.overview;
+
+  useEffect(() => {
+    const handleEsc = (e: KeyboardEvent) => {
+      if (e.key === "Escape") {
+        onClose();
+      }
+    };
+
+    document.addEventListener("keydown", handleEsc);
+    return () => document.removeEventListener("keydown", handleEsc);
+  }, [onClose]);
 
   const handleSubmitReview = async () => {
     if (rating === 0) {
@@ -62,27 +79,34 @@ const MovieModal: React.FC<MovieModalProps> = ({ movie, onClose }) => {
           <>
             <div className={styles.detailsContainer}>
               <h2 className={styles.textBlock}>
-                {movie.title} ({movie.original_title})
+                {movie.title}
               </h2>
-              <p className={styles.textBlock}><strong>Director:</strong> {movie.directors || "Not found"}</p>
-              <p className={styles.textBlock}><strong>Release Date:</strong> {movie.release_date || "Not found."}</p>
-              <p className={styles.textBlock}>{movie.overview || "Not found."}</p>
+              <p className={styles.textBlock}><strong>{t("Director")}:</strong> {movie.directors || "Not found"}</p>
+              <p className={styles.textBlock}><strong>{t("Release Date")}:</strong> {movie.release_date || "Not found."}</p>
+              <div className={`${styles.textBlock} ${showFullOverview ? styles.scrollableOverview : ""}`}>
+                {showFullOverview ? movie.overview : truncatedOverview}
+                {movie.overview.length > 200 && (
+                  <text
+                    className={styles.readMoreButton}
+                    onClick={() => setShowFullOverview(!showFullOverview)}
+                  >
+                    {showFullOverview ? t("Show Less") : t("Read More")}
+                  </text>
+                )}
+              </div>
             </div>
 
             <div className={styles.buttonSection}>
               <button className={`${styles.button}`} onClick={() => setWritingReview(true)}>
-                Review
+                {t("Review")}
               </button>
-              {/*<button className={`${styles.button} ${styles.closeButton}`} onClick={onClose}>
-                Close
-              </button>*/}
             </div>
           </>
         ) : (
           <>
             <div className={styles.detailsContainer}>
               <h2 className={styles.textBlock}>
-                Review for {movie.title} ({movie.original_title})
+                {t("Review for")} {movie.title} ({movie.original_title})
               </h2>
               <div className={styles.ratingStars}>
                 {[1, 2, 3, 4, 5].map((star) => (
@@ -96,19 +120,23 @@ const MovieModal: React.FC<MovieModalProps> = ({ movie, onClose }) => {
                 ))}
               </div>
             </div>
-            <textarea
-              className={styles.textarea}
-              value={reviewText}
-              rows={6}
-              placeholder="How was it?"
-              onChange={(e) => setReviewText(e.target.value)}
-            />
+
+            <div className={styles.parentOfTextarea}>
+              <textarea
+                className={styles.textarea}
+                value={reviewText}
+                rows={6}
+                placeholder={t("What do you think about this film?")}
+                onChange={(e) => setReviewText(e.target.value)}
+              />
+            </div>
+
             <div className={styles.buttonSection}>
               <button className={`${styles.button}`} onClick={handleSubmitReview}>
-                Save
+                {t("Save")}
               </button>
               <button className={`${styles.button} ${styles.closeButton}`} onClick={() => setWritingReview(false)}>
-                Back
+                {t("Back")}
               </button>
             </div>
           </>

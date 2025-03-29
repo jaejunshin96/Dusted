@@ -21,14 +21,14 @@
   padding: 20px;
   margin-top: 40px;
   border-radius: 8px;
-  width: 100%;
-  max-width: 900px;
-  height: 500px;
+  width: 60vw;
+  height: 60vh;
   text-align: left;
   color: white;
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.7);
   position: relative;
   animation: slideUp 1.0s ease;
+  overflow-y: auto;
 }
 
 /* Modal Background Image */
@@ -42,6 +42,7 @@
   display: flex;
   flex-direction: column;
   align-items: flex-start;
+  margin-bottom: 20px;
 }
 
 /* Text Block */
@@ -92,8 +93,13 @@
 }
 
 /* Review Textarea */
+.parentOfTextarea {
+  display: flex;
+  justify-content: center;
+}
+
 .textarea {
-  width: 100%;
+  width: 70%;
   padding: 12px 15px;
   margin-top: 10px;
   border-radius: 8px;
@@ -166,4 +172,42 @@
 @keyframes slideUp {
   0% { transform: translateY(30px); opacity: 0; }
   100% { transform: translateY(0); opacity: 1; }
+}
+
+
+@media (max-width: 1024px) {
+  .modalContainer {
+    width: 80vw;
+  }
+}
+
+/* Mobile-only scrollable overview */
+@media (max-width: 768px) {
+  .modalContainer {
+    width: 90vw;
+    max-height: 80vh; /* Prevent the modal from going off the screen */
+    overflow-y: auto;
+  }
+}
+
+@media (max-width: 430px) {
+  h2 {
+    font-size: medium;
+  }
+
+  .textarea {
+    width: 100%;
+  }
+
+  .modalContainer {
+    width: 100%;
+  }
+}
+
+@media (max-width: 375px) {
+  .scrollableOverview {
+    max-height: 25vh;
+    overflow-y: auto;
+    padding-right: 5px;
+  }
 }
