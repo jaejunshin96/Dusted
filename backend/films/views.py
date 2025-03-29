@@ -8,11 +8,12 @@ class SearchMovieAPIView(APIView):
     def get(self, request):
         query = request.GET.get("query")
         page = request.GET.get("page", 1)
+        lang = request.GET.get('lang', 'en-US')
 
         if not query:
             return Response({"error": "Query parameter is required"}, status=status.HTTP_400_BAD_REQUEST)
 
-        url = f"https://api.themoviedb.org/3/search/movie?query={query}&include_adult=false&language=en-US&page={page}"
+        url = f"https://api.themoviedb.org/3/search/movie?query={query}&include_adult=false&language={lang}&page={page}"
 
         headers = {
             "accept": "application/json",
@@ -32,7 +33,7 @@ class SearchMovieAPIView(APIView):
 
                 if movie_id:
                     # Fetch directors for the movie
-                    credits_url = f"https://api.themoviedb.org/3/movie/{movie_id}/credits?language=en-US"
+                    credits_url = f"https://api.themoviedb.org/3/movie/{movie_id}/credits?language={lang}"
                     credits_response = requests.get(credits_url, headers=headers)
 
                     if credits_response.status_code == 200:

@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Review } from "../pages/ReviewCollectionPage";
 import authAxios from "../utils/authentications/authFetch";
 import { useTranslation } from "react-i18next";
@@ -16,6 +16,17 @@ const ReviewDetailModal: React.FC<ReviewDetailModalProps> = ({ review, onClose, 
   const [reviewText, setReviewText] = useState(review.review);
   const [rating, setRating] = useState(review.rating);
   const backendUrl = import.meta.env.VITE_BACKEND_URL;
+
+  useEffect(() => {
+    const handleEsc = (e: KeyboardEvent) => {
+      if (e.key === "Escape") {
+        onClose();
+      }
+    };
+
+    document.addEventListener("keydown", handleEsc);
+    return () => document.removeEventListener("keydown", handleEsc);
+  }, [onClose]);
 
   const handleSave = async () => {
     try {
@@ -109,13 +120,16 @@ const ReviewDetailModal: React.FC<ReviewDetailModalProps> = ({ review, onClose, 
               </div>
             </div>
 
-            <textarea
-              className={styles.textarea}
-              value={reviewText}
-              rows={6}
-              placeholder={t("What do you think about this film?")}
-              onChange={(e) => setReviewText(e.target.value)}
-            />
+            <div className={styles.parentOfTextarea}>
+              <textarea
+                className={styles.textarea}
+                value={reviewText}
+                rows={6}
+                placeholder={t("What do you think about this film?")}
+                onChange={(e) => setReviewText(e.target.value)}
+              />
+            </div>
+
             <div className={styles.buttonSection}>
               <button className={`${styles.button}`} onClick={handleSave}>{t("Save")}</button>
               <button className={`${styles.button} ${styles.closeButton}`} onClick={() => setIsEditing(false)}>{t("Cancel")}</button>

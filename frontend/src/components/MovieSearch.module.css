@@ -10,6 +10,7 @@
 
 .searchBar {
   display: flex;
+  flex-direction: row;
   gap: 10px;
   margin-bottom: 20px;
   width: clamp(300px, 80%, 600px);
@@ -45,9 +46,16 @@
   background-color: #5a6ccc;
 }
 
+.noResults {
+  text-align: center;
+  padding: 20px;
+  color: #888;
+  font-size: 1.1rem;
+}
+
 .movieList {
   width: clamp(300px, 80%, 600px);
-  max-height: 400px;
+  max-height: 50vh;
   overflow-y: auto;
   list-style-type: none;
   padding-left: 10px;
