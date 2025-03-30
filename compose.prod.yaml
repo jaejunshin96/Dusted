@@ -6,7 +6,7 @@ services:
       context: .
       dockerfile: frontend/dockerfile.prod
     ports:
-      - "80:80" # React app will be served via Nginx
+      - "80:80"
     env_file:
       - .env
 
