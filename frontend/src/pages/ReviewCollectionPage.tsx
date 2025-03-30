@@ -4,6 +4,7 @@ import authAxios from "../utils/authentications/authFetch";
 import ReviewDetailModal from "../components/ReviewDetailModal";
 import styles from "./ReviewCollectionPage.module.css"
 import { useTranslation } from "react-i18next";
+import { FaArrowDownLong, FaArrowUpLong } from "react-icons/fa6";
 
 export interface Review {
   id: number;
@@ -24,7 +25,8 @@ const ReviewCollectionPage: React.FC = () => {
   const [hasMore, setHasMore] = useState(false);
   const [searchQuery, setSearchQuery] = useState("");
   const [currentQuery, setCurrentQuery] = useState("");
-  const [sorting, setSorting] = useState("");
+  const [sorting, setSorting] = useState("created_at");
+  const [order, setOrder] = useState("dsc");
   const username = localStorage.getItem("username");
   let debounceTimeout: NodeJS.Timeout;
   const backendUrl = import.meta.env.VITE_BACKEND_URL;
@@ -42,7 +44,8 @@ const ReviewCollectionPage: React.FC = () => {
         params: {
           page: fetchMore ? pageNumber : 1,
           query,
-          sorting
+          sorting,
+          order
         },
       });
 
@@ -63,7 +66,7 @@ const ReviewCollectionPage: React.FC = () => {
 
   useEffect(() => {
     fetchReviews(page, currentQuery);
-  }, [currentQuery, sorting]);
+  }, [currentQuery, sorting, order]);
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const value = e.target.value;
@@ -80,6 +83,10 @@ const ReviewCollectionPage: React.FC = () => {
     setPage(1);
     setSorting(e.target.value);
   };
+
+  const handleOrder = async () => {
+    setOrder(order === "dsc" ? "asc" : "dsc");
+  }
 
   const handleLoadMore = async () => {
     const nextPage = page + 1;
@@ -104,16 +111,22 @@ const ReviewCollectionPage: React.FC = () => {
           placeholder={t("Search for reviews...")}
           className={styles.searchInput}
         />
-
+        
         <select className={styles.sortDropdown} value={sorting} onChange={handleSortingChange}>
-          <option value="">{t("by Created")}</option>
-          {/*<option value="-rating">by Rating</option>*/}
+          <option value="created_at">{t("by Created")}</option>
+          <option value="rating">{t("by Rating")}</option>
           <option value="5">{t("5 Stars")}</option>
           <option value="4">{t("4 Stars")}</option>
           <option value="3">{t("3 Stars")}</option>
           <option value="2">{t("2 Stars")}</option>
           <option value="1">{t("1 Stars")}</option>
         </select>
+
+        <FaArrowDownLong
+          size={24}
+          onClick={handleOrder}
+          className={`${styles.sortIcon} ${order === "dsc" ? styles.rotateDown : styles.rotateUp}`}
+        />
       </div>
 
       {errorMessage && <p className="text-danger text-center">{errorMessage}</p>}

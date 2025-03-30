@@ -12,23 +12,27 @@ class ReviewsList(APIView):
 
 	def get(self, request):
 		query = request.GET.get('query', '')
+		page = request.GET.get('page', 1)
 		sorting = request.GET.get('sorting', None)
+		order = request.GET.get('order', 'asc')
+		orderDirection = "" if order == "asc" else "-"
 		reviews = Review.objects.filter(user=request.user)
+
 		if query:
 			reviews = reviews.filter(title__icontains=query)
 
-		if sorting:
+		if sorting != "created_at" and sorting != "rating":
 			try:
 				rating_value = float(sorting)
 				if rating_value < 0 or rating_value > 5:
 					return Response({'Error': 'Rating must be between 0 and 5.'}, status=status.HTTP_400_BAD_REQUEST)
 				reviews = reviews.filter(rating=rating_value)
+				reviews = reviews.order_by(orderDirection + "created_at")
 			except ValueError:
 				return Response({'Error': 'Rating must be a valid number.'}, status=status.HTTP_400_BAD_REQUEST)
+		else :
+			reviews = reviews.order_by(orderDirection + sorting)
 
-		page = request.GET.get('page', 1)
-
-		reviews = reviews.order_by("-created_at")
 		paginator = PageNumberPagination()
 		paginator.page = int(page)
 		paginator.page_size = 12

@@ -20,7 +20,7 @@ i18n
           "Search for reviews...": "Search for reviews...",
           "No reviews found.": "No reviews found.",
           "All Reviews": "All Reviews",
-          "by Rating": "Sort by Rating",
+          "by Rating": "by Rating",
           "by Created": "by Created",
           "5 Stars": "5 Stars",
           "4 Stars": "4 Stars",

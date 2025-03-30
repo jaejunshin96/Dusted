@@ -19,10 +19,10 @@ p {
 }
 
 .searchSection {
-	justify-content: center;
-	text-align: center;
-	margin-bottom: 20px;
+	display: flex;
 	align-items: center;
+	justify-content: center;
+	margin-bottom: 20px;
 }
 
 .searchInput {
@@ -45,6 +45,22 @@ p {
 .sortDropdown:focus {
   border-color: #8090ff;
   outline: none;
+}
+
+.sortIcon {
+	margin-left: 10px;
+  transition: transform 0.3s ease;
+  display: inline-block;
+	cursor: pointer;
+	vertical-align: middle;
+}
+
+.rotateUp {
+  transform: rotate(180deg);
+}
+
+.rotateDown {
+  transform: rotate(0deg);
 }
 
 .bodyContainer {
@@ -141,19 +157,31 @@ p {
 
 /* Small Mobile View (Max width: 430px) */
 @media (max-width: 430px) {
+	.searchSection {
+		display: block;
+		margin-bottom: 10px;
+	}
+
 	.searchInput {
     width: 80vw; /* Takes more space on smaller screens */
     margin-right: 0; /* Remove margin for better fit */
   }
+
 	.sortDropdown {
 		margin-top: 10px;
 	}
+
+	.sortIcon {
+		margin-left: 20px;
+	}
+
   .rowContainer {
     grid-template-columns: repeat(3, 1fr); /* Single column for small mobile devices */
     gap: 2px;
   }
+
 	.card {
-    width: clamp(20px, 11vw, 60px);
+    width: clamp(20px, 13vw, 60px);
     height: clamp(100px, 13vh, 150px);
 		transition: transform 0.2s;
 		border-radius: 0;
@@ -162,14 +190,22 @@ p {
 		align-items: center;
 		box-shadow: none;
 	}
+
 	.cardTitle {
     visibility: hidden; /* Hides the text but preserves space */
   }
+
 	.ratingBackground {
 		background-color: rgba(0, 0, 0, 0.6); /* Semi-transparent black background */
 		padding: 4px 8px; /* Padding to give some spacing around the stars */
 		border-radius: 4px; /* Rounded corners for a nice look */
 		display: inline-block; /* Keeps it tight around the stars */
+	}
+}
+
+@media (max-width: 390px) {
+	.card {
+		width: clamp(20px, 11vw, 60px);
 	}
 }
 
