@@ -79,7 +79,8 @@ p {
 	border-radius: 8px;
 	width: clamp(150px, 15vw, 250px); /* Min: 150px, Max: 250px, Responsive scaling */
 	height: clamp(200px, 40vh, 300px); /* Min: 200px, Max: 300px, Responsive scaling */
-	transition: transform 0.2s;
+	transition: transform 0.2s, box-shadow 0.2s;
+	box-shadow: 0 4px 12px rgba(0, 0, 0, 0.4);
 }
 
 .card:hover {
@@ -159,6 +160,7 @@ p {
 		display: flex;
 		flex-direction: column;
 		align-items: center;
+		box-shadow: none;
 	}
 	.cardTitle {
     visibility: hidden; /* Hides the text but preserves space */
