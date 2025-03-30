@@ -1,0 +1,36 @@
+services:
+  # Frontend (React served via Nginx inside dockerfile.prod)
+  frontend:
+    container_name: frontend
+    build:
+      context: .
+      dockerfile: frontend/dockerfile.prod
+    ports:
+      - "80:80" # React app will be served via Nginx
+    env_file:
+      - .env
+
+  # Backend (Django)
+  backend:
+    container_name: backend
+    build: ./backend
+    ports:
+      - "8000:8000"
+    env_file:
+      - .env
+    depends_on:
+      - db
+
+  # PostgreSQL Database
+  db:
+    image: postgres:15
+    restart: always
+    env_file:
+      - .env
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+
+volumes:
+  postgres_data:

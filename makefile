@@ -1,6 +1,9 @@
 all:
 	@docker compose up --build
 
+prod:
+	@docker compose -f compose.prod.yaml up --build
+
 detach:
 	@docker compose up --build -d
 
@@ -27,4 +30,4 @@ clean: down
 fclean: down
 	@docker system prune -f -a --volumes
 
-.PHONY: all detach down fdown migrate createsuperuser rebuild watch clean fclean
+.PHONY: all prod detach down fdown migrate createsuperuser rebuild watch clean fclean

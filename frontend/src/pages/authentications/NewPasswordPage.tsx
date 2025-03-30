@@ -18,7 +18,7 @@ const NewPasswordPage: React.FC = () => {
   const [message, setMessage] = useState<string | null>(null);
   const navigate = useNavigate();
   const location = useLocation();
-  const backendUrl = import.meta.env.VITE_BACKEND_URL;
+  const backendUrl = import.meta.env.DEV ? import.meta.env.VITE_BACKEND_URL : "";
 
   const searchParams = new URLSearchParams(location.search);
   const uidb64 = searchParams.get("uidb64");
@@ -45,7 +45,7 @@ const NewPasswordPage: React.FC = () => {
     }
 
     try {
-      await axios.patch(`${backendUrl}/api/password-reset-complete/`,
+      await axios.patch(`${backendUrl}/api/auth/password-reset-complete/`,
         { uidb64, token, password, password2 },
         { headers: { "Content-Type": "application/json" } }
       );

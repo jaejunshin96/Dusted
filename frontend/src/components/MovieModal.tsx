@@ -14,7 +14,7 @@ const MovieModal: React.FC<MovieModalProps> = ({ movie, onClose }) => {
   const [writingReview, setWritingReview] = useState(false);
   const [reviewText, setReviewText] = useState("");
   const [rating, setRating] = useState(0);
-  const backendUrl = import.meta.env.VITE_BACKEND_URL;
+  const backendUrl = import.meta.env.DEV ? import.meta.env.VITE_BACKEND_URL : "";
 
   const [showFullOverview, setShowFullOverview] = useState(false);
 

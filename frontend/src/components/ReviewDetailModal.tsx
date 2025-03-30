@@ -15,7 +15,7 @@ const ReviewDetailModal: React.FC<ReviewDetailModalProps> = ({ review, onClose, 
   const [isEditing, setIsEditing] = useState(false);
   const [reviewText, setReviewText] = useState(review.review);
   const [rating, setRating] = useState(review.rating);
-  const backendUrl = import.meta.env.VITE_BACKEND_URL;
+  const backendUrl = import.meta.env.DEV ? import.meta.env.VITE_BACKEND_URL : "";
 
   useEffect(() => {
     const handleEsc = (e: KeyboardEvent) => {

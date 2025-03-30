@@ -43,7 +43,7 @@ i18n
           "Back": "Back",
           "Please enter at least 1 character.": "Please enter at least 1 character.",
           "Failed to fetch movies.": "Failed to fetch movies.",
-          "Search for a movie...": "What movie have you watched today?",
+          "Search for a movie...": "Search for a movie...",
           "Loading...": "Loading...",
           "Failed to save the review. Please try again.": "Failed to save the review. Please try again.",
           "Are you sure you want to delete this review?": "Are you sure you want to delete this review?",
@@ -86,7 +86,7 @@ i18n
       ko: {
         translation: {
           "Home": "홈",
-          "WelcomeMessage": "{{username}}님, 영화 감상 기록을 시작해볼까요?",
+          "WelcomeMessage": "{{username}}님, 영화 기록을 시작해볼까요?",
           "Reviews": "리뷰",
           "Search": "검색",
           "Director": "감독",

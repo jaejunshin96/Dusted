@@ -4,7 +4,7 @@ import authAxios from "../utils/authentications/authFetch";
 import ReviewDetailModal from "../components/ReviewDetailModal";
 import styles from "./ReviewCollectionPage.module.css"
 import { useTranslation } from "react-i18next";
-import { FaArrowDownLong, FaArrowUpLong } from "react-icons/fa6";
+import { FaArrowDownLong } from "react-icons/fa6";
 
 export interface Review {
   id: number;
@@ -29,7 +29,7 @@ const ReviewCollectionPage: React.FC = () => {
   const [order, setOrder] = useState("dsc");
   const username = localStorage.getItem("username");
   let debounceTimeout: NodeJS.Timeout;
-  const backendUrl = import.meta.env.VITE_BACKEND_URL;
+  const backendUrl = import.meta.env.DEV ? import.meta.env.VITE_BACKEND_URL : "";
 
   const [selectedReview, setSelectedReview] = useState<Review | null>(null);
 
@@ -111,7 +111,7 @@ const ReviewCollectionPage: React.FC = () => {
           placeholder={t("Search for reviews...")}
           className={styles.searchInput}
         />
-        
+
         <select className={styles.sortDropdown} value={sorting} onChange={handleSortingChange}>
           <option value="created_at">{t("by Created")}</option>
           <option value="rating">{t("by Rating")}</option>

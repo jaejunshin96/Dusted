@@ -9,7 +9,7 @@ const ActivationConfirmPage: React.FC = () => {
   const [isValid, setIsValid] = useState<boolean | null>(null);
   const location = useLocation();
   const navigate = useNavigate();
-  const backendUrl = import.meta.env.VITE_BACKEND_URL;
+  const backendUrl = import.meta.env.DEV ? import.meta.env.VITE_BACKEND_URL : "";
 
   useEffect(() => {
     const token = new URLSearchParams(location.search).get("token");
@@ -21,7 +21,7 @@ const ActivationConfirmPage: React.FC = () => {
     }
 
     axios
-      .get(`${backendUrl}/api/validate-activation-token/`, {
+      .get(`${backendUrl}/api/auth/validate-activation-token/`, {
         params: { token },
       })
       .then((response) => {

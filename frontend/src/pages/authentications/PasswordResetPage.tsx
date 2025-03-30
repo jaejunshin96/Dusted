@@ -12,13 +12,13 @@ const PasswordResetPage: React.FC = () => {
   const { t } = useTranslation();
   const [email, setEmail] = useState<string>("");
   const [message, setMessage] = useState<string | null>(null);
-  const backendUrl = import.meta.env.VITE_BACKEND_URL;
+  const backendUrl = import.meta.env.DEV ? import.meta.env.VITE_BACKEND_URL : "";
 
   const handleResetRequest = async (e: React.FormEvent) => {
     e.preventDefault();
 
     try {
-      const response = await axios.post(`${backendUrl}/api/request-password-reset-email/`,
+      const response = await axios.post(`${backendUrl}/api/auth/request-password-reset-email/`,
         { email },
         { headers: { "Content-Type": "application/json" } }
       );
