@@ -41,17 +41,16 @@ services:
       - postgres_data:/var/lib/postgresql/data
 
   #Nginx
-  #nginx:
-  #  image: nginx:latest
-  #  container_name: nginx
-  #  ports:
-  #    - "80:80"
-  #  volumes:
-  #    - ./nginx/default.conf:/etc/nginx/conf.d/default.conf
-  #    - ./frontend/dist:/usr/share/nginx/html
-  #  depends_on:
-  #    - frontend
-  #    - backend
+  nginx:
+    image: nginx:latest
+    container_name: nginx
+    ports:
+      - "80:80"
+    volumes:
+      - ./nginx/default.conf:/etc/nginx/conf.d/default.conf
+    depends_on:
+      - frontend
+      - backend
 
 volumes:
   postgres_data:
