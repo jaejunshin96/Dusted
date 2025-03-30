@@ -2,6 +2,7 @@ import axios from "axios";
 
 const refreshAccessToken = async () => {
   const refreshToken = localStorage.getItem("refresh_token");
+  const backendUrl = import.meta.env.DEV ? import.meta.env.VITE_BACKEND_URL : "";
 
   if (!refreshToken) {
     console.log("No refresh token found. User must log in.");
@@ -9,7 +10,7 @@ const refreshAccessToken = async () => {
   }
 
   try {
-    const response = await axios.post("http://127.0.0.1:8000/token_refresh/",
+    const response = await axios.post(`${backendUrl}/api/token_refresh/`,
       { refresh: refreshToken },
       { headers: { "Content-Type": "application/json" } }
     );

@@ -26,7 +26,7 @@ const MovieSearch = () => {
   const [selectedMovie, setSelectedMovie] = useState<Movie | null>(null);
   const [hasMore, setHasMore] = useState(false);
   const [searchAttempted, setSearchAttempted] = useState(false);
-  const backendUrl = import.meta.env.VITE_BACKEND_URL;
+  const backendUrl = import.meta.env.DEV ? import.meta.env.VITE_BACKEND_URL : "";
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setQuery(e.target.value);

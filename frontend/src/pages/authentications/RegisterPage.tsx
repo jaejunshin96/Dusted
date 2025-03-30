@@ -16,14 +16,14 @@ const RegisterPage: React.FC = () => {
   const [password2, setPassword2] = useState<string>("");
   const [error, setError] = useState<string | null>(null);
   const [message, setMessage] = useState<string | null>(null);
-  const backendUrl = import.meta.env.VITE_BACKEND_URL;
+  const backendUrl = import.meta.env.DEV ? import.meta.env.VITE_BACKEND_URL : "";
 
   const handleRegister = async (e: React.FormEvent) => {
     e.preventDefault();
     setError(null);
 
     try {
-      await axios.post(`${backendUrl}/api/register/`,
+      await axios.post(`${backendUrl}/api/auth/register/`,
         { username, email, password, password2 },
         { headers: { "Content-Type": "application/json" } }
       );
