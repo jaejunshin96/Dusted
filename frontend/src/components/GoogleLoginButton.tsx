@@ -1,10 +1,14 @@
 import { GoogleLogin } from "@react-oauth/google";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
+import { useTranslation } from "react-i18next";
 
 const GoogleLoginButton = () => {
+  const { i18n } = useTranslation();
   const navigate = useNavigate();
   const backendUrl = import.meta.env.DEV ? import.meta.env.VITE_BACKEND_URL : "";
+
+  const lang = i18n.language;
 
   const handleSuccess = async (response: any) => {
     try {
@@ -27,6 +31,8 @@ const GoogleLoginButton = () => {
     <GoogleLogin
       onSuccess={handleSuccess}
       onError={() => alert("Google login failed")}
+      text="continue_with"
+      locale={lang}
     />
   );
 };
