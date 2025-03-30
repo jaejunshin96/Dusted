@@ -5,6 +5,7 @@ import LogoutButton from "./LogoutButton";
 import { useTranslation } from "react-i18next";
 import { IoIosGlobe } from "react-icons/io";
 import { GiHamburgerMenu } from "react-icons/gi";
+import { FaExchangeAlt } from "react-icons/fa";
 
 const Header: React.FC = () => {
   const { t, i18n } = useTranslation();
@@ -18,7 +19,7 @@ const Header: React.FC = () => {
 
   const handleLanguageChange = (lang: string) => {
     i18n.changeLanguage(lang);
-    localStorage.setItem("language", lang); // Persist user choice
+    localStorage.setItem("language", lang);
     setShowDropdown(false);
   };
 
@@ -52,7 +53,7 @@ const Header: React.FC = () => {
         <div
           className={styles.languageSwitcher}
           onClick={() => setShowDropdown(!showDropdown)}
-          ref={dropdownRef}
+          ref={showMobileMenu ? () => {} : dropdownRef}
         >
           <IoIosGlobe size={25} />
           <span className={styles.languageLabel}>{currentLanguage}</span>
@@ -88,13 +89,16 @@ const Header: React.FC = () => {
             >
               <IoIosGlobe size={25} />
               <span className={styles.languageLabel}>{currentLanguage}</span>
-              {showDropdown && (
-                <div className={styles.languageDropdown}>
-                  <button onClick={() => handleLanguageChange("en")}>English</button>
-                  <button onClick={() => handleLanguageChange("ko")}>한국어</button>
-                </div>
-              )}
             </div>
+            {showDropdown && (
+              <div
+                className={styles.languageSwitcher}
+                onClick={() => handleLanguageChange(i18n.language === "en" ? "ko" : "en")}
+              >
+                <FaExchangeAlt size={25} />
+                <span className={styles.languageLabel}>{i18n.language === "en" ? "한국어" : "English"}</span>
+              </div>
+            )}
           </div>
         </div>
       )}

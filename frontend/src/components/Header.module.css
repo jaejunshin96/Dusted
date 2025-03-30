@@ -158,8 +158,11 @@
 
   /* Mobile Popup Menu */
   .mobileMenu {
+    position: relative;
+    top: -130px;
     background-color: white;
     width: 80%;
+    height: auto;
     max-width: 350px;
     padding: 20px;
     border-radius: 10px;
@@ -168,8 +171,5 @@
     gap: 15px;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
     animation: slideDown 0.3s ease;
-
-    position: relative; /* Make sure it's positioned correctly */
-    top: -100px; /* Move it up by 100px */
   }
 }
