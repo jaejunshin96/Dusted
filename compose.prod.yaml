@@ -9,6 +9,8 @@ services:
       - "80:80"
     env_file:
       - .env
+    volumes:
+      - ./backend/staticfiles:/usr/src/app/staticfiles
 
   # Backend (Django)
   backend:
@@ -20,6 +22,8 @@ services:
       - .env
     depends_on:
       - db
+    volumes:
+      - ./backend/staticfiles:/usr/src/app/staticfiles
 
   # PostgreSQL Database
   db:
