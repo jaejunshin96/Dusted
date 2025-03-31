@@ -12,6 +12,8 @@ services:
           target: /usr/src/app
     env_file:
       - .env
+    volumes:
+      - ./backend/staticfiles:/usr/src/app/staticfiles
 
   #Backend Django
   backend:
@@ -28,6 +30,8 @@ services:
       - .env
     depends_on:
       - db
+    volumes:
+      - ./backend/staticfiles:/usr/src/app/staticfiles
 
   #Postgre
   db:
@@ -48,6 +52,7 @@ services:
       - "80:80"
     volumes:
       - ./nginx/default.conf:/etc/nginx/conf.d/default.conf
+      - ./backend/staticfiles:/usr/src/app/staticfiles
     depends_on:
       - frontend
       - backend
