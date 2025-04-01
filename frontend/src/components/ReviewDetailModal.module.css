@@ -45,6 +45,13 @@
   margin-bottom: 20px;
 }
 
+.reviewContainer {
+  display: flex;
+  align-items: start;
+  justify-content: center;
+  margin-top: 20px;
+}
+
 /* Text Block */
 .textBlock {
   background-color: rgba(0, 0, 0, 0.6);
@@ -56,14 +63,6 @@
   text-align: start;
 }
 
-.reviewContainer {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  /*padding: 20px;*/
-  margin-top: 20px;
-}
-
 .reviewBlock {
   background-color: rgba(0, 0, 0, 0.6);
   color: white;
@@ -72,6 +71,22 @@
   text-align: center;
   border-radius: 4px;
   max-width: 40vw;
+  word-wrap: break-word;
+  overflow-wrap: break-word;
+  white-space: pre-wrap;
+  box-sizing: border-box;
+}
+
+.scrollableOverview {
+  background-color: rgba(0, 0, 0, 0.6);
+  color: white;
+  display: inline-block;
+  padding: 10px;
+  text-align: center;
+  border-radius: 4px;
+  max-height: 30vh;
+  overflow-y: auto;
+  padding-right: 5px;
 }
 
 /* Rating Stars */
@@ -99,7 +114,7 @@
 }
 
 .textarea {
-  width: 70%;
+  width: 85%;
   padding: 12px 15px;
   margin-top: 10px;
   border-radius: 8px;
@@ -113,14 +128,26 @@
   transition: border-color 0.3s, box-shadow 0.3s;
 }
 
+.errorContainer {
+  display: flex;
+  justify-content: center;
+}
+
+.error {
+  background-color: rgba(0, 0, 0, 0.6);
+  border-radius: 4px;
+  color: red;
+  margin-bottom: 10px;
+}
+
 /* Button Section */
 .buttonSection {
   position: absolute;
+  display: flex;
+  justify-content: center;
   bottom: 20px;
   left: 0;
   right: 0;
-  display: flex;
-  justify-content: center;
 }
 
 /* Buttons */

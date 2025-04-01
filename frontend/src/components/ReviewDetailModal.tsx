@@ -3,6 +3,7 @@ import { Review } from "../pages/ReviewCollectionPage";
 import authAxios from "../utils/authentications/authFetch";
 import { useTranslation } from "react-i18next";
 import styles from "./ReviewDetailModal.module.css";
+import { text } from "stream/consumers";
 
 interface ReviewDetailModalProps {
   review: Review;
@@ -14,8 +15,16 @@ const ReviewDetailModal: React.FC<ReviewDetailModalProps> = ({ review, onClose, 
   const { t } = useTranslation();
   const [isEditing, setIsEditing] = useState(false);
   const [reviewText, setReviewText] = useState(review.review);
+  const [textCount, setTextCount] = useState(review.review.length);
   const [rating, setRating] = useState(review.rating);
+  const [error, setError] = useState<string | null>(null);
   const backendUrl = import.meta.env.DEV ? import.meta.env.VITE_BACKEND_URL : "";
+
+  //const [showFullReview, setShowFullReview] = useState(false);
+
+  //  const truncatedReview = review.review.length > 200
+  //    ? review.review.slice(0, 200) + "..."
+  //    : review.review;
 
   useEffect(() => {
     const handleEsc = (e: KeyboardEvent) => {
@@ -27,6 +36,11 @@ const ReviewDetailModal: React.FC<ReviewDetailModalProps> = ({ review, onClose, 
     document.addEventListener("keydown", handleEsc);
     return () => document.removeEventListener("keydown", handleEsc);
   }, [onClose]);
+
+  useEffect(() => {
+    setError(null);
+    setTextCount(reviewText.length);
+  }, [reviewText]);
 
   const handleSave = async () => {
     try {
@@ -40,8 +54,12 @@ const ReviewDetailModal: React.FC<ReviewDetailModalProps> = ({ review, onClose, 
       });
       onSave();
       setIsEditing(false);
-    } catch (error) {
-      alert(t("Failed to save the review. Please try again."));
+    } catch (err: any) {
+      if (err.response?.data?.review) {
+        setError(t("Review over 400"));
+      } else {
+        setError(t("Failed to save the review. Please try again."));
+      }
     }
   };
 
@@ -92,8 +110,25 @@ const ReviewDetailModal: React.FC<ReviewDetailModalProps> = ({ review, onClose, 
 
             <div className={styles.reviewContainer}>
               <p className={`${styles.textBlock} ${styles.reviewBlock}`}>
-                "{review.review}"
+                {review.review.split("\n").map((line, index) => (
+                  <span key={index}>
+                    {line}
+                    <br />
+                  </span>
+                ))}
+                {/*{review.review}*/}
               </p>
+              {/*<div className={`${styles.textBlock} ${showFullReview ? styles.scrollableOverview : styles.reviewBlock}`}>
+                {showFullReview ? review.review : truncatedReview}
+                {review.review.length > 200 && (
+                  <text
+                    className={styles.readMoreButton}
+                    onClick={() => setShowFullReview(!showFullReview)}
+                  >
+                    {showFullReview ? t("Show Less") : t("Read More")}
+                  </text>
+                )}
+              </div>*/}
             </div>
 
             <div className={styles.buttonSection}>
@@ -130,6 +165,12 @@ const ReviewDetailModal: React.FC<ReviewDetailModalProps> = ({ review, onClose, 
               />
             </div>
 
+            <div style={{ textAlign: "right", width: "90%", color: textCount > 400 ? "red" : "white"}}>
+              {textCount} / 400
+            </div>
+            <div className={styles.errorContainer}>
+              {error && <p className={styles.error}>{error}</p>}
+            </div>
             <div className={styles.buttonSection}>
               <button className={`${styles.button}`} onClick={handleSave}>{t("Save")}</button>
               <button className={`${styles.button} ${styles.closeButton}`} onClick={() => setIsEditing(false)}>{t("Cancel")}</button>

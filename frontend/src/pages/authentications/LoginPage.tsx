@@ -34,15 +34,24 @@ const LoginPage: React.FC = () => {
 
       const data: LoginResponse = response.data;
 
-      localStorage.setItem("email", data.email);
-      localStorage.setItem("username", data.username);
-      localStorage.setItem("access_token", data.access_token);
-      localStorage.setItem("refresh_token", data.refresh_token);
+      if (data.access_token && data.refresh_token) {
+        localStorage.setItem("email", data.email);
+        localStorage.setItem("username", data.username);
+        localStorage.setItem("access_token", data.access_token);
+        localStorage.setItem("refresh_token", data.refresh_token);
 
-      console.log(data);
-      navigate("/");
+        navigate("/");
+      }
     } catch (err: any) {
-      setError(err.response?.data?.message || t("Login failed"));
+      if (err.response?.data?.detail === "google") {
+        setError(t("Please continue your login using Google."));
+      } else if (err.response?.data?.detail === "credentials") {
+        setError(t("Invalid credentials"));
+      } else if (err.response?.data?.detail === "verify") {
+        setError(t("Not verified"));
+      } else {
+        setError(t("An unexpected error occurred."));
+      }
     }
   };
 
@@ -57,7 +66,16 @@ const LoginPage: React.FC = () => {
         {/* Login Section */}
         <div className={styles.loginBox}>
           <h2>{t("Sign In")}</h2>
-          {error && <p className={styles.error}>{error}</p>}
+          {error && (
+            <p className={styles.error}>
+              {error.split('\n').map((line, i) => (
+                <span key={i}>
+                  {line}
+                  <br />
+                </span>
+              ))}
+            </p>
+          )}
           <form onSubmit={handleLogin}>
             <input
               type="email"

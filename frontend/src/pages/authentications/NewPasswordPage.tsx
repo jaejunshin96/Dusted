@@ -17,6 +17,7 @@ const NewPasswordPage: React.FC = () => {
   const [error, setError] = useState<string | null>(null);
   const [message, setMessage] = useState<string | null>(null);
   const navigate = useNavigate();
+  const [isRedirecting, setIsRedirecting] = useState(false);
   const location = useLocation();
   const backendUrl = import.meta.env.DEV ? import.meta.env.VITE_BACKEND_URL : "";
 
@@ -45,22 +46,31 @@ const NewPasswordPage: React.FC = () => {
     }
 
     try {
-      await axios.patch(`${backendUrl}/api/auth/password-reset-complete/`,
+      const response = await axios.patch(`${backendUrl}/api/auth/password-reset-complete/`,
         { uidb64, token, password, password2 },
         { headers: { "Content-Type": "application/json" } }
       );
 
-      setMessage(t("Password reset successful. Redirecting to login..."));
-      setTimeout(() => navigate("/login"), 3000);
+      if (response.status === 200) {
+        setIsRedirecting(true);
+        setMessage(t("Password reset successful. Redirecting to login..."));
+        setTimeout(() => navigate("/login"), 3000);
+      }
     } catch (err: any) {
-      setError(err.response?.data?.Error || t("Password reset failed"));
+      if (err.response?.data?.password) {
+        setError(t("Password must be at least 8 characters long."))
+      } else if (err.response?.data?.password) {
+        setError(t("Passwords do not match."));
+      } else {
+        setError(t("An unexpected error occurred."));
+      }
     }
   };
 
   return (
     <div className={styles.container}>
       <div className={styles.resetBox}>
-        <h2>Reset Password</h2>
+        <h2>{t("Reset Password")}</h2>
         {error && <p className={styles.error}>{error}</p>}
         {message && <p className={styles.message}>{message}</p>}
         <form onSubmit={handleResetPassword}>
@@ -78,7 +88,7 @@ const NewPasswordPage: React.FC = () => {
             onChange={(e) => setPassword2(e.target.value)}
             required
           />
-          <button type="submit">{t("Reset Password")}</button>
+          <button type="submit" disabled={isRedirecting}>{t("Reset Password")}</button>
         </form>
       </div>
     </div>
