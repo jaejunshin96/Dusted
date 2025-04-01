@@ -3,7 +3,7 @@ import { Review } from "../pages/ReviewCollectionPage";
 import authAxios from "../utils/authentications/authFetch";
 import { useTranslation } from "react-i18next";
 import styles from "./ReviewDetailModal.module.css";
-import { text } from "stream/consumers";
+//import { text } from "stream/consumers";
 
 interface ReviewDetailModalProps {
   review: Review;
