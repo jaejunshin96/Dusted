@@ -13,8 +13,10 @@ class UserSerializer(serializers.ModelSerializer):
         fields = ["id", "email", 'username', "is_staff", "is_active", "date_joined", 'language_preference']
 
 class UserRegisterationSerializer(serializers.ModelSerializer):
-	password = serializers.CharField(max_length=68, min_length=6, write_only=True)
-	password2 = serializers.CharField(max_length=68, min_length=6, write_only=True)
+	email = serializers.EmailField()
+	username = serializers.CharField(max_length=150)
+	password = serializers.CharField(max_length=68, min_length=8, write_only=True)
+	password2 = serializers.CharField(max_length=68, min_length=8, write_only=True)
 
 	class Meta:
 		model = CustomUser
@@ -22,11 +24,19 @@ class UserRegisterationSerializer(serializers.ModelSerializer):
 
 	# we need compare the two passwords the user provides
 	def validate(self, attrs):
+		email = attrs.get('email', '')
+		username = attrs.get('username', '')
 		password = attrs.get('password', '')
 		password2 = attrs.get('password2', '')
 
-		if password != password2:
-			raise serializers.ValidationError("passwords do not match")
+		if CustomUser.objects.filter(email=email).exists():
+			raise serializers.ValidationError({"email": "Email already exists"})
+		elif CustomUser.objects.filter(username=username).exists():
+			raise serializers.ValidationError({"username": "Username already exists"})
+		elif len(password) < 8:
+			raise serializers.ValidationError({"password2": "Password must be at least 8 characters long."})
+		elif password != password2:
+			raise serializers.ValidationError({"password": "passwords do not match"})
 		return attrs
 
 	def create(self, validated_data):
@@ -58,13 +68,12 @@ class LoginSerializer(serializers.Serializer):
 		user = authenticate(email=email, password=password)
 
 		if filtered_user_by_email.exists() and filtered_user_by_email[0].auth_provider != 'email':
-			raise AuthenticationFailed(
-				detail='Please continue your login using ' + filtered_user_by_email[0].auth_provider)
+			raise AuthenticationFailed(detail='google')
 
 		if not user:
-			raise AuthenticationFailed(f"invalid credentials try again")
+			raise AuthenticationFailed(detail="credentials")
 		if not user.is_verified:
-			raise AuthenticationFailed("Email is not verified")
+			raise AuthenticationFailed(detail='verify')
 
 		user_tokens = user.tokens()
 
@@ -99,8 +108,8 @@ class RequestPasswordResetEmailSerializer(serializers.Serializer):
 		fields = ['email', 'redirect_url']
 
 class SetNewPasswordSerializer(serializers.Serializer):
-	password = serializers.CharField(min_length=6, max_length=68, write_only=True)
-	password2 = serializers.CharField(min_length=6, max_length=68, write_only=True)
+	password = serializers.CharField(min_length=8, max_length=68, write_only=True)
+	password2 = serializers.CharField(min_length=8, max_length=68, write_only=True)
 	token = serializers.CharField(min_length=1, write_only=True)
 	uidb64 = serializers.CharField(min_length=1, write_only=True)
 
@@ -117,8 +126,10 @@ class SetNewPasswordSerializer(serializers.Serializer):
 			id = smart_str(urlsafe_base64_decode(uidb64))
 			user = CustomUser.objects.get(id=id)
 
+			if len(password) < 8:
+				raise serializers.ValidationError({"password": "Password must be at least 8 characters long."})
 			if password != password2:
-				raise serializers.ValidationError({'Error': 'Passwords do not match'})
+				raise serializers.ValidationError({'password': 'Passwords do not match'})
 
 			if not PasswordResetTokenGenerator().check_token(user, token):
 				raise AuthenticationFailed('The reset link is invalid', 401)

@@ -12,7 +12,14 @@ const HomePage: React.FC = () => {
     <div className={styles.container}>
       <div className={styles.header}>
         <h1 className={styles.title}>Dusted</h1>
-        <p className={styles.welcome}>{t("WelcomeMessage", { username })}</p>
+        <p className={styles.welcome}>
+          {t("WelcomeMessage", { username }).split('\n').map((line, i) => (
+            <span key={i}>
+              {line}
+              <br />
+            </span>
+          ))}
+        </p>
       </div>
 
       <div className={styles.searchSection}>

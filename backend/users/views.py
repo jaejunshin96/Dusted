@@ -43,13 +43,14 @@ class RegisterUserView(APIView):
 
             token = jwt.encode({"user_id": user.id}, settings.SECRET_KEY, algorithm="HS256")
 
-            current_site = get_current_site(request).domain
+            current_site = os.getenv("DOMAIN_URL", "http://localhost")
             relative_link = reverse('verify-email')
-            absurl = 'http://' + current_site + relative_link + "?token=" + str(token)
-            email_body = 'Hi '+user.username + \
-            ' Use the link below to verify your email \n' + absurl
+            absurl = current_site + relative_link + "?token=" + str(token)
+            email_body = 'Hello, ' + user.username + '\n' + \
+                'Welcome to Dusted.\n' + \
+                'Use the link below to verify your email.\n\n' + absurl
             data = {'email_body': email_body, 'to_email': user.email,
-                    'email_subject': 'Verify your email'}
+                    'email_subject': 'Verify your email to activate the account'}
 
             Util.send_email(data)
 
@@ -67,8 +68,8 @@ class VerifyEmail(APIView):
             if not user.is_verified:
                 user.is_verified = True
                 user.save()
-            frontend_url = os.getenv("FRONTEND_URL", "http://localhost:5173")
-            activation_confirm_url = f"{frontend_url}/activation-confirm?token={token}"
+            domain_url = os.getenv("DOMAIN_URL", "http://localhost")
+            activation_confirm_url = f"{domain_url}/activation-confirm?token={token}"
             return redirect(activation_confirm_url)
             #return Response({'email': 'Successfully activated'}, status=status.HTTP_200_OK)
         except jwt.ExpiredSignatureError as identifier:
@@ -129,16 +130,16 @@ class RequestPasswordResetEmail(APIView):
                 uidb64 = urlsafe_base64_encode(smart_bytes(user.id))
                 token = PasswordResetTokenGenerator().make_token(user)
 
-                current_site = get_current_site(request).domain
+                current_site = os.getenv("DOMAIN_URL", "http://localhost")
                 relative_link = reverse('password-reset-confirm', kwargs={'uidb64': uidb64, 'token': token})
 
-                absurl = 'http://' + current_site + relative_link
-                email_body = 'Hello, \n Use link below to reset your password \n' + absurl
+                absurl = current_site + relative_link
+                email_body = 'Hello, \nUse link below to reset your password.\n\n' + absurl
                 data = {'email_body': email_body, 'to_email': user.email,
                         'email_subject': 'Reset your password'}
 
                 Util.send_email(data)
-                return Response({'success': 'We have sent you a link to reset your password'}, status=status.HTTP_200_OK)
+                return Response({'success': 'We have sent you a link to reset your password.'}, status=status.HTTP_200_OK)
             return Response({'Error': 'Email not found'}, status=status.HTTP_404_NOT_FOUND)
 
 class PasswordResetTokenConfirm(APIView):
@@ -152,12 +153,12 @@ class PasswordResetTokenConfirm(APIView):
             if not PasswordResetTokenGenerator().check_token(user, token):
                 #I guess this should be a redirect to the frontend 404 page?
                 #return Response({'Error': 'Token is not valid, please request a new one'}, status=status.HTTP_401_UNAUTHORIZED)
-                frontend_url = os.getenv("FRONTEND_URL", "http://localhost:5173")
-                frontend_404_url = f'{frontend_url}/404'
+                domain_url = os.getenv("DOMAIN_URL", "http://localhost")
+                frontend_404_url = f'{domain_url}/404'
                 return redirect(frontend_404_url)
 
-            frontend_url = os.getenv("FRONTEND_URL", "http://localhost:5173")
-            password_reset_complete_url = f"{frontend_url}/password-reset-complete?uidb64={uidb64}&token={token}"
+            domain_url = os.getenv("DOMAIN_URL", "http://localhost")
+            password_reset_complete_url = f"{domain_url}/password-reset-complete?uidb64={uidb64}&token={token}"
             return redirect(password_reset_complete_url)
         except DjangoUnicodeDecodeError as identifier:
             return Response({'Error': 'Token is not valid, please request a new one'}, status=status.HTTP_401_UNAUTHORIZED)
