@@ -124,7 +124,7 @@ class RequestPasswordResetEmail(APIView):
                 user = CustomUser.objects.get(email=email)
                 if user.auth_provider == 'google':
                     return Response(
-                        {'Error': 'Password reset is not allowed for Google-authenticated accounts. Please use Google Sign-In.'},
+                        {'google': 'Password reset is not allowed for Google-authenticated accounts. Please use Google Sign-In.'},
                         status=status.HTTP_403_FORBIDDEN
                     )
                 uidb64 = urlsafe_base64_encode(smart_bytes(user.id))
