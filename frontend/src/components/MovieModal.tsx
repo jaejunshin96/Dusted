@@ -18,6 +18,8 @@ const MovieModal: React.FC<MovieModalProps> = ({ movie, onClose }) => {
   const [error, setError] = useState<string | null>(null);
   const backendUrl = import.meta.env.DEV ? import.meta.env.VITE_BACKEND_URL : "";
 
+  const [isImageLoaded, setIsImageLoaded] = useState(false);
+
   const [showFullOverview, setShowFullOverview] = useState(false);
 
   const truncatedOverview = movie.overview.length > 200
@@ -34,6 +36,17 @@ const MovieModal: React.FC<MovieModalProps> = ({ movie, onClose }) => {
     document.addEventListener("keydown", handleEsc);
     return () => document.removeEventListener("keydown", handleEsc);
   }, [onClose]);
+
+  useEffect(() => {
+    if (!movie.backdrop_path) {
+      setIsImageLoaded(true);
+      return;
+    }
+
+    const img = new Image();
+    img.src = `https://image.tmdb.org/t/p/original${movie.backdrop_path}`;
+    img.onload = () => setIsImageLoaded(true);
+  }, [movie.backdrop_path]);
 
   useEffect(() => {
     setError(null);
@@ -73,6 +86,16 @@ const MovieModal: React.FC<MovieModalProps> = ({ movie, onClose }) => {
     }
   };
 
+  //if (!isImageLoaded) {
+  //  return (
+  //    <div className={styles.overlay}>
+  //      <div className={styles.modalContainer}>
+  //        <div className={styles.spinner}></div>
+  //      </div>
+  //    </div>
+  //  );
+  //}
+
   return (
     <div className={styles.overlay} onClick={onClose}>
       <div
@@ -84,7 +107,8 @@ const MovieModal: React.FC<MovieModalProps> = ({ movie, onClose }) => {
         }}
         onClick={(e) => e.stopPropagation()}
       >
-        {!writingReview ? (
+        {!isImageLoaded ? (<div className={styles.spinner}></div>) :
+        !writingReview ? (
           <>
             <div className={styles.detailsContainer}>
               <h2 className={styles.textBlock}>
