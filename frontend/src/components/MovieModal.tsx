@@ -42,7 +42,7 @@ const MovieModal: React.FC<MovieModalProps> = ({ movie, onClose }) => {
 
   const handleSubmitReview = async () => {
     if (rating === 0) {
-      alert(t("Please select a rating before submitting your review."));
+      setError(t("Please select a rating before submitting your review."));
       return;
     }
 
