@@ -3,6 +3,7 @@ import { Movie } from "./MovieSearch";
 import authAxios from "../utils/authentications/authFetch";
 import { useTranslation } from "react-i18next";
 import styles from "./MovieModal.module.css";
+import clapperboard from "../assets/clapperboard.png"
 
 interface MovieModalProps {
   movie: Movie;
@@ -16,6 +17,7 @@ const MovieModal: React.FC<MovieModalProps> = ({ movie, onClose }) => {
   const [rating, setRating] = useState(0);
   const [textCount, setTextCount] = useState(0);
   const [error, setError] = useState<string | null>(null);
+  const [isReviewed, setIsReviewed] = useState(false);
   const backendUrl = import.meta.env.DEV ? import.meta.env.VITE_BACKEND_URL : "";
 
   const [isImageLoaded, setIsImageLoaded] = useState(false);
@@ -36,6 +38,25 @@ const MovieModal: React.FC<MovieModalProps> = ({ movie, onClose }) => {
     document.addEventListener("keydown", handleEsc);
     return () => document.removeEventListener("keydown", handleEsc);
   }, [onClose]);
+
+  useEffect(() => {
+    const fetchReviewStatus = async () => {
+      try {
+        const response = await authAxios(`${backendUrl}/api/review/reviews/status/`, {
+          method: "GET",
+          params: { movie_id: movie.id }
+        });
+
+        if (response.status === 200 && response.data.reviewed) {
+          setIsReviewed(true);
+        }
+      } catch (error) {
+        console.error("Failed to fetch review status:", error);
+      }
+    };
+
+    fetchReviewStatus();
+  }, [movie.id]);
 
   useEffect(() => {
     if (!movie.backdrop_path) {
@@ -67,7 +88,8 @@ const MovieModal: React.FC<MovieModalProps> = ({ movie, onClose }) => {
           title: movie.title,
           rating,
           review: reviewText,
-          image_path: `https://image.tmdb.org/t/p/original${movie.backdrop_path}`,
+          image_path: movie.backdrop_path ?
+            `https://image.tmdb.org/t/p/original${movie.backdrop_path}` : null,
         }
       });
 
@@ -101,9 +123,10 @@ const MovieModal: React.FC<MovieModalProps> = ({ movie, onClose }) => {
       <div
         className={`${styles.modalContainer} ${styles.modalBackgroundImage}`}
         style={{
-          backgroundImage: movie.backdrop_path
-            ? `url(https://image.tmdb.org/t/p/original${movie.backdrop_path})`
-            : "none",
+          backgroundImage:
+            `url(${movie.backdrop_path && isImageLoaded
+            ? `https://image.tmdb.org/t/p/original${movie.backdrop_path}`
+            : clapperboard})`
         }}
         onClick={(e) => e.stopPropagation()}
       >
@@ -137,8 +160,12 @@ const MovieModal: React.FC<MovieModalProps> = ({ movie, onClose }) => {
             </div>
 
             <div className={styles.buttonSection}>
-              <button className={`${styles.button}`} onClick={() => setWritingReview(true)}>
-                {t("Review")}
+              <button
+                className={`${styles.button}`}
+                onClick={() => setWritingReview(true)}
+                disabled={isReviewed}
+              >
+                {isReviewed ? t("Reviewed") : t("Review")}
               </button>
             </div>
           </>

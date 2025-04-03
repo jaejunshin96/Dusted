@@ -3,7 +3,7 @@ import { Review } from "../pages/ReviewCollectionPage";
 import authAxios from "../utils/authentications/authFetch";
 import { useTranslation } from "react-i18next";
 import styles from "./ReviewDetailModal.module.css";
-//import { text } from "stream/consumers";
+import clapperboard from "../assets/clapperboard.png"
 
 interface ReviewDetailModalProps {
   review: Review;
@@ -45,7 +45,7 @@ const ReviewDetailModal: React.FC<ReviewDetailModalProps> = ({ review, onClose, 
     }
 
     const img = new Image();
-    img.src = `https://image.tmdb.org/t/p/original${review.image_path}`;
+    img.src = `${review.image_path}`;
     img.onload = () => setIsImageLoaded(true);
   }, [review.image_path]);
 
@@ -106,9 +106,10 @@ const ReviewDetailModal: React.FC<ReviewDetailModalProps> = ({ review, onClose, 
       <div
         className={`${styles.modalContainer} ${styles.modalBackgroundImage}`}
         style={{
-          backgroundImage: review.image_path
-            ? `url(https://image.tmdb.org/t/p/original${review.image_path})`
-            : "none",
+          backgroundImage:
+            `url(${review.image_path && isImageLoaded
+            ? `${review.image_path}`
+            : clapperboard})`
         }}
         onClick={(e) => e.stopPropagation()}
       >
