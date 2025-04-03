@@ -17,6 +17,9 @@
 
 /* Modal Container */
 .modalContainer {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
   background-color: #2a2a2a;
   padding: 20px;
   margin-top: 40px;
@@ -42,6 +45,7 @@
   display: flex;
   flex-direction: column;
   align-items: flex-start;
+  flex-grow: 1;
   margin-bottom: 20px;
 }
 
@@ -71,19 +75,46 @@
   color: #5060d1;
 }
 
+/* Review Textarea */
+.parentOfTextarea {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+}
+
+.textarea {
+  width: 85%;
+  padding: 12px 15px;
+  margin-top: 10px;
+  border-radius: 8px;
+  border: 1px solid #ddd;
+  background-color: #1e1e1e;
+  color: white;
+  box-sizing: border-box;
+  resize: vertical;
+  font-size: 16px;
+  line-height: 1.5;
+  transition: border-color 0.3s, box-shadow 0.3s;
+}
+
 /* Centered Button Section */
 .buttonSection {
-  position: absolute;
+  margin-top: auto;
+  display: flex;
+  justify-content: center;
+  gap: 10px;
+  /*position: absolute;
   bottom: 20px;
   left: 0;
   right: 0;
   display: flex;
-  justify-content: center;
+  justify-content: center;*/
 }
 
 /* Buttons */
 .button {
-  margin-right: 10px;
+  /*margin-right: 10px;*/
   padding: 6px 12px;
   border-radius: 4px;
   cursor: pointer;
@@ -135,26 +166,17 @@
   color: #FFD700;
 }
 
-/* Review Textarea */
-.parentOfTextarea {
+.errorContainer {
   display: flex;
   justify-content: center;
+  width: 100%;
 }
 
-.textarea {
-  width: 85%;
-  padding: 12px 15px;
-  margin-top: 10px;
-  border-radius: 8px;
-  border: 1px solid #ddd;
-  background-color: #1e1e1e;
-  color: white;
-  box-sizing: border-box;
-  resize: vertical;
-  font-size: 16px;
-  line-height: 1.5;
-  transition: border-color 0.3s, box-shadow 0.3s;
-  outline: none;
+.error {
+  background-color: rgba(0, 0, 0, 0.6);
+  border-radius: 4px;
+  color: red;
+  margin-bottom: 10px;
 }
 
 /* Animation */
