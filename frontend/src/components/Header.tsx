@@ -45,7 +45,7 @@ const Header: React.FC = () => {
         {username && (
           <>
             <span className={styles.navLink} onClick={() => { navigate("/"); closeMobileMenu(); }}>{t("Home")}</span>
-            <span className={styles.navLink} onClick={() => { navigate("/reviews"); closeMobileMenu(); }}>{t("Reviews")}</span>
+            <span className={styles.navLink} onClick={() => { navigate("/reviews"); closeMobileMenu(); }}>{t("Collections")}</span>
             <LogoutButton onLogout={closeMobileMenu} />
           </>
         )}
@@ -77,7 +77,7 @@ const Header: React.FC = () => {
             {username && (
               <>
                 <span className={styles.navLink} onClick={() => { navigate("/"); closeMobileMenu(); }}>{t("Home")}</span>
-                <span className={styles.navLink} onClick={() => { navigate("/reviews"); closeMobileMenu(); }}>{t("Reviews")}</span>
+                <span className={styles.navLink} onClick={() => { navigate("/reviews"); closeMobileMenu(); }}>{t("Collections")}</span>
                 <LogoutButton onLogout={closeMobileMenu} />
               </>
             )}

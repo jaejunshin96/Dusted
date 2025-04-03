@@ -217,6 +217,10 @@
   .modalContainer {
     width: 80vw;
   }
+
+  .reviewBlock {
+    max-width: 70vw;
+  }
 }
 
 /* Mobile-only scrollable overview */
@@ -239,6 +243,10 @@
 
   .modalContainer {
     width: 100%;
+  }
+
+  .reviewBlock {
+    max-width: 100%;
   }
 }
 
