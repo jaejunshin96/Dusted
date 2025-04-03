@@ -6,6 +6,18 @@ from .serializers import ReviewsSerializer
 from rest_framework.permissions import IsAuthenticated, AllowAny
 from rest_framework.pagination import PageNumberPagination
 
+class ReviewView(APIView):
+    permission_classes = [IsAuthenticated]
+
+    def get(self, request):
+        movie_id = request.query_params.get('movie_id')
+
+        if not movie_id:
+            return Response({'error': 'movie_id is required'}, status=status.HTTP_400_BAD_REQUEST)
+
+        has_review = Review.objects.filter(user=request.user, movie_id=movie_id).exists()
+
+        return Response({'reviewed': has_review}, status=status.HTTP_200_OK)
 
 class ReviewsList(APIView):
 	permission_classes = [IsAuthenticated]

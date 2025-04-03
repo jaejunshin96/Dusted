@@ -5,6 +5,7 @@ import ReviewDetailModal from "../components/ReviewDetailModal";
 import styles from "./ReviewCollectionPage.module.css"
 import { useTranslation } from "react-i18next";
 import { FaArrowDownLong } from "react-icons/fa6";
+import clapperBoard from "../assets/clapperboard.png"
 
 export interface Review {
   id: number;
@@ -12,7 +13,7 @@ export interface Review {
   title: string;
   review: string;
   rating: number;
-  image_path: string | null;
+  image_path: URL | null;
   created_at: string;
 }
 
@@ -160,8 +161,8 @@ const ReviewCollectionPage: React.FC = () => {
               onClick={() => setSelectedReview(review)}
               className={styles.card}
               style={{
-                backgroundImage: review.image_path ? `url(${review.image_path})` : "none",
-                backgroundColor: review.image_path ? "transparent" : "#2a2a2a",
+                backgroundImage: `url(${review.image_path ? `${review.image_path}` : clapperBoard})`,
+                //backgroundColor: review.image_path ? "transparent" : "#2a2a2a",
               }}
             >
               <CardBody>
