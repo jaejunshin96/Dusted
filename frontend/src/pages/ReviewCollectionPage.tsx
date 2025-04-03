@@ -19,6 +19,7 @@ export interface Review {
 const ReviewCollectionPage: React.FC = () => {
   const { t } = useTranslation();
   const [reviews, setReviews] = useState<Review[]>([]);
+  const [selectedReview, setSelectedReview] = useState<Review | null>(null);
   const [errorMessage, setErrorMessage] = useState("");
   const [loading, setLoading] = useState(false);
   const [page, setPage] = useState(1);
@@ -30,8 +31,6 @@ const ReviewCollectionPage: React.FC = () => {
   const username = localStorage.getItem("username");
   let debounceTimeout: NodeJS.Timeout;
   const backendUrl = import.meta.env.DEV ? import.meta.env.VITE_BACKEND_URL : "";
-
-  const [selectedReview, setSelectedReview] = useState<Review | null>(null);
 
   const handleCloseModal = () => setSelectedReview(null);
 
@@ -63,6 +62,22 @@ const ReviewCollectionPage: React.FC = () => {
       setLoading(false);
     }
   };
+
+  useEffect(() => {
+    if (selectedReview) {
+      document.body.style.overflow = "hidden";
+      document.documentElement.style.overflow = "hidden";
+    } else {
+      document.body.style.overflow = "";
+      document.documentElement.style.overflow = "";
+    }
+
+    // Cleanup on unmount
+    return () => {
+      document.body.style.overflow = "";
+      document.documentElement.style.overflow = "";
+    };
+  }, [selectedReview]);
 
   useEffect(() => {
     fetchReviews(page, currentQuery);

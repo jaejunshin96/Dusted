@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import authAxios from "../utils/authentications/authFetch";
 import LoadingErrorItem from "./LoadingErrorItem";
 import MovieListItem from "./MovieListItem";
@@ -27,6 +27,22 @@ const MovieSearch = () => {
   const [hasMore, setHasMore] = useState(false);
   const [searchAttempted, setSearchAttempted] = useState(false);
   const backendUrl = import.meta.env.DEV ? import.meta.env.VITE_BACKEND_URL : "";
+
+  useEffect(() => {
+    if (selectedMovie) {
+      document.body.style.overflow = "hidden";
+      document.documentElement.style.overflow = "hidden";
+    } else {
+      document.body.style.overflow = "";
+      document.documentElement.style.overflow = "";
+    }
+
+    // Cleanup on unmount
+    return () => {
+      document.body.style.overflow = "";
+      document.documentElement.style.overflow = "";
+    };
+  }, [selectedMovie]);
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setQuery(e.target.value);

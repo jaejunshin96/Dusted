@@ -106,34 +106,21 @@ const ReviewDetailModal: React.FC<ReviewDetailModalProps> = ({ review, onClose, 
                   </span>
                 ))}
               </div>
-            </div>
 
-            <div className={styles.reviewContainer}>
-              <p className={`${styles.textBlock} ${styles.reviewBlock}`}>
+              <div className={`${styles.reviewBlock}`}>
                 {review.review.split("\n").map((line, index) => (
                   <span key={index}>
                     {line}
                     <br />
                   </span>
                 ))}
-                {/*{review.review}*/}
-              </p>
-              {/*<div className={`${styles.textBlock} ${showFullReview ? styles.scrollableOverview : styles.reviewBlock}`}>
-                {showFullReview ? review.review : truncatedReview}
-                {review.review.length > 200 && (
-                  <text
-                    className={styles.readMoreButton}
-                    onClick={() => setShowFullReview(!showFullReview)}
-                  >
-                    {showFullReview ? t("Show Less") : t("Read More")}
-                  </text>
-                )}
-              </div>*/}
+              </div>
             </div>
 
             <div className={styles.buttonSection}>
-              <button className={`${styles.button}`} onClick={() => setIsEditing(true)}>{t("Edit")}</button>
-              {/*<button className={`${styles.button} ${styles.closeButton}`} onClick={onClose}>Close</button>*/}
+              <button className={`${styles.button}`} onClick={() => setIsEditing(true)}>
+                {t("Edit")}
+              </button>
             </div>
           </>
         ) : (
@@ -153,24 +140,26 @@ const ReviewDetailModal: React.FC<ReviewDetailModalProps> = ({ review, onClose, 
                   </span>
                 ))}
               </div>
+
+              <div className={styles.parentOfTextarea}>
+                <textarea
+                  className={styles.textarea}
+                  value={reviewText}
+                  rows={6}
+                  placeholder={t("What do you think about this film?")}
+                  onChange={(e) => setReviewText(e.target.value)}
+                />
+              </div>
+
+              <div style={{ textAlign: "right", width: "90%", color: textCount > 400 ? "red" : "white"}}>
+                {textCount} / 400
+              </div>
+              
+              <div className={styles.errorContainer}>
+                {error && <p className={styles.error}>{error}</p>}
+              </div>
             </div>
 
-            <div className={styles.parentOfTextarea}>
-              <textarea
-                className={styles.textarea}
-                value={reviewText}
-                rows={6}
-                placeholder={t("What do you think about this film?")}
-                onChange={(e) => setReviewText(e.target.value)}
-              />
-            </div>
-
-            <div style={{ textAlign: "right", width: "90%", color: textCount > 400 ? "red" : "white"}}>
-              {textCount} / 400
-            </div>
-            <div className={styles.errorContainer}>
-              {error && <p className={styles.error}>{error}</p>}
-            </div>
             <div className={styles.buttonSection}>
               <button className={`${styles.button}`} onClick={handleSave}>{t("Save")}</button>
               <button className={`${styles.button} ${styles.closeButton}`} onClick={() => setIsEditing(false)}>{t("Cancel")}</button>

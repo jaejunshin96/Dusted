@@ -14,6 +14,8 @@ const MovieModal: React.FC<MovieModalProps> = ({ movie, onClose }) => {
   const [writingReview, setWritingReview] = useState(false);
   const [reviewText, setReviewText] = useState("");
   const [rating, setRating] = useState(0);
+  const [textCount, setTextCount] = useState(0);
+  const [error, setError] = useState<string | null>(null);
   const backendUrl = import.meta.env.DEV ? import.meta.env.VITE_BACKEND_URL : "";
 
   const [showFullOverview, setShowFullOverview] = useState(false);
@@ -32,6 +34,11 @@ const MovieModal: React.FC<MovieModalProps> = ({ movie, onClose }) => {
     document.addEventListener("keydown", handleEsc);
     return () => document.removeEventListener("keydown", handleEsc);
   }, [onClose]);
+
+  useEffect(() => {
+    setError(null);
+    setTextCount(reviewText.length);
+  }, [reviewText]);
 
   const handleSubmitReview = async () => {
     if (rating === 0) {
@@ -56,11 +63,13 @@ const MovieModal: React.FC<MovieModalProps> = ({ movie, onClose }) => {
         setWritingReview(false);
         setReviewText("");
         setRating(0);
-      } else {
-        alert("Failed to submit review. Please try again.");
       }
-    } catch (error) {
-      alert("Something went wrong. Please try again.");
+    } catch (err: any) {
+      if (err.response?.data?.review) {
+        setError(t("Review over 400"));
+      } else {
+        setError(t("Failed to save the review. Please try again."));
+      }
     }
   };
 
@@ -81,8 +90,8 @@ const MovieModal: React.FC<MovieModalProps> = ({ movie, onClose }) => {
               <h2 className={styles.textBlock}>
                 {movie.title}
               </h2>
-              <p className={styles.textBlock}><strong>{t("Director")}:</strong> {movie.directors || "Not found"}</p>
-              <p className={styles.textBlock}><strong>{t("Release Date")}:</strong> {movie.release_date || "Not found."}</p>
+              <p className={styles.textBlock}>{t("Director")}: <strong>{movie.directors || "Not found"}</strong></p>
+              <p className={styles.textBlock}>{t("Release Date")}: <strong>{movie.release_date || "Not found."}</strong></p>
               <div className={`${styles.textBlock} ${showFullOverview ? styles.scrollableOverview : ""}`}>
                 {showFullOverview ? movie.overview : truncatedOverview}
                 {movie.overview.length > 200 && (
@@ -108,6 +117,7 @@ const MovieModal: React.FC<MovieModalProps> = ({ movie, onClose }) => {
               <h2 className={styles.textBlock}>
                 {t("Review for")} {movie.title} ({movie.original_title})
               </h2>
+
               <div className={styles.ratingStars}>
                 {[1, 2, 3, 4, 5].map((star) => (
                   <span
@@ -119,16 +129,24 @@ const MovieModal: React.FC<MovieModalProps> = ({ movie, onClose }) => {
                   </span>
                 ))}
               </div>
-            </div>
 
-            <div className={styles.parentOfTextarea}>
-              <textarea
-                className={styles.textarea}
-                value={reviewText}
-                rows={6}
-                placeholder={t("What do you think about this film?")}
-                onChange={(e) => setReviewText(e.target.value)}
-              />
+              <div className={styles.parentOfTextarea}>
+                <textarea
+                  className={styles.textarea}
+                  value={reviewText}
+                  rows={6}
+                  placeholder={t("What do you think about this film?")}
+                  onChange={(e) => setReviewText(e.target.value)}
+                />
+              </div>
+
+              <div style={{ textAlign: "right", width: "90%", color: textCount > 400 ? "red" : "white"}}>
+                {textCount} / 400
+              </div>
+
+              <div className={styles.errorContainer}>
+                {error && <p className={styles.error}>{error}</p>}
+              </div>
             </div>
 
             <div className={styles.buttonSection}>
