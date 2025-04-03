@@ -107,14 +107,16 @@ const ReviewDetailModal: React.FC<ReviewDetailModalProps> = ({ review, onClose, 
                 ))}
               </div>
 
-              <div className={`${styles.reviewBlock}`}>
-                {review.review.split("\n").map((line, index) => (
-                  <span key={index}>
-                    {line}
-                    <br />
-                  </span>
-                ))}
-              </div>
+              {review.review && (
+                <div className={`${styles.reviewBlock}`}>
+                  {review.review.split("\n").map((line, index) => (
+                    <span key={index}>
+                      {line}
+                      <br />
+                    </span>
+                  ))}
+                </div>
+              )}
             </div>
 
             <div className={styles.buttonSection}>
@@ -154,7 +156,7 @@ const ReviewDetailModal: React.FC<ReviewDetailModalProps> = ({ review, onClose, 
               <div style={{ textAlign: "right", width: "90%", color: textCount > 400 ? "red" : "white"}}>
                 {textCount} / 400
               </div>
-              
+
               <div className={styles.errorContainer}>
                 {error && <p className={styles.error}>{error}</p>}
               </div>

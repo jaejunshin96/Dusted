@@ -59,7 +59,7 @@ const MovieModal: React.FC<MovieModalProps> = ({ movie, onClose }) => {
       });
 
       if (response.status === 201) {
-        alert("Review submitted successfully!");
+        alert(t("Review submitted successfully!"));
         setWritingReview(false);
         setReviewText("");
         setRating(0);
@@ -90,7 +90,14 @@ const MovieModal: React.FC<MovieModalProps> = ({ movie, onClose }) => {
               <h2 className={styles.textBlock}>
                 {movie.title}
               </h2>
-              <p className={styles.textBlock}>{t("Director")}: <strong>{movie.directors || "Not found"}</strong></p>
+              <p className={styles.textBlock}>
+                {t("Director")}:{" "}
+                <strong>
+                  {Array.isArray(movie.directors)
+                    ? movie.directors.join(", ")
+                    : movie.directors || "Not found"}
+                </strong>
+              </p>
               <p className={styles.textBlock}>{t("Release Date")}: <strong>{movie.release_date || "Not found."}</strong></p>
               <div className={`${styles.textBlock} ${showFullOverview ? styles.scrollableOverview : ""}`}>
                 {showFullOverview ? movie.overview : truncatedOverview}
@@ -115,7 +122,8 @@ const MovieModal: React.FC<MovieModalProps> = ({ movie, onClose }) => {
           <>
             <div className={styles.detailsContainer}>
               <h2 className={styles.textBlock}>
-                {t("Review for")} {movie.title} ({movie.original_title})
+                {t("Review for")} {movie.title}
+                  {movie.original_title !== movie.title ? " (" + (movie.original_title) + ")" : ""}
               </h2>
 
               <div className={styles.ratingStars}>
