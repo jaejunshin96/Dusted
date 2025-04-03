@@ -38,8 +38,10 @@ const PasswordResetPage: React.FC = () => {
         navigate("/");
       }, 10000);
     } catch (err: any) {
-      if (err.response?.data?.Error) {
-        setError(t("Email not found"));
+      if (err.response?.data?.google) {
+        setError(t("Try with Google."));
+      } else if (err.response?.data?.Error) {
+        setError(t("Email not found."));
       } else {
         setError(t("An unexpected error occurred."));
       }

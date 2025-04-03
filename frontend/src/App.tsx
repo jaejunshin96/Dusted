@@ -9,6 +9,7 @@ import HomePage from "./pages/HomePage";
 import NotFoundPage from "./pages/404/NotFoundPage";
 import { AuthProvider } from "./utils/authentications/useAuth";
 import ProtectedRoute from "./utils/authentications/ProtectedRoute";
+import PublicRoute from "./utils/authentications/PublicRoute";
 import ReviewCollectionPage from "./pages/ReviewCollectionPage";
 import Header from "./components/Header";
 import "./App.css";
@@ -26,12 +27,14 @@ function App() {
           </Route>
 
           {/* public access */}
-          <Route path="/login" element={<LoginPage />} />
-          <Route path="/register" element={<RegisterPage />} />
-          {/*<Route path="/verify-email" element={<VerifyEmailPage />} />*/}
-          <Route path="/activation-confirm" element={<ActivationConfirmPage />} />
-          <Route path="/password-reset" element={<PasswordResetPage />} />
-          <Route path="/password-reset-complete" element={<NewPasswordPage />} />
+          <Route element={<PublicRoute/>}>
+            <Route path="/login" element={<LoginPage />} />
+            <Route path="/register" element={<RegisterPage />} />
+            {/*<Route path="/verify-email" element={<VerifyEmailPage />} />*/}
+            <Route path="/activation-confirm" element={<ActivationConfirmPage />} />
+            <Route path="/password-reset" element={<PasswordResetPage />} />
+            <Route path="/password-reset-complete" element={<NewPasswordPage />} />
+          </Route>
 
           {/* 404 */}
           <Route path="*" element={<NotFoundPage />} />
