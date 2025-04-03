@@ -19,6 +19,7 @@ const ReviewDetailModal: React.FC<ReviewDetailModalProps> = ({ review, onClose, 
   const [rating, setRating] = useState(review.rating);
   const [error, setError] = useState<string | null>(null);
   const backendUrl = import.meta.env.DEV ? import.meta.env.VITE_BACKEND_URL : "";
+  const [isImageLoaded, setIsImageLoaded] = useState(false);
 
   //const [showFullReview, setShowFullReview] = useState(false);
 
@@ -36,6 +37,17 @@ const ReviewDetailModal: React.FC<ReviewDetailModalProps> = ({ review, onClose, 
     document.addEventListener("keydown", handleEsc);
     return () => document.removeEventListener("keydown", handleEsc);
   }, [onClose]);
+
+  useEffect(() => {
+    if (!review.image_path) {
+      setIsImageLoaded(true);
+      return;
+    }
+
+    const img = new Image();
+    img.src = `https://image.tmdb.org/t/p/original${review.image_path}`;
+    img.onload = () => setIsImageLoaded(true);
+  }, [review.image_path]);
 
   useEffect(() => {
     setError(null);
@@ -79,6 +91,16 @@ const ReviewDetailModal: React.FC<ReviewDetailModalProps> = ({ review, onClose, 
     }
   };
 
+  //if (!isImageLoaded) {
+  //  return (
+  //    <div className={styles.overlay}>
+  //      <div className={styles.modalContainer}>
+  //        <div className={styles.spinner}></div>
+  //      </div>
+  //    </div>
+  //  );
+  //}
+
   return (
     <div className={styles.overlay} onClick={onClose}>
       <div
@@ -90,7 +112,8 @@ const ReviewDetailModal: React.FC<ReviewDetailModalProps> = ({ review, onClose, 
         }}
         onClick={(e) => e.stopPropagation()}
       >
-        {!isEditing ? (
+        {!isImageLoaded ? (<div className={styles.spinner}></div>) :
+        !isEditing ? (
           <>
             <div className={styles.detailsContainer}>
               <h2 className={styles.textBlock}>{review.title}</h2>

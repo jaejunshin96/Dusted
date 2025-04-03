@@ -116,7 +116,8 @@ const MovieSearch = () => {
       </form>
 
       <ul className={styles.movieList}>
-        {loading && <LoadingErrorItem message={t("Loading...")} />}
+        {/*{loading && <LoadingErrorItem message={t("Loading...")} />}*/}
+        {loading && <div className={styles.spinner} />}
         {error && <LoadingErrorItem message={error} isError />}
         {!loading && searchAttempted && movies.length === 0 && !error && (
           <div className={styles.noResults}>{t("No results found.")}</div>
