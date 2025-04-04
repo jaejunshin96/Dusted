@@ -4,33 +4,38 @@
   display: flex;
   flex-direction: column;
   align-items: center;
-  margin-top: 20px;
+  margin-top: 10px;
   width: 100%;
+  max-height: 45vh;
 }
 
 .searchBar {
   display: flex;
   flex-direction: row;
   gap: 10px;
-  margin-bottom: 20px;
-  width: clamp(300px, 80%, 600px);
+  margin-bottom: 10px;
+  width: clamp(300px, 90%, 600px);
+  /*border-radius: 30px;*/
 }
 
 .searchBar input {
   flex: 1;
   padding: 10px;
   border: 1px solid #ddd;
-  border-radius: 5px;
+  border-radius: 30px;
   outline: none;
   transition: border 0.3s;
   font-size: 1rem;
-  background-color: #f5f5f5;
-}
-
-.searchBar input:focus {
+  /*background-color: #f5f5f5;*/
   border-color: #8090ff;
   background-color: white;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
 }
+
+/*.searchBar input:focus {
+  border-color: #8090ff;
+  background-color: white;
+}*/
 
 .searchBar button {
   padding: 10px 20px;
@@ -54,7 +59,7 @@
 }
 
 .movieList {
-  width: clamp(300px, 80%, 600px);
+  width: clamp(300px, 90%, 600px);
   max-height: 50vh;
   overflow-y: auto;
   list-style-type: none;
@@ -108,8 +113,8 @@
 }
 
 .spinner {
-  width: 48px;
-  height: 48px;
+  width: 24px;
+  height: 24px;
   border: 5px solid white;
   border-top-color: gray;
   border-radius: 50%;
