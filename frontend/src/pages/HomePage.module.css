@@ -9,13 +9,30 @@ body {
 }
 
 .container {
+  display: flex;
+  flex-direction: column;
   align-items: center;
-  min-height: 90vh;
   padding: 20px;
+  min-height: 80vh;
+  box-sizing: border-box;
+  margin-top: clamp(2vh, 10vh, 20vh);
+}
+
+/* As screen gets shorter, reduce top spacing */
+@media (max-height: 800px) {
+  .container {
+    margin-top: 5vh;
+  }
+}
+
+@media (max-height: 600px) {
+  .container {
+    margin-top: 2vh;
+  }
 }
 
 .header {
-  margin-bottom: 30px;
+  margin-bottom: 10px;
   text-align: center;
 }
 
@@ -28,23 +45,22 @@ body {
 .welcome {
   font-size: clamp(1rem, 2.5vw, 1.5rem);
   color: #666;
-  margin-bottom: 20px;
 }
 
 .searchSection {
   width: clamp(300px, 80vw, 600px);
-  margin-bottom: 30px;
+  margin-bottom: 20px;
 }
 
-.buttonContainer {
+/*.buttonContainer {
   margin-top: 20px;
   display: flex;
   gap: 15px;
   justify-content: center;
   flex-wrap: wrap;
-}
+}*/
 
-.button {
+/*.button {
   padding: 12px 20px;
   background-color: #8090ff;
   color: white;
@@ -53,12 +69,12 @@ body {
   cursor: pointer;
   transition: background-color 0.3s, transform 0.2s;
   font-size: 1rem;
-}
+}*/
 
-.button:hover {
+/*.button:hover {
   background-color: #5a6ccc;
   transform: scale(1.05);
-}
+}*/
 
 @media (max-width: 430px) {
   .container {

@@ -5,6 +5,7 @@ import MovieListItem from "./MovieListItem";
 import MovieModal from "./MovieModal";
 import styles from "./MovieSearch.module.css";
 import { useTranslation } from "react-i18next";
+//import { GiClapperboard } from "react-icons/gi";
 
 export interface Movie {
   id: number;
@@ -22,6 +23,7 @@ const MovieSearch = () => {
   const [page, setPage] = useState(1);
   const [movies, setMovies] = useState<Movie[]>([]);
   const [loading, setLoading] = useState(false);
+  const [loadMoreLoading, setLoadMoreLoading] = useState(false);
   const [error, setError] = useState("");
   const [selectedMovie, setSelectedMovie] = useState<Movie | null>(null);
   const [hasMore, setHasMore] = useState(false);
@@ -63,7 +65,13 @@ const MovieSearch = () => {
   };
 
   const fetchMovies = async (searchTerm: string, pageNumber: number) => {
-    setLoading(true);
+    if (pageNumber === 1) {
+      setLoading(true);
+      setLoadMoreLoading(false);
+    } else {
+      setLoading(false);
+      setLoadMoreLoading(true);
+    }
     setError("");
 
     try {
@@ -85,6 +93,7 @@ const MovieSearch = () => {
       setError(t("Failed to fetch movies."));
     } finally {
       setLoading(false);
+      setLoadMoreLoading(false);
     }
   };
 
@@ -106,17 +115,17 @@ const MovieSearch = () => {
           handleSearch();
         }}
       >
+        {/*<GiClapperboard />*/}
         <input
           type="text"
           placeholder={t("Search for a movie...")}
           value={query}
           onChange={handleInputChange}
         />
-        <button type="submit">{t("Search")}</button>
+        {/*<button type="submit">{t("Search")}</button>*/}
       </form>
 
       <ul className={styles.movieList}>
-        {/*{loading && <LoadingErrorItem message={t("Loading...")} />}*/}
         {loading && <div className={styles.spinner} />}
         {error && <LoadingErrorItem message={error} isError />}
         {!loading && searchAttempted && movies.length === 0 && !error && (
@@ -128,9 +137,13 @@ const MovieSearch = () => {
 
         {hasMore && (
           <li className={styles.loadMoreContainer}>
-            <button className={styles.loadMoreButton} onClick={handleLoadMore}>
-              {loading ? t("Loading...") : t("Load More")}
-            </button>
+            {loadMoreLoading ? (
+              <div className={styles.spinner} />
+            ) : (
+              <button className={styles.loadMoreButton} onClick={handleLoadMore}>
+                {t("Load More")}
+              </button>
+            )}
           </li>
         )}
       </ul>
