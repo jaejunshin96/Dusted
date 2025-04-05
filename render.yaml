@@ -4,5 +4,10 @@ services:
     env: docker
     plan: free
     autoDeploy: true
-    dockerfilePath: backend/Dockerfile.render
+    dockerfilePath: backend/dockerfile.render
+    buildCommand: ""
+    startCommand: ""
     buildContext: backend
+    envVars:
+      - key: DJANGO_SETTINGS_MODULE
+        value: backend.settings
