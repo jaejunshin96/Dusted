@@ -20,7 +20,7 @@
 
 .searchBar input {
   flex: 1;
-  padding: 10px;
+  padding: 10px 20px;
   border: 1px solid #ddd;
   border-radius: 30px;
   outline: none;
