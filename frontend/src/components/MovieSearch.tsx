@@ -115,14 +115,12 @@ const MovieSearch = () => {
           handleSearch();
         }}
       >
-        {/*<GiClapperboard />*/}
         <input
           type="text"
           placeholder={t("Search for a movie...")}
           value={query}
           onChange={handleInputChange}
         />
-        {/*<button type="submit">{t("Search")}</button>*/}
       </form>
 
       <ul className={styles.movieList}>
