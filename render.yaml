@@ -8,6 +8,6 @@ services:
     buildCommand: ""
     startCommand: ""
     buildContext: backend
-    #envVars:
-    #  - key: DJANGO_SETTINGS_MODULE
-    #    value: backend.backend.settings
+    envVars:
+      - key: DJANGO_SETTINGS_MODULE
+        value: backend.backend.settings
