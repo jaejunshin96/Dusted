@@ -10,4 +10,4 @@ services:
     buildContext: backend
     envVars:
       - key: DJANGO_SETTINGS_MODULE
-        value: settings
+        value: backend.backend.settings
