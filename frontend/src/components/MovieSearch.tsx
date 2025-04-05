@@ -136,7 +136,7 @@ const MovieSearch = () => {
         {hasMore && (
           <li className={styles.loadMoreContainer}>
             {loadMoreLoading ? (
-              <div className={styles.spinner} />
+              <div className={styles.loadMoreSpinner} />
             ) : (
               <button className={styles.loadMoreButton} onClick={handleLoadMore}>
                 {t("Load More")}

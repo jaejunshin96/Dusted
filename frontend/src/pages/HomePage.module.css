@@ -84,4 +84,7 @@
     width: 70vw;
     margin-bottom: 20px;
   }
+  .welcome {
+    font-size: 0.8rem;
+  }
 }
