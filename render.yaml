@@ -4,7 +4,7 @@ services:
     env: docker
     plan: free
     autoDeploy: true
-    dockerfilePath: backend/dockerfile.render
+    dockerfilePath: ./backend/dockerfile.render
     #buildCommand: ""
     #startCommand: ""
     buildContext: ./backend
