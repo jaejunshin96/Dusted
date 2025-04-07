@@ -10,7 +10,8 @@ services:
     env_file:
       - .env
     volumes:
-      - ./backend/staticfiles:/usr/src/app/staticfiles
+      #- ./backend/staticfiles:/usr/src/app/staticfiles
+      - static-data:/vol/static
 
   # Backend (Django)
   backend:
@@ -23,7 +24,8 @@ services:
     depends_on:
       - db
     volumes:
-      - ./backend/staticfiles:/usr/src/app/staticfiles
+      #- ./backend/staticfiles:/usr/src/app/staticfiles
+      - static-data:/vol/static
 
   # PostgreSQL Database
   db:
@@ -34,7 +36,7 @@ services:
     ports:
       - "5432:5432"
     volumes:
-      - postgres_data:/var/lib/postgresql/data
+      - postgres-data:/var/lib/postgresql/data
 
   #nginx:
   #  container_name: nginx
@@ -50,4 +52,5 @@ services:
   #    - ./backend/staticfiles:/usr/src/app/staticfiles
 
 volumes:
-  postgres_data:
+  postgres-data:
+  static-data:
