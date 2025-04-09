@@ -6,7 +6,7 @@ import { useTranslation } from "react-i18next";
 import { PiGlobe } from "react-icons/pi";
 import { GiHamburgerMenu } from "react-icons/gi";
 import { FaExchangeAlt } from "react-icons/fa";
-import { FaRegCircleUser } from "react-icons/fa6";
+//import { FaRegCircleUser } from "react-icons/fa6";
 
 const Header: React.FC = () => {
   const { t, i18n } = useTranslation();
