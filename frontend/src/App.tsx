@@ -36,7 +36,7 @@ function App() {
             <Route path="/password-reset-complete" element={<NewPasswordPage />} />
           </Route>
 
-          {/* 404 */}
+          {/* 404page */}
           <Route path="*" element={<NotFoundPage />} />
         </Routes>
       </Router>
