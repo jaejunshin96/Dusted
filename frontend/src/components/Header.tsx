@@ -3,9 +3,10 @@ import { useNavigate } from "react-router-dom";
 import styles from "./Header.module.css";
 import LogoutButton from "./LogoutButton";
 import { useTranslation } from "react-i18next";
-import { IoIosGlobe } from "react-icons/io";
+import { PiGlobe } from "react-icons/pi";
 import { GiHamburgerMenu } from "react-icons/gi";
 import { FaExchangeAlt } from "react-icons/fa";
+import { FaRegCircleUser } from "react-icons/fa6";
 
 const Header: React.FC = () => {
   const { t, i18n } = useTranslation();
@@ -44,9 +45,17 @@ const Header: React.FC = () => {
       <nav className={styles.nav}>
         {username && (
           <>
-            <span className={styles.navLink} onClick={() => { navigate("/"); closeMobileMenu(); }}>{t("Home")}</span>
+            <span className={styles.navLink} onClick={() => { navigate("/"); closeMobileMenu(); }}>{t("Search")}</span>
             <span className={styles.navLink} onClick={() => { navigate("/reviews"); closeMobileMenu(); }}>{t("Collections")}</span>
-            <LogoutButton onLogout={closeMobileMenu} />
+            {/*<span className={styles.navLink} onClick={() => { closeMobileMenu(); }}>{t("My Page")}</span>*/}
+            <div
+              className={styles.languageSwitcher}
+              onClick={() => { navigate("/reviews"); closeMobileMenu(); }}
+            >
+              {/*<FaRegCircleUser size={25}/>*/}
+              {/*<span className={styles.languageLabel}>{username}</span>*/}
+              <LogoutButton onLogout={closeMobileMenu} />
+            </div>
           </>
         )}
 
@@ -55,8 +64,8 @@ const Header: React.FC = () => {
           onClick={() => setShowDropdown(!showDropdown)}
           ref={showMobileMenu ? () => {} : dropdownRef}
         >
-          <IoIosGlobe size={25} />
-          <span className={styles.languageLabel}>{currentLanguage}</span>
+          <PiGlobe size={25} />
+          {/*<span className={styles.languageLabel}>{currentLanguage}</span>*/}
           {showDropdown && (
             <div className={styles.languageDropdown}>
               <button onClick={() => handleLanguageChange("en")}>English</button>
@@ -87,7 +96,7 @@ const Header: React.FC = () => {
               className={styles.languageSwitcher}
               onClick={() => setShowDropdown(!showDropdown)}
             >
-              <IoIosGlobe size={25} />
+              <PiGlobe size={25} />
               <span className={styles.languageLabel}>{currentLanguage}</span>
             </div>
             {showDropdown && (
