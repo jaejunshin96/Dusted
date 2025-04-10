@@ -47,15 +47,7 @@ const Header: React.FC = () => {
           <>
             <span className={styles.navLink} onClick={() => { navigate("/"); closeMobileMenu(); }}>{t("Search")}</span>
             <span className={styles.navLink} onClick={() => { navigate("/reviews"); closeMobileMenu(); }}>{t("Collections")}</span>
-            {/*<span className={styles.navLink} onClick={() => { closeMobileMenu(); }}>{t("My Page")}</span>*/}
-            <div
-              className={styles.languageSwitcher}
-              onClick={() => { navigate("/reviews"); closeMobileMenu(); }}
-            >
-              {/*<FaRegCircleUser size={25}/>*/}
-              {/*<span className={styles.languageLabel}>{username}</span>*/}
-              <LogoutButton onLogout={closeMobileMenu} />
-            </div>
+            <LogoutButton onLogout={closeMobileMenu} />
           </>
         )}
 
