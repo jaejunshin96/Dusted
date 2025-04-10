@@ -43,7 +43,7 @@ class RegisterUserView(APIView):
 
             token = jwt.encode({"user_id": user.id}, settings.SECRET_KEY, algorithm="HS256")
 
-            current_site = os.getenv("DOMAIN_URL", "http://localhost")
+            current_site = os.getenv("BACKEND_URL", "http://localhost")
             relative_link = reverse('verify-email')
             absurl = current_site + relative_link + "?token=" + str(token)
             email_body = 'Hello, ' + user.username + '\n' + \
@@ -68,7 +68,7 @@ class VerifyEmail(APIView):
             if not user.is_verified:
                 user.is_verified = True
                 user.save()
-            domain_url = os.getenv("DOMAIN_URL", "http://localhost")
+            domain_url = os.getenv("FRONTEND_URL", "http://localhost")
             activation_confirm_url = f"{domain_url}/activation-confirm?token={token}"
             return redirect(activation_confirm_url)
             #return Response({'email': 'Successfully activated'}, status=status.HTTP_200_OK)
@@ -130,7 +130,7 @@ class RequestPasswordResetEmail(APIView):
                 uidb64 = urlsafe_base64_encode(smart_bytes(user.id))
                 token = PasswordResetTokenGenerator().make_token(user)
 
-                current_site = os.getenv("DOMAIN_URL", "http://localhost")
+                current_site = os.getenv("BACKEND_URL", "http://localhost")
                 relative_link = reverse('password-reset-confirm', kwargs={'uidb64': uidb64, 'token': token})
 
                 absurl = current_site + relative_link
@@ -153,11 +153,11 @@ class PasswordResetTokenConfirm(APIView):
             if not PasswordResetTokenGenerator().check_token(user, token):
                 #I guess this should be a redirect to the frontend 404 page?
                 #return Response({'Error': 'Token is not valid, please request a new one'}, status=status.HTTP_401_UNAUTHORIZED)
-                domain_url = os.getenv("DOMAIN_URL", "http://localhost")
+                domain_url = os.getenv("FRONTEND_URL", "http://localhost")
                 frontend_404_url = f'{domain_url}/404'
                 return redirect(frontend_404_url)
 
-            domain_url = os.getenv("DOMAIN_URL", "http://localhost")
+            domain_url = os.getenv("FRONTEND_URL", "http://localhost")
             password_reset_complete_url = f"{domain_url}/password-reset-complete?uidb64={uidb64}&token={token}"
             return redirect(password_reset_complete_url)
         except DjangoUnicodeDecodeError as identifier:
