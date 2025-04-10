@@ -2,7 +2,7 @@ import axios from "axios";
 
 const refreshAccessToken = async () => {
   const refreshToken = localStorage.getItem("refresh_token");
-  const backendUrl = import.meta.env.DEV ? import.meta.env.VITE_BACKEND_URL : "";
+  const backendUrl = import.meta.env.DEV ? import.meta.env.VITE_BACKEND_URL : import.meta.env.VITE_BACKEND_URL_PROD;
 
   if (!refreshToken) {
     console.log("No refresh token found. User must log in.");

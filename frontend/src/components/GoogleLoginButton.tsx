@@ -6,7 +6,7 @@ import axios from "axios";
 const GoogleLoginButton = () => {
   const { i18n } = useTranslation();
   const navigate = useNavigate();
-  const backendUrl = import.meta.env.DEV ? import.meta.env.VITE_BACKEND_URL : "";
+  const backendUrl = import.meta.env.DEV ? import.meta.env.VITE_BACKEND_URL : import.meta.env.VITE_BACKEND_URL_PROD;
 
   const lang = i18n.language;
 

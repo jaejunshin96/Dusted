@@ -18,7 +18,7 @@ const MovieModal: React.FC<MovieModalProps> = ({ movie, onClose }) => {
   const [textCount, setTextCount] = useState(0);
   const [error, setError] = useState<string | null>(null);
   const [isReviewed, setIsReviewed] = useState(false);
-  const backendUrl = import.meta.env.DEV ? import.meta.env.VITE_BACKEND_URL : "";
+  const backendUrl = import.meta.env.DEV ? import.meta.env.VITE_BACKEND_URL : import.meta.env.VITE_BACKEND_URL_PROD;
 
   const [isImageLoaded, setIsImageLoaded] = useState(false);
 

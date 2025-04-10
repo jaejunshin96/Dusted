@@ -9,7 +9,7 @@ const VerifyEmailPage: React.FC = () => {
   const [message, setMessage] = useState<string>("Verifying...");
   const location = useLocation();
   const navigate = useNavigate();
-  const backendUrl = import.meta.env.DEV ? import.meta.env.VITE_BACKEND_URL : "";
+  const backendUrl = import.meta.env.DEV ? import.meta.env.VITE_BACKEND_URL : import.meta.env.VITE_BACKEND_URL_PROD;
 
   useEffect(() => {
     const token = new URLSearchParams(location.search).get("token");

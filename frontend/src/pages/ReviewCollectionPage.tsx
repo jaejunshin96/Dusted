@@ -31,7 +31,7 @@ const ReviewCollectionPage: React.FC = () => {
   const [order, setOrder] = useState("dsc");
   const username = localStorage.getItem("username");
   let debounceTimeout: NodeJS.Timeout;
-  const backendUrl = import.meta.env.DEV ? import.meta.env.VITE_BACKEND_URL : "";
+  const backendUrl = import.meta.env.DEV ? import.meta.env.VITE_BACKEND_URL : import.meta.env.VITE_BACKEND_URL_PROD;
 
   const handleCloseModal = () => setSelectedReview(null);
 

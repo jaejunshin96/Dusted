@@ -19,7 +19,7 @@ const NewPasswordPage: React.FC = () => {
   const navigate = useNavigate();
   const [isRedirecting, setIsRedirecting] = useState(false);
   const location = useLocation();
-  const backendUrl = import.meta.env.DEV ? import.meta.env.VITE_BACKEND_URL : "";
+  const backendUrl = import.meta.env.DEV ? import.meta.env.VITE_BACKEND_URL : import.meta.env.VITE_BACKEND_URL_PROD;
 
   const searchParams = new URLSearchParams(location.search);
   const uidb64 = searchParams.get("uidb64");

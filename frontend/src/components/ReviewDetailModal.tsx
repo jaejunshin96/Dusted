@@ -18,7 +18,7 @@ const ReviewDetailModal: React.FC<ReviewDetailModalProps> = ({ review, onClose, 
   const [textCount, setTextCount] = useState(review.review.length);
   const [rating, setRating] = useState(review.rating);
   const [error, setError] = useState<string | null>(null);
-  const backendUrl = import.meta.env.DEV ? import.meta.env.VITE_BACKEND_URL : "";
+  const backendUrl = import.meta.env.DEV ? import.meta.env.VITE_BACKEND_URL : import.meta.env.VITE_BACKEND_URL_PROD;
   const [isImageLoaded, setIsImageLoaded] = useState(false);
 
   //const [showFullReview, setShowFullReview] = useState(false);
