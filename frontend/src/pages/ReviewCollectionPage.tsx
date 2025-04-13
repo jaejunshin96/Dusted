@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { Container, Row, Card, CardBody, CardTitle, CardText } from "reactstrap";
 import authAxios from "../utils/authentications/authFetch";
-import ReviewDetailModal from "../components/ReviewDetailModal";
+import ReviewDetailModal from "../components/movie/ReviewDetailModal";
 import styles from "./ReviewCollectionPage.module.css"
 import { useTranslation } from "react-i18next";
 import { FaArrowDownLong } from "react-icons/fa6";

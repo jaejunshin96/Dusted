@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
-import authAxios from "../utils/authentications/authFetch";
-import LoadingErrorItem from "./LoadingErrorItem";
+import authAxios from "../../utils/authentications/authFetch";
+import LoadingErrorItem from "../LoadingErrorItem";
 import MovieListItem from "./MovieListItem";
 import MovieModal from "./MovieModal";
 import styles from "./MovieSearch.module.css";

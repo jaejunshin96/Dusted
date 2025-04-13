@@ -1,5 +1,5 @@
 import { useNavigate } from "react-router-dom";
-import styles from "./Header.module.css";
+import styles from "./LogoutButton.module.css";
 import { useTranslation } from "react-i18next";
 
 interface LogoutButtonProps {
@@ -20,7 +20,7 @@ const LogoutButton: React.FC<LogoutButtonProps> = ({ onLogout }) => {
   };
 
   return (
-    <span onClick={handleLogout} className={styles.navLink}>
+    <span onClick={handleLogout} className={styles.logoutButton}>
       {t("Logout")}
     </span>
   );

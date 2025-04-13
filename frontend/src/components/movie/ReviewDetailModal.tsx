@@ -1,9 +1,9 @@
 import React, { useState, useEffect } from "react";
-import { Review } from "../pages/ReviewCollectionPage";
-import authAxios from "../utils/authentications/authFetch";
+import { Review } from "../../pages/ReviewCollectionPage";
+import authAxios from "../../utils/authentications/authFetch";
 import { useTranslation } from "react-i18next";
 import styles from "./ReviewDetailModal.module.css";
-import clapperboard from "../assets/clapperboard.png"
+import clapperboard from "../../assets/clapperboard.png"
 
 interface ReviewDetailModalProps {
   review: Review;

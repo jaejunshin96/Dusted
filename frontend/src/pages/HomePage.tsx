@@ -1,6 +1,6 @@
 //import { useNavigate } from "react-router-dom";
 //import LogoutButton from "../components/LogoutButton";
-import MovieSearch from "../components/MovieSearch";
+import MovieSearch from "../components/movie/MovieSearch";
 import styles from "./HomePage.module.css";
 import { useTranslation } from "react-i18next";
 

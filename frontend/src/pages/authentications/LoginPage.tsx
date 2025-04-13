@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { GoogleOAuthProvider } from "@react-oauth/google";
-import GoogleLoginButton from "../../components/GoogleLoginButton";
+import GoogleLoginButton from "../../components/auth/GoogleLoginButton";
 import axios from "axios";
 import styles from "./LoginPage.module.css";
 import videoSrc from "../../assets/The horse in motion.mp4";

@@ -1,0 +1,98 @@
+.desktopSidebar {
+  position: fixed;
+  left: 0;
+  top: 0;
+  bottom: 0;
+  width: 240px;
+  background-color: white;
+  border-right: 1px solid #dbdbdb;
+  padding: 20px 12px;
+  display: flex;
+  flex-direction: column;
+  z-index: 1000;
+}
+
+.sidebarLogo {
+  font-size: 24px;
+  font-weight: bold;
+  padding: 25px 12px;
+  margin-bottom: 24px;
+  cursor: pointer;
+}
+
+.sidebarLinks {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+}
+
+.sidebarLink {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 12px;
+  margin-bottom: 8px;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+}
+
+.sidebarLink:hover {
+  background-color: #f8f8f8;
+}
+
+.sidebarLink span {
+  font-size: 16px;
+}
+
+.sidebarBottom {
+  margin-top: auto;
+  padding-top: 20px;
+  border-top: 1px solid #dbdbdb;
+}
+
+.languageSwitcher {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 12px;
+  cursor: pointer;
+  border-radius: 8px;
+  margin-bottom: 12px;
+}
+
+.languageSwitcher:hover {
+  background-color: #f8f8f8;
+}
+
+.languageDropdown {
+  position: absolute;
+  bottom: 120px;
+  left: 12px;
+  background-color: white;
+  border-radius: 8px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+  overflow: hidden;
+  width: calc(100% - 24px);
+}
+
+.languageDropdown button {
+  width: 100%;
+  padding: 12px;
+  border: none;
+  background: none;
+  text-align: left;
+  cursor: pointer;
+  font-size: 14px;
+}
+
+.languageDropdown button:hover {
+  background-color: #f8f8f8;
+}
+
+/* Hide desktop sidebar on mobile */
+@media (max-width: 768px) {
+  .desktopSidebar {
+    display: none;
+  }
+}
