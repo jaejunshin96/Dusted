@@ -1,16 +1,56 @@
 :root {
-  font-family: system-ui, Avenir, Helvetica, Arial, sans-serif;
+  /* Light mode colors */
+  --background-color: #f0f2f5;
+  --card-background: white;
+  --text-primary: #333;
+  --text-secondary: #666;
+  --border-color: #dbdbdb;
+  --shadow-color: rgba(0, 0, 0, 0.08);
+  --accent-color: #8090ff;
+  --accent-hover: #5a6ccc;
+  --success-color: #4CAF50;
+  --danger-color: #FF4444;
+  --error-color: #cc0000;
+
+  /* Font settings */
+  font-family: system-ui, Helvetica, Arial, sans-serif;
   line-height: 1.5;
   font-weight: 400;
-
-  color-scheme: light dark;
-  color: rgba(255, 255, 255, 0.87);
-  background-color: #242424;
+  color: var(--text-primary);
+  background-color: var(--background-color);
 
   font-synthesis: none;
   text-rendering: optimizeLegibility;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+}
+
+/* For systems that prefer dark mode */
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --background-color: #121212;
+    --card-background: #1e1e1e;
+    --text-primary: #ffffff;
+    --text-secondary: #aaaaaa;
+    /* ... other dark variables ... */
+  }
+}
+
+/* For manual theme setting */
+:root[data-theme="dark"] {
+  --background-color: #121212;
+  --card-background: #1e1e1e;
+  --text-primary: #ffffff;
+  --text-secondary: #aaaaaa;
+  /* ... other dark variables ... */
+}
+
+:root[data-theme="light"] {
+  --background-color: #f0f2f5;
+  --card-background: white;
+  --text-primary: #333;
+  --text-secondary: #666;
+  /* ... other light variables ... */
 }
 
 a {
@@ -25,10 +65,14 @@ a:hover {
 body {
   font-family: 'Helvetica', 'Arial', sans-serif;
   margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  background-color: var(--background-color);
+  color: var(--text-primary);
+  min-height: 100vh;
   display: flex;
   place-items: center;
   min-width: 320px;
-  min-height: 100vh;
 }
 
 h1 {
@@ -53,17 +97,4 @@ button:hover {
 button:focus,
 button:focus-visible {
   outline: 4px auto -webkit-focus-ring-color;
-}
-
-@media (prefers-color-scheme: light) {
-  :root {
-    color: #213547;
-    background-color: #ffffff;
-  }
-  a:hover {
-    color: #747bff;
-  }
-  button {
-    background-color: #f9f9f9;
-  }
 }

@@ -1,0 +1,37 @@
+.themeToggle {
+    background: transparent;
+    border: none;
+    cursor: pointer;
+    color: var(--text-primary);
+    font-size: 18px;
+    padding: 8px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: background-color 0.3s;
+  }
+
+  .themeToggle:hover {
+    background-color: rgba(128, 128, 128, 0.1);
+  }
+
+  .systemIcon {
+    position: relative;
+    width: 18px;
+    height: 18px;
+  }
+
+  .sunIcon, .moonIcon {
+    position: absolute;
+    top: 0;
+    left: 0;
+  }
+
+  .sunIcon {
+    clip-path: polygon(0 0, 50% 0, 50% 100%, 0 100%);
+  }
+
+  .moonIcon {
+    clip-path: polygon(50% 0, 100% 0, 100% 100%, 50% 100%);
+  }

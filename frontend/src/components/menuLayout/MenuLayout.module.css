@@ -8,7 +8,7 @@
   margin-left: 240px; /* Width of DesktopSidebar */
   padding: 20px;
   min-height: 100vh;
-  background-color: #fafafa;
+  background-color: var(--background-color);
 }
 
 /* Mobile styles */

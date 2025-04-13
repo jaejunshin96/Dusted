@@ -14,6 +14,7 @@ from django.contrib.auth.tokens import PasswordResetTokenGenerator
 from django.urls import reverse
 from django.utils.http import urlsafe_base64_encode, urlsafe_base64_decode
 from django.utils.encoding import smart_bytes, smart_str, DjangoUnicodeDecodeError
+from reviews.models import Review
 import os
 from dotenv import load_dotenv
 
@@ -29,6 +30,21 @@ class UserDetailAPIView(APIView):
             return Response(serializer.data, status=status.HTTP_200_OK)
         except CustomUser.DoesNotExist:
             return Response({"Error": "User not found"}, status=status.HTTP_404_NOT_FOUND)
+
+class UserProfileView(APIView):
+    permission_classes = [IsAuthenticated]
+
+    def get(self, request):
+        user = request.user
+        # Get additional profile information
+        review_count = Review.objects.filter(user=user).count()
+
+        # Use the existing serializer but add review count
+        serializer = UserSerializer(user)
+        data = serializer.data
+        data['review_count'] = review_count
+
+        return Response(data, status=status.HTTP_200_OK)
 
 class RegisterUserView(APIView):
     permission_classes = [AllowAny]
