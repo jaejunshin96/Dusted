@@ -5,6 +5,7 @@ import RegisterPage from "./pages/authentications/RegisterPage";
 import ActivationConfirmPage from "./pages/authentications/ActivationConfirmPage";
 import PasswordResetPage from "./pages/authentications/PasswordResetPage";
 import NewPasswordPage from "./pages/authentications/NewPasswordPage";
+import ExplorePage from "./pages/ExplorePage";
 import CreatePage from "./pages/CreatePage";
 import ProfilePage from "./pages/ProfilePage";
 import NotFoundPage from "./pages/404/NotFoundPage";
@@ -33,6 +34,7 @@ function App() {
             <Route element={<MenuLayout><Outlet /></MenuLayout>}>
               {/* authenticated access */}
               <Route element={<ProtectedRoute />}>
+                <Route path="/explore" element={<ExplorePage />} />
                 <Route path="/reviews" element={<ReviewCollectionPage />} />
                 <Route path="/create" element={<CreatePage />} />
                 <Route path="/profile" element={<ProfilePage />} />

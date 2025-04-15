@@ -4,8 +4,8 @@
   top: 0;
   bottom: 0;
   width: 240px;
-  background-color: var(--card-background);
-  border-right: 1px solid var(--border-color);
+  background-color: var(--background-color);
+  border-right: 0.1px solid var(--border-color);
   padding: 20px 12px;
   display: flex;
   flex-direction: column;
@@ -50,7 +50,7 @@
 .sidebarBottom {
   margin-top: auto;
   padding-top: 20px;
-  border-top: 1px solid var(--border-color);
+  border-top: 0.1px solid var(--border-color);
 }
 
 .languageSwitcher {
