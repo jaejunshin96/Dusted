@@ -104,7 +104,7 @@ const ExplorePage: React.FC = () => {
 
   return (
     <div className={styles.container}>
-      <h1 className={styles.title}>{t('Explore Movies')}</h1>
+      {/*<h1 className={styles.title}>{t('Explore Movies')}</h1>*/}
 
       {error && <p className={styles.error}>{error}</p>}
 

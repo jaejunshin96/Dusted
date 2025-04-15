@@ -1,120 +1,125 @@
 .container {
-    padding: 20px;
-    max-width: 1400px;
-    margin: 0 auto;
-  }
+  padding: 20px;
+  min-width: 65vw;
+  margin: 0 auto;
+}
 
-  .title {
-    font-size: 2rem;
-    margin-bottom: 20px;
-    color: var(--text-primary);
-    text-align: left;
-  }
+.title {
+  font-size: 2rem;
+  margin-bottom: 20px;
+  color: var(--text-primary);
+  text-align: left;
+  width: 100%;
+}
 
+.grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr); /* 3 columns on desktop */
+  gap: 5px;
+  padding-bottom: 40px;
+  width: 100%;
+}
+
+.card {
+  background-color: var(--card-background);
+  border-radius: 8px;
+  overflow: hidden;
+  box-shadow: 0 4px 8px var(--shadow-color);
+  cursor: pointer;
+  transition: transform 0.2s, box-shadow 0.2s;
+  aspect-ratio: 2/3;
+  position: relative;
+}
+
+.card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 8px 16px var(--shadow-color);
+}
+
+.card:hover .overlay {
+  opacity: 1;
+}
+
+.poster {
+  width: 100%;
+  height: 100%;
+  background-size: cover;
+  background-position: center;
+  background-color: var(--card-background);
+}
+
+.overlay {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  background-color: rgba(0, 0, 0, 0.7);
+  padding: 15px;
+  color: white;
+  opacity: 0;
+  transition: opacity 0.3s;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+}
+
+.overlay h3 {
+  margin: 0 0 5px 0;
+  font-size: 1rem;
+}
+
+.overlay p {
+  margin: 0;
+  font-size: 0.8rem;
+  opacity: 0.8;
+  color: white; /* Ensuring text is visible */
+}
+
+.loader {
+  text-align: center;
+  padding: 20px;
+  font-size: 1.2rem;
+  color: var(--text-secondary);
+}
+
+.error {
+  color: var(--danger-color);
+  text-align: center;
+  font-size: 1.2rem;
+  padding: 20px;
+}
+
+/* Tablet view */
+@media (max-width: 992px) {
   .grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
-    gap: 16px;
-    padding-bottom: 40px;
+    grid-template-columns: repeat(2, 1fr); /* 2 columns on tablet */
+    gap: 15px;
   }
+}
 
-  .card {
-    background-color: var(--card-background);
-    border-radius: 8px;
-    overflow: hidden;
-    box-shadow: 0 4px 8px var(--shadow-color);
-    cursor: pointer;
-    transition: transform 0.2s, box-shadow 0.2s;
-    aspect-ratio: 2/3;
-    position: relative;
-  }
-
-  .card:hover {
-    transform: translateY(-5px);
-    box-shadow: 0 8px 16px var(--shadow-color);
-  }
-
-  .card:hover .overlay {
-    opacity: 1;
-  }
-
-  .poster {
-    width: 100%;
-    height: 100%;
-    background-size: cover;
-    background-position: center;
-    background-color: #2a2a2a;
+/* Mobile view */
+@media (max-width: 768px) {
+  .grid {
+    grid-template-columns: 1fr; /* 1 column on mobile */
+    gap: 15px;
   }
 
   .overlay {
-    position: absolute;
-    bottom: 0;
-    left: 0;
-    right: 0;
-    background-color: rgba(0, 0, 0, 0.7);
+    opacity: 1; /* Always show overlay on mobile for better UX */
+  }
+
+  .card {
+    max-width: 100%;
+  }
+
+  .title {
+    font-size: 1.5rem;
+    margin-bottom: 15px;
+    text-align: center;
+  }
+
+  /* Better spacing for mobile */
+  .container {
     padding: 15px;
-    color: white;
-    opacity: 0;
-    transition: opacity 0.3s;
-    display: flex;
-    flex-direction: column;
-    justify-content: flex-end;
   }
-
-  .overlay h3 {
-    margin: 0 0 5px 0;
-    font-size: 1rem;
-  }
-
-  .overlay p {
-    margin: 0;
-    font-size: 0.8rem;
-    opacity: 0.8;
-  }
-
-  .loader {
-    text-align: center;
-    padding: 20px;
-    font-size: 1.2rem;
-    color: var(--text-secondary);
-  }
-
-  .error {
-    color: var(--danger-color);
-    text-align: center;
-    font-size: 1.2rem;
-    padding: 20px;
-  }
-
-  /* Responsive design for different screen sizes */
-  @media (max-width: 768px) {
-    .grid {
-      grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
-      gap: 12px;
-    }
-
-    .overlay {
-      opacity: 1;
-      padding: 10px;
-    }
-
-    .overlay h3 {
-      font-size: 0.9rem;
-    }
-
-    .overlay p {
-      font-size: 0.7rem;
-    }
-  }
-
-  @media (max-width: 480px) {
-    .grid {
-      grid-template-columns: repeat(3, 1fr);
-      gap: 8px;
-    }
-
-    .title {
-      font-size: 1.5rem;
-      margin-bottom: 15px;
-    }
-  }
+}
