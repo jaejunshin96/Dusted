@@ -27,19 +27,19 @@
   transition: border 0.3s;
   font-size: 1rem;
   /*background-color: #f5f5f5;*/
-  border-color: #8090ff;
+  border-color: var(--border-color);
   background-color: white;
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
 }
 
-/*.searchBar input:focus {
-  border-color: #8090ff;
-  background-color: white;
-}*/
+.searchBar input:focus {
+  border-color: var(--accent-color);
+  background-color: var(--card-background);
+}
 
 .searchBar button {
   padding: 10px 20px;
-  background-color: #8090ff;
+  background-color: var(--accent-color);
   color: white;
   border: none;
   border-radius: 5px;
@@ -48,13 +48,13 @@
 }
 
 .searchBar button:hover {
-  background-color: #5a6ccc;
+  background-color: var(--accent-hover);
 }
 
 .noResults {
   text-align: center;
   padding: 20px;
-  color: #888;
+  color: var(--text-secondary);
   font-size: 1.1rem;
 }
 
@@ -67,10 +67,10 @@
   padding-right: 10px;
   margin: 0;
   border-radius: 8px;
-  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-  background-color: #f5f5f5;
+  box-shadow: 0 0 10px var(--shadow-color);
+  background-color: var(--card-background);
   scrollbar-width: thin; /* Firefox */
-  scrollbar-color: #8090ff #f0f2f5; /* Firefox */
+  scrollbar-color: var(--accent-color) var(--background-color); /* Firefox */
 }
 
 /* Chrome, Edge, and Safari */
@@ -79,17 +79,17 @@
 }
 
 .movieList::-webkit-scrollbar-track {
-  background: #f0f2f5; /* Track color */
+  background: var(--background-color); /* Track color */
 }
 
 .movieList::-webkit-scrollbar-thumb {
-  background-color: #8090ff; /* Thumb color */
+  background-color: var(--accent-color); /* Thumb color */
   border-radius: 10px;
-  border: 2px solid #f0f2f5; /* Adds a little space around the thumb */
+  border: 2px solid var(--background-color); /* Adds a little space around the thumb */
 }
 
 .movieList::-webkit-scrollbar-thumb:hover {
-  background-color: #5a6ccc; /* Color when hovered */
+  background-color: var(--accent-hover); /* Color when hovered */
 }
 
 .loadMoreContainer {
@@ -100,7 +100,7 @@
 
 .loadMoreButton {
   padding: 10px 20px;
-  background-color: #8090ff;
+  background-color: var(--accent-color);
   color: white;
   border: none;
   border-radius: 5px;
@@ -109,7 +109,7 @@
 }
 
 .loadMoreButton:hover {
-  background-color: #5a6ccc;
+  background-color: var(--accent-hover);
 }
 
 .spinner {

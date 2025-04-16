@@ -1,15 +1,17 @@
 import React, { useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import { GiHamburgerMenu } from "react-icons/gi";
 import { PiGlobe } from "react-icons/pi";
-//import { FaExchangeAlt } from "react-icons/fa";
+import { BsCollectionPlay, BsSearch } from "react-icons/bs";
+import { AiOutlinePlus, AiOutlineUser } from "react-icons/ai";
 import LogoutButton from "../auth/LogoutButton";
 import styles from "./MobileHeader.module.css";
 
 const MobileHeader: React.FC = () => {
   const { t, i18n } = useTranslation();
   const navigate = useNavigate();
+  const location = useLocation();
   const username = localStorage.getItem("username");
   const [showMobileMenu, setShowMobileMenu] = useState(false);
   const [showDropdown, setShowDropdown] = useState(false);
@@ -20,6 +22,10 @@ const MobileHeader: React.FC = () => {
     i18n.changeLanguage(lang);
     localStorage.setItem("language", lang);
     setShowDropdown(false);
+  };
+
+  const isActive = (path: string) => {
+    return location.pathname === path;
   };
 
   return (
@@ -37,12 +43,39 @@ const MobileHeader: React.FC = () => {
           <div className={styles.mobileMenu} onClick={(e) => e.stopPropagation()}>
             {username && (
               <>
-                <span className={styles.navLink} onClick={() => { navigate("/"); closeMobileMenu(); }}>
-                  {t("Home")}
+                <span
+                  className={`${styles.navLink} ${isActive("/explore") ? styles.active : ""}`}
+                  onClick={() => { navigate("/explore"); closeMobileMenu(); }}
+                >
+                  <BsSearch size={20} />
+                  <span>{t("Explore")}</span>
                 </span>
-                <span className={styles.navLink} onClick={() => { navigate("/reviews"); closeMobileMenu(); }}>
-                  {t("Collections")}
+
+                <span
+                  className={`${styles.navLink} ${isActive("/reviews") ? styles.active : ""}`}
+                  onClick={() => { navigate("/reviews"); closeMobileMenu(); }}
+                >
+                  <BsCollectionPlay size={20} />
+                  <span>{t("Collections")}</span>
                 </span>
+
+                <span
+                  className={`${styles.navLink} ${isActive("/create") ? styles.active : ""}`}
+                  onClick={() => { navigate("/create"); closeMobileMenu(); }}
+                >
+                  <AiOutlinePlus size={20} />
+                  <span>{t("Create")}</span>
+                </span>
+
+                <span
+                  className={`${styles.navLink} ${isActive("/profile") ? styles.active : ""}`}
+                  onClick={() => { navigate("/profile"); closeMobileMenu(); }}
+                >
+                  <AiOutlineUser size={20} />
+                  <span>{t("Profile")}</span>
+                </span>
+
+                <div className={styles.mobileNavDivider}></div>
                 <LogoutButton onLogout={closeMobileMenu} />
               </>
             )}

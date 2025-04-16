@@ -10,7 +10,7 @@ class ExploreMoviesAPIView(APIView):
         lang = request.GET.get('lang', 'en-US')
         region = request.GET.get('region', 'us')
 
-        url = f"https://api.themoviedb.org/3/movie/now_playing?language={lang}&page={page}&region={region}"
+        url = f"https://api.themoviedb.org/3/movie/popular?language={lang}&page={page}&region={region}"
 
         headers = {
             "accept": "application/json",
