@@ -1,0 +1,45 @@
+import React from "react";
+import { PiGlobe } from "react-icons/pi";
+import { useTranslation } from "react-i18next";
+import styles from "./LanguageSelector.module.css";
+
+type LanguageOption = {
+  code: string;
+  label: string;
+};
+
+const languages: LanguageOption[] = [
+  { code: "en", label: "English" },
+  { code: "ko", label: "한국어" }
+];
+
+const LanguageSelector: React.FC = () => {
+  const { t, i18n } = useTranslation();
+
+  const handleLanguageChange = (lang: string) => {
+    i18n.changeLanguage(lang);
+    localStorage.setItem("language", lang);
+  };
+
+  return (
+    <div className={styles.languageSelector}>
+      <div className={styles.languageHeader}>
+        <PiGlobe size={18} />
+        <span>{t("Language")}</span>
+      </div>
+      <div className={styles.languageOptions}>
+        {languages.map((language) => (
+          <button
+            key={language.code}
+            className={i18n.language === language.code ? styles.activeLanguage : ""}
+            onClick={() => handleLanguageChange(language.code)}
+          >
+            {language.label}
+          </button>
+        ))}
+      </div>
+    </div>
+  );
+};
+
+export default LanguageSelector;

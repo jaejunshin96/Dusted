@@ -16,10 +16,50 @@
     background-color: rgba(128, 128, 128, 0.1);
   }
 
+  .themeToggleContainer {
+    display: flex;
+    align-items: center;
+    width: 100%;
+    padding: 8px 0;
+    cursor: pointer;
+    position: relative;
+  }
+
+  .themeIcon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-right: 16px;
+    color: #fff;
+  }
+
+  .themeLabel {
+    color: #fff;
+    font-size: 16px;
+    font-weight: 400;
+  }
+
+  .activeIndicator {
+    width: 8px;
+    height: 8px;
+    background-color: #8090ff;
+    border-radius: 50%;
+    position: absolute;
+    right: 12px;
+    opacity: 0;
+    transition: opacity 0.2s;
+  }
+
+  /* Show the indicator for the active theme */
+  .themeToggleContainer:hover .activeIndicator {
+    opacity: 0.6;
+  }
+
   .systemIcon {
     position: relative;
-    width: 18px;
-    height: 18px;
+    width: 20px;
+    height: 20px;
+    display: flex;
   }
 
   .sunIcon, .moonIcon {

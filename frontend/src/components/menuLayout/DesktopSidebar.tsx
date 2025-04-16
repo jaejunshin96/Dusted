@@ -1,23 +1,36 @@
-import React, { useState, useRef } from "react";
+import React, { useState, useRef, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { useTranslation } from "react-i18next";
-import { PiGlobe } from "react-icons/pi";
 import { FaPlus, FaBookmark, FaUserAlt, FaRegCompass } from "react-icons/fa";
+import { GiHamburgerMenu } from "react-icons/gi";
 import ThemeToggleButton from "./ThemeToggleButton";
 import LogoutButton from "../auth/LogoutButton";
+import LanguageSelector from "./LanguageSelector";
 import styles from "./DesktopSidebar.module.css";
 
 const DesktopSidebar: React.FC = () => {
-  const { t, i18n } = useTranslation();
+  const { t } = useTranslation();
   const navigate = useNavigate();
   const [showDropdown, setShowDropdown] = useState(false);
   const dropdownRef = useRef<HTMLDivElement>(null);
 
-  const handleLanguageChange = (lang: string) => {
-    i18n.changeLanguage(lang);
-    localStorage.setItem("language", lang);
-    setShowDropdown(false);
-  };
+  // Close dropdown when clicking outside
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      if (dropdownRef.current && !dropdownRef.current.contains(event.target as Node)) {
+        setShowDropdown(false);
+      }
+    };
+
+    // Only add the event listener when the dropdown is shown
+    if (showDropdown) {
+      document.addEventListener("mousedown", handleClickOutside);
+    }
+
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, [showDropdown]);
 
   return (
     <nav className={styles.desktopSidebar}>
@@ -44,26 +57,33 @@ const DesktopSidebar: React.FC = () => {
           <span>{t("Profile")}</span>
         </div>
 
-        <div className={styles.sidebarBottom}>
+        <div className={styles.sidebarBottom} ref={dropdownRef}>
           <div
-            className={styles.languageSwitcher}
-            onClick={() => setShowDropdown(!showDropdown)}
-            ref={dropdownRef}
+            className={styles.moreButton}
+            onClick={(e) => {
+              e.stopPropagation();
+              setShowDropdown(!showDropdown);
+            }}
           >
-            <PiGlobe size={24} />
-            <span>{i18n.language === "ko" ? "KO" : "EN"}</span>
+            <GiHamburgerMenu size={24} />
+            <span>{t("More")}</span>
           </div>
 
           {showDropdown && (
-            <div className={styles.languageDropdown}>
-              <button onClick={() => handleLanguageChange("en")}>English</button>
-              <button onClick={() => handleLanguageChange("ko")}>한국어</button>
+            <div className={styles.moreDropdown}>
+              <div className={styles.dropdownItem}>
+                <LanguageSelector />
+              </div>
+
+              <div className={styles.dropdownItem}>
+                <ThemeToggleButton />
+              </div>
+
+              <div className={styles.dropdownItem}>
+                <LogoutButton />
+              </div>
             </div>
           )}
-
-          <ThemeToggleButton />
-
-          <LogoutButton/>
         </div>
       </div>
     </nav>
