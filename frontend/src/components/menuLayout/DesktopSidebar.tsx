@@ -60,10 +60,7 @@ const DesktopSidebar: React.FC = () => {
         <div className={styles.sidebarBottom} ref={dropdownRef}>
           <div
             className={styles.moreButton}
-            onClick={(e) => {
-              e.stopPropagation();
-              setShowDropdown(!showDropdown);
-            }}
+            onClick={() => {setShowDropdown(!showDropdown);}}
           >
             <GiHamburgerMenu size={24} />
             <span>{t("More")}</span>

@@ -6,6 +6,11 @@ import styles from './ThemeToggleButton.module.css';
 const ThemeToggleButton: React.FC = () => {
   // Get initial theme from localStorage or system preference
   const { t } = useTranslation();
+
+  const getSystemTheme = (): 'light' | 'dark' => {
+    return window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+  };
+
   const getInitialTheme = (): 'light' | 'dark' | 'system' => {
     const savedTheme = localStorage.getItem('theme');
     if (savedTheme === 'light' || savedTheme === 'dark') {
@@ -16,23 +21,42 @@ const ThemeToggleButton: React.FC = () => {
 
   const [theme, setTheme] = useState<'light' | 'dark' | 'system'>(getInitialTheme);
 
+  const toggleTheme = () => {
+    const themeOrder: ('light' | 'dark' | 'system')[] = ['light', 'dark', 'system'];
+    const currentIndex = themeOrder.indexOf(theme);
+    const nextTheme = themeOrder[(currentIndex + 1) % themeOrder.length];
+    setTheme(nextTheme);
+    applyTheme(nextTheme);
+  };
+
   const applyTheme = (newTheme: 'light' | 'dark' | 'system') => {
     const root = document.documentElement;
 
     if (newTheme === 'system') {
       localStorage.removeItem('theme');
-      root.removeAttribute('data-theme');
+      // Apply system preference
+      const systemTheme = getSystemTheme();
+      root.setAttribute('data-theme', systemTheme);
     } else {
       localStorage.setItem('theme', newTheme);
       root.setAttribute('data-theme', newTheme);
     }
   };
 
-  const toggleTheme = () => {
-    const newTheme = theme === 'light' ? 'dark' : theme === 'dark' ? 'system' : 'light';
-    setTheme(newTheme);
-    applyTheme(newTheme);
-  };
+  // Listen for system theme changes when in 'system' mode
+  useEffect(() => {
+    if (theme === 'system') {
+      const mediaQuery = window.matchMedia('(prefers-color-scheme: dark)');
+
+      const handleChange = () => {
+        const systemTheme = getSystemTheme();
+        document.documentElement.setAttribute('data-theme', systemTheme);
+      };
+
+      mediaQuery.addEventListener('change', handleChange);
+      return () => mediaQuery.removeEventListener('change', handleChange);
+    }
+  }, [theme]);
 
   useEffect(() => {
     // Apply the initial theme
@@ -59,7 +83,6 @@ const ThemeToggleButton: React.FC = () => {
         )}
       </div>
       <span className={styles.themeLabel}>{getThemeLabel()}</span>
-      <div className={styles.activeIndicator}></div>
     </div>
   );
 };

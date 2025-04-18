@@ -3,9 +3,9 @@
   left: 0;
   top: 0;
   bottom: 0;
-  width: 240px;
+  width: 220px;
   background-color: var(--background-color);
-  border-right: 0.1px solid var(--border-color);
+  border-right: 1px solid rgba(128, 128, 128, 0.3);
   padding: 20px 12px;
   display: flex;
   flex-direction: column;
@@ -25,6 +25,7 @@
   display: flex;
   flex-direction: column;
   flex: 1;
+  gap: 10px;
 }
 
 .sidebarLink {
@@ -50,7 +51,7 @@
 .sidebarBottom {
   margin-top: auto;
   padding-top: 20px;
-  border-top: 0.1px solid var(--border-color);
+  /*border-top: 0.1px solid var(--border-color);*/
 }
 
 .moreButton {
@@ -70,11 +71,11 @@
 .moreDropdown {
   position: absolute;
   bottom: 70px;
-  left: 0;
-  background-color: #222;
-  border-radius: 12px;
-  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.25);
-  width: 260px;
+  left: 12px;
+  background-color: var(--menu-bg-color, #202020);
+  border-radius: 15px;
+  min-width: 260px;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
   overflow: hidden;
   z-index: 100;
 }
@@ -82,12 +83,15 @@
 .dropdownItem {
   display: flex;
   align-items: center;
-  padding: 16px;
+  padding: 12px 16px;
   gap: 16px;
   cursor: pointer;
   transition: background-color 0.2s;
   position: relative;
-  border-radius: 8px;
+}
+
+.dropdownItem:not(:last-child) {
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
 }
 
 .dropdownItem:hover {
@@ -99,57 +103,19 @@
   color: #fff;
 }
 
-/* Special styling for language section */
-.dropdownItem:has(.languageSelector) {
-  flex-direction: column;
-  align-items: flex-start;
-  gap: 10px;
-  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
-  cursor: default;
-  pointer-events: none;
-  background-color: #222 !important;
-}
-
-/* Override the hover effect specifically for this item */
-.dropdownItem:has(.languageSelector):hover {
-  background-color: #222 !important;
-}
-
-/* Enable pointer events specifically for language options */
-.dropdownItem:has(.languageSelector) .languageSelector .languageOptions {
-  pointer-events: auto;
-}
-
-/* Make language option buttons clickable */
-.dropdownItem:has(.languageSelector) .languageSelector .languageOptions button {
-  pointer-events: auto;
-  cursor: pointer;
-}
-
 /* Theme toggle item */
 .dropdownItem:nth-child(2) {
-  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+  border-bottom: 5px solid rgba(255, 255, 255, 0.1);
 }
 
 /* Logout section at the bottom with different styling */
 .dropdownItem:last-child {
-  justify-content: center;
   padding-top: 16px;
   padding-bottom: 16px;
-  color: #ff5252;
 }
 
 .dropdownItem:last-child span {
-  color: #ff5252;
   font-weight: 500;
-}
-
-/* For logout section - match screenshot */
-.moreDropdown > div:last-child {
-  margin-top: 4px;
-  padding-top: 16px;
-  padding-bottom: 16px;
-  border-top: 1px solid rgba(255, 255, 255, 0.1);
 }
 
 /* Hide desktop sidebar on mobile */

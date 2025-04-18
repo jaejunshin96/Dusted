@@ -4,7 +4,6 @@
     cursor: pointer;
     color: var(--text-primary);
     font-size: 18px;
-    padding: 8px;
     border-radius: 50%;
     display: flex;
     align-items: center;

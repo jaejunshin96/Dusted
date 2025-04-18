@@ -1,28 +1,39 @@
-.languageSelector {
-  width: 100%;
-  display: flex;
-  flex-direction: column;
-  gap: 10px;
-  pointer-events: none;
-}
-
-.languageHeader {
+.languageToggleContainer {
   display: flex;
   align-items: center;
-  gap: 16px;
-  color: #fff;
-  padding: 0 4px;
+  cursor: pointer;
+  position: relative;
+  width: 100%;
+  padding: 8px 0; /* Match ThemeToggleButton padding */
 }
 
-.languageHeader span {
+.languageIcon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-right: 16px; /* Match ThemeToggleButton margin */
+  color: #fff;
+}
+
+.languageLabel {
   font-size: 16px;
-  font-weight: 500;
+  font-weight: 400; /* Match ThemeToggleButton weight */
+  color: #fff;
 }
 
 .languageOptions {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  background-color: var(--menu-bg-color, #202020);
+  border-radius: 8px;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
+  overflow: hidden;
+  width: 100%;
+  margin-top: 8px;
+  z-index: 10;
   display: flex;
   flex-direction: column;
-  width: 100%;
   pointer-events: auto;
 }
 
@@ -31,13 +42,15 @@
   border: none;
   color: #fff;
   text-align: left;
-  padding: 12px 36px;
+  padding: 12px 16px;
   cursor: pointer;
   width: 100%;
   font-size: 16px;
-  border-radius: 4px;
   transition: background-color 0.2s ease;
   position: relative;
+  display: flex;
+  align-items: center;
+  border-radius: 4px;
 }
 
 .languageOptions button:hover {
@@ -45,7 +58,7 @@
 }
 
 .activeLanguage {
-  color: #fff;
+  color: var(--accent-color, #8090ff) !important;
 }
 
 .activeLanguage::after {
@@ -56,6 +69,6 @@
   transform: translateY(-50%);
   width: 8px;
   height: 8px;
-  background-color: #8090ff;
+  background-color: var(--accent-color, #8090ff);
   border-radius: 50%;
 }
