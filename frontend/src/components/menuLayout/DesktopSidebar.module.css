@@ -13,12 +13,16 @@
 }
 
 .sidebarLogo {
-  font-size: 24px;
+  font-size: 32px;
   font-weight: bold;
-  padding: 25px 12px;
-  margin-bottom: 24px;
+  margin: 12px;
+  margin-bottom: 32px;
   cursor: pointer;
   color: var(--text-primary);
+  text-align: left;
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
 }
 
 .sidebarLinks {
