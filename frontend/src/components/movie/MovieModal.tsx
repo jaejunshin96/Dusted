@@ -86,10 +86,13 @@ const MovieModal: React.FC<MovieModalProps> = ({ movie, onClose }) => {
         data: {
           movie_id: movie.id,
           title: movie.title,
-          rating,
+          directors: Array.isArray(movie.directors)
+            ? movie.directors.join(", ")
+            : movie.directors,
           review: reviewText,
-          image_path: movie.backdrop_path ?
-            `https://image.tmdb.org/t/p/original${movie.backdrop_path}` : null,
+          rating: rating,
+          backdrop_path: movie.backdrop_path,
+          poster_path: movie.poster_path,
         }
       });
 

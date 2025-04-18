@@ -6,11 +6,12 @@ from rest_framework import status
 
 class ExploreMoviesAPIView(APIView):
     def get(self, request):
+        search_type = request.GET.get("search_type", "popular")
         page = request.GET.get("page", 1)
         lang = request.GET.get('lang', 'en-US')
         region = request.GET.get('region', 'us')
 
-        url = f"https://api.themoviedb.org/3/movie/popular?language={lang}&page={page}&region={region}"
+        url = f"https://api.themoviedb.org/3/movie/{search_type}?language={lang}&page={page}&region={region}"
 
         headers = {
             "accept": "application/json",

@@ -1,19 +1,21 @@
-import React, { useEffect, useState } from "react";
-import { Container, Row, Card, CardBody, CardTitle, CardText } from "reactstrap";
+import React, { useEffect, useState, useRef, useCallback } from "react";
 import authAxios from "../utils/authentications/authFetch";
 import ReviewDetailModal from "../components/movie/ReviewDetailModal";
 import styles from "./ReviewCollectionPage.module.css"
 import { useTranslation } from "react-i18next";
 import { FaArrowDownLong } from "react-icons/fa6";
-import clapperBoard from "../assets/clapperboard.png"
+import clapperboard from "../assets/clapperboard.png"
 
 export interface Review {
   id: number;
   movie_id: number;
   title: string;
+  directors: string;
   review: string;
   rating: number;
   image_path: URL | null;
+  backdrop_path: string | null;
+  poster_path: string | null;
   created_at: string;
 }
 
@@ -25,44 +27,19 @@ const ReviewCollectionPage: React.FC = () => {
   const [loading, setLoading] = useState(false);
   const [page, setPage] = useState(1);
   const [hasMore, setHasMore] = useState(false);
-  const [searchQuery, setSearchQuery] = useState("");
-  const [currentQuery, setCurrentQuery] = useState("");
+  const [query, setQuery] = useState("");
   const [sorting, setSorting] = useState("created_at");
   const [order, setOrder] = useState("dsc");
-  const username = localStorage.getItem("username");
   let debounceTimeout: NodeJS.Timeout;
-  const backendUrl = import.meta.env.DEV ? import.meta.env.VITE_BACKEND_URL : import.meta.env.VITE_BACKEND_URL_PROD;
+  const observer = useRef<IntersectionObserver | null>(null);
+  const backendUrl = import.meta.env.DEV
+    ? import.meta.env.VITE_BACKEND_URL
+    : import.meta.env.VITE_BACKEND_URL_PROD;
 
-  const handleCloseModal = () => setSelectedReview(null);
-
-  const fetchReviews = async (pageNumber: number, query: string = "", fetchMore: boolean = false) => {
-    setLoading(true);
-    setHasMore(false);
-    try {
-      const response = await authAxios(`${backendUrl}/api/review/reviews/`, {
-        method: "GET",
-        params: {
-          page: fetchMore ? pageNumber : 1,
-          query,
-          sorting,
-          order
-        },
-      });
-
-      const fetchedReviews = response.data.results || [];
-
-      fetchMore ?
-        setReviews(prevReviews => [...prevReviews, ...fetchedReviews]) :
-        setReviews(fetchedReviews);
-
-      setHasMore(fetchedReviews.length >= 12);
-
-    } catch (err: any) {
-      setErrorMessage(err.response?.data?.Error || t("Failed to fetch reviews."));
-    } finally {
-      setLoading(false);
-    }
-  };
+  useEffect(() => {
+    fetchReviews();
+    setPage(1);
+  }, [query, sorting, order]);
 
   useEffect(() => {
     if (selectedReview) {
@@ -73,25 +50,77 @@ const ReviewCollectionPage: React.FC = () => {
       document.documentElement.style.overflow = "";
     }
 
-    // Cleanup on unmount
     return () => {
       document.body.style.overflow = "";
       document.documentElement.style.overflow = "";
     };
   }, [selectedReview]);
 
-  useEffect(() => {
-    fetchReviews(page, currentQuery);
-  }, [currentQuery, sorting, order]);
+  const fetchReviews = async () => {
+    setLoading(true);
+    setErrorMessage("");
+
+    try {
+      const response = await authAxios(`${backendUrl}/api/review/reviews/`, {
+        method: "GET",
+        params: {
+          page,
+          query,
+          sorting,
+          order
+        },
+      });
+
+      const fetchedReviews = response.data.results || [];
+
+      if (page === 1) {
+        setReviews(fetchedReviews);
+      } else {
+        setReviews(prev => [...prev, ...fetchedReviews]);
+      }
+
+      setHasMore(fetchedReviews.length > 0);
+    } catch (err: any) {
+      setErrorMessage(err.response?.data?.Error || t("Failed to fetch reviews."));
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  // Set up intersection observer for potential infinite scroll (same as ExplorePage)
+  const lastReviewElementRef = useCallback((node: HTMLDivElement | null) => {
+    if (loading) return;
+
+    if (observer.current) observer.current.disconnect();
+
+    observer.current = new IntersectionObserver(entries => {
+      if (entries[0].isIntersecting && hasMore) {
+        setPage(prevPage => prevPage + 1);
+      }
+    });
+
+    if (node) observer.current.observe(node);
+  }, [loading, hasMore]);
+
+  const handleReviewClick = (review: Review) => {
+    setSelectedReview(review);
+  };
+
+  const handleCloseModal = () => setSelectedReview(null);
+
+  const getImageUrl = (path: string | null) => {
+    if (!path) return clapperboard;
+    return `https://image.tmdb.org/t/p/w500${path}`;
+  };
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const value = e.target.value;
-    setSearchQuery(value);
+    setQuery(value);
 
     clearTimeout(debounceTimeout);
     debounceTimeout = setTimeout(() => {
       setPage(1);
-      setCurrentQuery(value);
+      setQuery(value);
     }, 300);
   };
 
@@ -101,28 +130,23 @@ const ReviewCollectionPage: React.FC = () => {
   };
 
   const handleOrder = async () => {
+    setPage(1);
     setOrder(order === "dsc" ? "asc" : "dsc");
   }
 
-  const handleLoadMore = async () => {
-    const nextPage = page + 1;
-    setPage(nextPage);
-    fetchReviews(nextPage, currentQuery, true);
-  };
-
   const handleEditSave = async () => {
-    await fetchReviews(page, currentQuery);
+    await fetchReviews();
     setSelectedReview(null);
   };
 
   return (
-    <Container fluid className={styles.container}>
-      <h1 className={styles.h1}>{t("ReviewsByUser", { username })}</h1>
+    <div className={styles.container}>
+      {/*<h1 className={styles.h1}>{t("ReviewsByUser", { username })}</h1>*/}
 
       <div className={styles.searchSection}>
         <input
           type="search"
-          value={searchQuery}
+          value={query}
           onChange={handleInputChange}
           placeholder={t("Search for reviews...")}
           className={styles.searchInput}
@@ -147,54 +171,34 @@ const ReviewCollectionPage: React.FC = () => {
 
       {errorMessage && <p className="text-danger text-center">{errorMessage}</p>}
 
-      <div className={styles.bodyContainer}>
-        <Row className={styles.rowContainer}>
-          {reviews.length === 0 && (
-            <div className={styles.noReviews}>
-              {t("No reviews found.")}
-            </div>
-          )}
+      <div className={styles.grid}>
+        {reviews.map((review, index) => {
+          const isLastElement = index === reviews.length - 1;
 
-          {reviews.map((review) => (
-            <Card
-              key={review.id}
-              onClick={() => setSelectedReview(review)}
+          return (
+            <div
+              key={`${review.id}-${index}`}
+              ref={isLastElement ? lastReviewElementRef : null}
               className={styles.card}
-              style={{
-                backgroundImage: `url(${review.image_path ? `${review.image_path}` : clapperBoard})`,
-                //backgroundColor: review.image_path ? "transparent" : "#2a2a2a",
-              }}
+              onClick={() => handleReviewClick(review)}
             >
-              <CardBody>
-                <CardText>
-                  <div className={styles.ratingBackground}>
-                    {[1, 2, 3, 4, 5].map((star) => (
-                      <span
-                        key={star}
-                        className={styles.ratingStars}
-                        style={{ color: star <= review.rating ? "#FFD700" : "#ccc" }}
-                      >
-                        ★
-                      </span>
-                    ))}
-                  </div>
-                  <br />
-                </CardText>
-                <CardTitle tag="h5" className={styles.cardTitle}>
-                  {review.title}
-                </CardTitle>
-              </CardBody>
-            </Card>
-          ))}
-        </Row>
-
-        {hasMore && (
-          <div className={styles.loadMoreContainer}>
-            <button className={styles.loadMoreButton} onClick={handleLoadMore}>
-              {loading ? t("Loading...") : t("Load More")}
-            </button>
-          </div>
-        )}
+              <div
+                className={styles.poster}
+                style={{
+                  backgroundImage: `url(${getImageUrl(review.poster_path || review.backdrop_path)})`
+                }}
+              >
+                <div className={styles.ratingBadge}>
+                  {review.rating.toFixed(1)}
+                </div>
+                <div className={styles.overlay}>
+                  <h3>{review.title}</h3>
+                  <p>{review.directors}</p>
+                </div>
+              </div>
+            </div>
+          );
+        })}
       </div>
 
       {selectedReview && (
@@ -204,7 +208,7 @@ const ReviewCollectionPage: React.FC = () => {
           onSave={handleEditSave}
         />
       )}
-    </Container>
+    </div>
   );
 };
 

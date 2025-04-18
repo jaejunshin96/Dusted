@@ -4,6 +4,7 @@ import authAxios from '../utils/authentications/authFetch';
 import styles from './ExplorePage.module.css';
 import MovieModal from '../components/movie/MovieModal';
 import clapperboard from "../assets/clapperboard.png";
+import cn from 'classnames';
 
 interface Movie {
   id: number;
@@ -16,6 +17,8 @@ interface Movie {
   release_date: string;
 }
 
+type SearchType = 'popular' | 'upcoming';
+
 const ExplorePage: React.FC = () => {
   const { t, i18n } = useTranslation();
   const [movies, setMovies] = useState<Movie[]>([]);
@@ -24,15 +27,21 @@ const ExplorePage: React.FC = () => {
   const [hasMore, setHasMore] = useState(true);
   const [error, setError] = useState('');
   const [selectedMovie, setSelectedMovie] = useState<Movie | null>(null);
+  const [searchType, setSearchType] = useState<SearchType>('popular');
   const observer = useRef<IntersectionObserver | null>(null);
   const backendUrl = import.meta.env.DEV
     ? import.meta.env.VITE_BACKEND_URL
     : import.meta.env.VITE_BACKEND_URL_PROD;
 
-  // Fetch movies on initial load and when page changes
+  useEffect(() => {
+    setMovies([]);
+    setPage(1);
+  }, [searchType]);
+
+  // Fetch movies on initial load, page or lang or searchType changes
   useEffect(() => {
     fetchMovies();
-  }, [page, i18n.language]);
+  }, [page, i18n.language, searchType]);
 
   // Handle body overflow when modal is open
   useEffect(() => {
@@ -55,6 +64,7 @@ const ExplorePage: React.FC = () => {
       const response = await authAxios(`${backendUrl}/api/film/explore/`, {
         method: "GET",
         params: {
+          search_type: searchType,
           page,
           lang: i18n.language === 'ko' ? 'ko-KR' : 'en-US',
           region: i18n.language === 'ko' ? 'kr' : 'us',
@@ -104,7 +114,25 @@ const ExplorePage: React.FC = () => {
 
   return (
     <div className={styles.container}>
-      {/*<h1 className={styles.title}>{t('Explore Movies')}</h1>*/}
+      {/* toggle buttons */}
+      <div className={styles.switchContainer}>
+        <button
+          className={cn(styles.switchButton, {
+            [styles.active]: searchType === 'popular',
+          })}
+          onClick={() => setSearchType('popular')}
+        >
+          {t('Popular')}
+        </button>
+        <button
+          className={cn(styles.switchButton, {
+            [styles.active]: searchType === 'upcoming',
+          })}
+          onClick={() => setSearchType('upcoming')}
+        >
+          {t('Upcoming')}
+        </button>
+      </div>
 
       {error && <p className={styles.error}>{error}</p>}
 
@@ -135,7 +163,7 @@ const ExplorePage: React.FC = () => {
         })}
       </div>
 
-      {loading && <div className={styles.loader}>{t('Loading...')}</div>}
+      {loading && <div className={styles.spinner}></div>}
 
       {selectedMovie && (
         <MovieModal

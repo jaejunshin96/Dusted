@@ -14,6 +14,7 @@ export interface Movie {
   directors: [string];
   overview: string;
   backdrop_path: string | null;
+  poster_path: string | null;
   release_date: string;
 }
 

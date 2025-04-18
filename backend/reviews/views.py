@@ -53,6 +53,14 @@ class ReviewsList(APIView):
 		return paginator.get_paginated_response(serializer.data)
 
 	def post(self, request):
+		# Check if the user already has a review for this movie
+		movie_id = request.data.get('movie_id')
+		existing_review = Review.objects.filter(user=request.user, movie_id=movie_id).first()
+
+		if existing_review:
+			return Response({'error': 'You have already reviewed this movie'},
+							status=status.HTTP_409_CONFLICT)
+
 		serializer = ReviewsSerializer(data=request.data)
 		if serializer.is_valid():
 			serializer.save(user=request.user)
