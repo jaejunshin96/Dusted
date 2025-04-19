@@ -106,7 +106,9 @@ const ReviewCollectionPage: React.FC = () => {
     setSelectedReview(review);
   };
 
-  const handleCloseModal = () => setSelectedReview(null);
+  const handleCloseModal = () => {
+    setSelectedReview(null);
+  }
 
   const getImageUrl = (path: string | null) => {
     if (!path) return clapperboard;

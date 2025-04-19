@@ -1,9 +1,9 @@
-import React, { useEffect, useState, useRef, useCallback } from 'react';
+import React, { useEffect, useState, useCallback } from 'react';
 import { useTranslation } from 'react-i18next';
 import authAxios from '../utils/authentications/authFetch';
 import styles from './ExplorePage.module.css';
 import MovieModal from '../components/movie/MovieModal';
-import clapperboard from "../assets/clapperboard.png";
+import MovieGrid from '../components/movie/MovieGrid';
 import cn from 'classnames';
 
 interface Movie {
@@ -17,31 +17,50 @@ interface Movie {
   release_date: string;
 }
 
-type SearchType = 'popular' | 'upcoming';
+type SearchType = 'now_playing' | 'upcoming';
 
 const ExplorePage: React.FC = () => {
   const { t, i18n } = useTranslation();
-  const [movies, setMovies] = useState<Movie[]>([]);
+
+  // Replace single movies state with a cache object
+  const [movieCache, setMovieCache] = useState<{
+    now_playing: Movie[];
+    upcoming: Movie[];
+  }>({
+    now_playing: [],
+    upcoming: [],
+  });
+
+  // Track page number for each type
+  const [pageCache, setPageCache] = useState<{
+    now_playing: number;
+    upcoming: number;
+  }>({
+    now_playing: 1,
+    upcoming: 1,
+  });
+
+  // Track hasMore state for each type
+  const [hasMoreCache, setHasMoreCache] = useState<{
+    now_playing: boolean;
+    upcoming: boolean;
+  }>({
+    now_playing: true,
+    upcoming: true,
+  });
+
   const [loading, setLoading] = useState(false);
-  const [page, setPage] = useState(1);
-  const [hasMore, setHasMore] = useState(true);
   const [error, setError] = useState('');
   const [selectedMovie, setSelectedMovie] = useState<Movie | null>(null);
-  const [searchType, setSearchType] = useState<SearchType>('popular');
-  const observer = useRef<IntersectionObserver | null>(null);
+  const [searchType, setSearchType] = useState<SearchType>('now_playing');
   const backendUrl = import.meta.env.DEV
     ? import.meta.env.VITE_BACKEND_URL
     : import.meta.env.VITE_BACKEND_URL_PROD;
 
-  useEffect(() => {
-    setMovies([]);
-    setPage(1);
-  }, [searchType]);
-
-  // Fetch movies on initial load, page or lang or searchType changes
+  // Fetch movies only when necessary
   useEffect(() => {
     fetchMovies();
-  }, [page, i18n.language, searchType]);
+  }, [pageCache, i18n.language, searchType]);
 
   // Handle body overflow when modal is open
   useEffect(() => {
@@ -59,13 +78,14 @@ const ExplorePage: React.FC = () => {
   const fetchMovies = async () => {
     setLoading(true);
     setError('');
+    const currentPage = pageCache[searchType];
 
     try {
       const response = await authAxios(`${backendUrl}/api/film/explore/`, {
         method: "GET",
         params: {
           search_type: searchType,
-          page,
+          page: currentPage,
           lang: i18n.language === 'ko' ? 'ko-KR' : 'en-US',
           region: i18n.language === 'ko' ? 'kr' : 'us',
         },
@@ -73,13 +93,17 @@ const ExplorePage: React.FC = () => {
 
       const newMovies = response.data.results || [];
 
-      if (page === 1) {
-        setMovies(newMovies);
-      } else {
-        setMovies(prev => [...prev, ...newMovies]);
-      }
+      setMovieCache(prev => ({
+        ...prev,
+        [searchType]: currentPage === 1
+          ? newMovies
+          : [...prev[searchType], ...newMovies]
+      }));
 
-      setHasMore(newMovies.length > 0);
+      setHasMoreCache(prev => ({
+        ...prev,
+        [searchType]: newMovies.length > 0
+      }));
     } catch (err) {
       console.error("Error fetching movies:", err);
       setError(t('Failed to load movies'));
@@ -88,29 +112,16 @@ const ExplorePage: React.FC = () => {
     }
   };
 
-  // Set up intersection observer for infinite scroll
-  const lastMovieElementRef = useCallback((node: HTMLDivElement | null) => {
-    if (loading) return;
-
-    if (observer.current) observer.current.disconnect();
-
-    observer.current = new IntersectionObserver(entries => {
-      if (entries[0].isIntersecting && hasMore) {
-        setPage(prevPage => prevPage + 1);
-      }
-    });
-
-    if (node) observer.current.observe(node);
-  }, [loading, hasMore]);
-
   const handleMovieClick = (movie: Movie) => {
     setSelectedMovie(movie);
   };
 
-  const getImageUrl = (path: string | null) => {
-    if (!path) return clapperboard;
-    return `https://image.tmdb.org/t/p/w500${path}`;
-  };
+  const handleLoadMore = useCallback(() => {
+    setPageCache(prev => ({
+      ...prev,
+      [searchType]: prev[searchType] + 1
+    }));
+  }, [searchType]);
 
   return (
     <div className={styles.container}>
@@ -118,12 +129,13 @@ const ExplorePage: React.FC = () => {
       <div className={styles.switchContainer}>
         <button
           className={cn(styles.switchButton, {
-            [styles.active]: searchType === 'popular',
+            [styles.active]: searchType === 'now_playing',
           })}
-          onClick={() => setSearchType('popular')}
+          onClick={() => setSearchType('now_playing')}
         >
-          {t('Popular')}
+          {t('Now Playing')}
         </button>
+
         <button
           className={cn(styles.switchButton, {
             [styles.active]: searchType === 'upcoming',
@@ -136,34 +148,13 @@ const ExplorePage: React.FC = () => {
 
       {error && <p className={styles.error}>{error}</p>}
 
-      <div className={styles.grid}>
-        {movies.map((movie, index) => {
-          const isLastElement = index === movies.length - 1;
-
-          return (
-            <div
-              key={`${movie.id}-${index}`}
-              ref={isLastElement ? lastMovieElementRef : null}
-              className={styles.card}
-              onClick={() => handleMovieClick(movie)}
-            >
-              <div
-                className={styles.poster}
-                style={{
-                  backgroundImage: `url(${getImageUrl(movie.poster_path || movie.backdrop_path)})`
-                }}
-              >
-                <div className={styles.overlay}>
-                  <h3>{movie.title}</h3>
-                  <p>{movie.directors?.join(', ')}</p>
-                </div>
-              </div>
-            </div>
-          );
-        })}
-      </div>
-
-      {loading && <div className={styles.spinner}></div>}
+      <MovieGrid
+        movies={movieCache[searchType]}
+        loading={loading}
+        hasMore={hasMoreCache[searchType]}
+        onMovieClick={handleMovieClick}
+        onLoadMore={handleLoadMore}
+      />
 
       {selectedMovie && (
         <MovieModal

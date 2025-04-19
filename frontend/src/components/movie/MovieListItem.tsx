@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { Movie } from "./MovieSearch";
+import { Movie } from "../../pages/CreatePage";
 import styles from "./MovieListItem.module.css";
 import { useTranslation } from "react-i18next";
 

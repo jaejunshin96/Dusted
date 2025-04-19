@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { Movie } from "./MovieSearch";
+import { Movie } from "../../pages/CreatePage";
 import authAxios from "../../utils/authentications/authFetch";
 import { useTranslation } from "react-i18next";
 import styles from "./MovieModal.module.css";

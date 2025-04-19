@@ -54,6 +54,11 @@ const ReviewDetailModal: React.FC<ReviewDetailModalProps> = ({ review, onClose, 
     setTextCount(reviewText.length);
   }, [reviewText]);
 
+  const getImageUrl = (path: string | null) => {
+    if (!path) return clapperboard;
+    return `https://image.tmdb.org/t/p/original${path}`;
+  };
+
   const handleSave = async () => {
     try {
       await authAxios(`${backendUrl}/api/review/reviews/`, {
@@ -106,10 +111,7 @@ const ReviewDetailModal: React.FC<ReviewDetailModalProps> = ({ review, onClose, 
       <div
         className={`${styles.modalContainer} ${styles.modalBackgroundImage}`}
         style={{
-          backgroundImage:
-            `url(${review.image_path && isImageLoaded
-            ? `${review.image_path}`
-            : clapperboard})`
+          backgroundImage: `url(${getImageUrl(review.backdrop_path || review.poster_path)})`
         }}
         onClick={(e) => e.stopPropagation()}
       >

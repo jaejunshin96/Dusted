@@ -3,10 +3,11 @@ from django.conf import settings
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import status
+from datetime import datetime
 
 class ExploreMoviesAPIView(APIView):
     def get(self, request):
-        search_type = request.GET.get("search_type", "popular")
+        search_type = request.GET.get("search_type", "now_playing")
         page = request.GET.get("page", 1)
         lang = request.GET.get('lang', 'en-US')
         region = request.GET.get('region', 'us')
