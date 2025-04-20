@@ -1,7 +1,7 @@
 import React, { useState, useRef, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { useTranslation } from "react-i18next";
-import { FaPlus, FaBookmark, FaUserAlt, FaRegCompass } from "react-icons/fa";
+import { FaSearch, FaBookmark, FaUserAlt, FaRegCompass } from "react-icons/fa";
 import { GiHamburgerMenu } from "react-icons/gi";
 import ThemeToggleButton from "./ThemeToggleButton";
 import LogoutButton from "../auth/LogoutButton";
@@ -42,11 +42,11 @@ const DesktopSidebar: React.FC = () => {
           <span>{t("Explore")}</span>
         </div>
 
-        <div className={styles.sidebarLink} onClick={() => navigate("/create")}>
-          <FaPlus size={24} />
-          <span>{t("Create")}</span>
+        <div className={styles.sidebarLink} onClick={() => navigate("/search")}>
+          <FaSearch size={24} />
+          <span>{t("Search")}</span>
         </div>
-        
+
         <div className={styles.sidebarLink} onClick={() => navigate("/reviews")}>
           <FaBookmark size={24} />
           <span>{t("Collections")}</span>

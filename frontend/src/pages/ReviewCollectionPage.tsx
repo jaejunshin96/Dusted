@@ -1,6 +1,6 @@
 import React, { useEffect, useState, useRef, useCallback } from "react";
 import authAxios from "../utils/authentications/authFetch";
-import ReviewDetailModal from "../components/movie/ReviewDetailModal";
+import ReviewModal from "../components/movie/ReviewModal";
 import styles from "./ReviewCollectionPage.module.css"
 import { useTranslation } from "react-i18next";
 import { FaArrowDownLong } from "react-icons/fa6";
@@ -204,7 +204,7 @@ const ReviewCollectionPage: React.FC = () => {
       </div>
 
       {selectedReview && (
-        <ReviewDetailModal
+        <ReviewModal
           review={selectedReview}
           onClose={handleCloseModal}
           onSave={handleEditSave}

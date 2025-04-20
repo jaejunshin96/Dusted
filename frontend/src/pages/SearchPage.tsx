@@ -2,7 +2,7 @@ import { useState, useEffect, useCallback } from "react";
 import authAxios from "../utils/authentications/authFetch";
 import MovieGrid from "../components/movie/MovieGrid";
 import MovieModal from "../components/movie/MovieModal";
-import styles from "./CreatePage.module.css";
+import styles from "./SearchPage.module.css";
 import { useTranslation } from "react-i18next";
 
 export interface Movie {
@@ -16,7 +16,7 @@ export interface Movie {
   release_date: string;
 }
 
-const CreatePage: React.FC = () => {
+const SearchPage: React.FC = () => {
   const { t, i18n } = useTranslation();
   const [movies, setMovies] = useState<Movie[]>([]);
   const [loading, setLoading] = useState(false);
@@ -154,4 +154,4 @@ const CreatePage: React.FC = () => {
   );
 };
 
-export default CreatePage;
+export default SearchPage;

@@ -1,4 +1,4 @@
-/* MovieModal.module.css */
+/* ReviewDetailModal.module.css */
 
 /* Background overlay */
 .overlay {
@@ -30,8 +30,8 @@
   text-align: left;
   color: var(--text-primary);
   box-shadow: 0 8px 32px rgba(0, 0, 0, 0.5);
-  position: relative;
   animation: fadeIn 0.4s ease;
+  position: relative;
   overflow-y: auto;
   backdrop-filter: blur(3px);
 }
@@ -45,7 +45,6 @@
   transition: all 0.3s ease;
 }
 
-/* Apply blur and overlay gradient when showDetails is true */
 .blurred::before {
   content: '';
   position: absolute;
@@ -59,38 +58,6 @@
   animation: zoomBlur 0.5s cubic-bezier(0.23, 1, 0.32, 1) forwards;
 }
 
-.clickableBackdrop {
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  cursor: pointer;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  border-radius: 16px;
-}
-
-.tapToViewOverlay {
-  background-color: rgba(0, 0, 0, 0.6);
-  color: white;
-  padding: 12px 24px;
-  border-radius: 8px;
-  font-size: 1.2rem;
-  opacity: 0;
-  transition: all 0.3s ease;
-  position: absolute;
-  bottom: 30px;
-  left: 50%;
-  transform: translateX(-50%) translateY(10px);
-}
-
-.clickableBackdrop:hover .tapToViewOverlay {
-  opacity: 1;
-  transform: translateX(-50%) translateY(0);
-}
-
 /* Detail Container */
 .detailsContainer {
   display: flex;
@@ -102,10 +69,17 @@
   width: 100%;
 }
 
+.reviewContainer {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
 /* Text Block */
 .textBlock {
   background-color: transparent;
   color: white;
+  text-shadow: 0px 1px 3px rgba(0, 0, 0, 0.8);
   display: inline-block;
   padding: 0;
   line-height: 1.5;
@@ -115,9 +89,53 @@
 }
 
 h2.textBlock {
+  text-shadow: 0px 2px 4px rgba(0, 0, 0, 0.9);
   font-size: 2rem;
   font-weight: 600;
   margin-bottom: 10px;
+}
+
+/* Review Block */
+.reviewBlock {
+  background-color: transparent;
+  color: white;
+  text-shadow: 0px 1px 3px rgba(0, 0, 0, 0.8);
+  padding: 0;
+  line-height: 1.6;
+  text-align: start;
+  margin: 0;
+  width: 100%;
+  white-space: pre-wrap;
+  word-wrap: break-word;
+  font-size: 1.25rem;
+  font-weight: 400;
+  letter-spacing: 0.01em;
+}
+
+/* Rating Stars */
+.ratingStars {
+  display: flex;
+  gap: 8px;
+  background-color: transparent;
+  padding: 0;
+  margin: 15px 0;
+}
+
+/* Star Icon */
+.star {
+  cursor: pointer;
+  font-size: 32px;
+  color: rgba(255, 255, 255, 0.3);
+  transition: all 0.2s ease;
+  text-shadow: 0 2px 5px rgba(0, 0, 0, 0.3);
+}
+
+.star:hover {
+  transform: scale(1.1);
+}
+
+.starActive {
+  color: #FFD700;
 }
 
 /* Review Textarea */
@@ -150,81 +168,6 @@ h2.textBlock {
   box-shadow: 0 0 0 2px rgba(128, 144, 255, 0.3);
 }
 
-/* Centered Button Section */
-.buttonSection {
-  margin-top: 20px;
-  display: flex;
-  justify-content: flex-end;
-  gap: 12px;
-  width: 100%;
-}
-
-/* Buttons */
-.button {
-  padding: 10px 20px;
-  border-radius: 8px;
-  cursor: pointer;
-  border: none;
-  transition: all 0.2s ease;
-  font-weight: 500;
-  font-size: 16px;
-  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
-  background-color: #8090ff;
-  color: white;
-}
-
-.button:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
-  background-color: #6b78d1;
-}
-
-.button:disabled {
-  background-color: #4a5280;
-  cursor: not-allowed;
-  transform: none;
-  box-shadow: none;
-  opacity: 0.7;
-}
-
-.closeButton {
-  background-color: transparent;
-  color: white;
-  border: 1px solid rgba(255, 255, 255, 0.3);
-  box-shadow: none;
-}
-
-.closeButton:hover {
-  background-color: rgba(255, 255, 255, 0.1);
-  box-shadow: none;
-}
-
-/* Rating Stars */
-.ratingStars {
-  display: flex;
-  gap: 8px;
-  background-color: transparent;
-  padding: 0;
-  margin: 15px 0;
-}
-
-/* Star Icon */
-.star {
-  cursor: pointer;
-  font-size: 32px;
-  color: rgba(255, 255, 255, 0.3);
-  transition: all 0.2s ease;
-  text-shadow: 0 2px 5px rgba(0, 0, 0, 0.3);
-}
-
-.star:hover {
-  transform: scale(1.1);
-}
-
-.starActive {
-  color: #FFD700;
-}
-
 .errorContainer {
   display: flex;
   justify-content: flex-start;
@@ -240,6 +183,51 @@ h2.textBlock {
   font-size: 14px;
   width: 100%;
   border-left: 3px solid #ff3b30;
+}
+
+/* Centered Button Section */
+.buttonSection {
+  margin-top: 20px;
+  display: flex;
+  justify-content: flex-end;
+  gap: 12px;
+  width: 100%;
+}
+
+/* Buttons */
+.button {
+  padding: 10px 20px;
+  border-radius: 8px;
+  cursor: pointer;
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  transition: all 0.2s ease;
+  font-weight: 500;
+  font-size: 16px;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+  background-color: rgba(255, 255, 255, 0.3);
+  color: white;
+}
+
+.button:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+  background-color: rgba(255, 255, 255, 0.5);
+}
+
+.button:disabled {
+  background-color: #4a5280;
+  cursor: not-allowed;
+  transform: none;
+  box-shadow: none;
+  opacity: 0.7;
+}
+
+.deleteButton {
+  color: #ff6b6b;
+}
+
+.saveButton {
+  color: #8090ff;
 }
 
 .spinner {
@@ -273,12 +261,18 @@ h2.textBlock {
   .modalContainer {
     width: 80vw;
   }
+
+  .reviewBlock {
+    max-width: 70vw;
+  }
 }
 
+/* Mobile-only scrollable overview */
 @media (max-width: 768px) {
   .modalContainer {
     width: 90vw;
-    max-height: 80vh;
+    max-height: 80vh; /* Prevent the modal from going off the screen */
+    overflow-y: auto;
     padding: 20px;
   }
 
@@ -286,23 +280,8 @@ h2.textBlock {
     font-size: 1.5rem;
   }
 
-  .scrollableOverview {
-    max-height: 25vh;
-    overflow-y: auto;
-    padding-right: 5px;
-  }
-
-  .scrollableOverview::-webkit-scrollbar {
-    width: 6px;
-  }
-
-  .scrollableOverview::-webkit-scrollbar-thumb {
-    background-color: #888;
-    border-radius: 4px;
-  }
-
-  .scrollableOverview::-webkit-scrollbar-thumb:hover {
-    background-color: #555;
+  .reviewBlock {
+    font-size: 1.125rem;
   }
 }
 
@@ -313,6 +292,15 @@ h2.textBlock {
 
   .textarea {
     width: 100%;
+  }
+
+  .modalContainer {
+    width: 100%;
+  }
+
+  .reviewBlock {
+    max-width: 100%;
+    font-size: 1rem;
   }
 
   .modalContainer {
@@ -335,9 +323,5 @@ h2.textBlock {
 }
 
 @media (max-width: 375px) {
-  .scrollableOverview {
-    max-height: 25vh;
-    overflow-y: auto;
-    padding-right: 5px;
-  }
+
 }

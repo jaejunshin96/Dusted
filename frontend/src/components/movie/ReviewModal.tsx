@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import { Review } from "../../pages/ReviewCollectionPage";
 import authAxios from "../../utils/authentications/authFetch";
 import { useTranslation } from "react-i18next";
-import styles from "./ReviewDetailModal.module.css";
+import styles from "./ReviewModal.module.css";
 import clapperboard from "../../assets/clapperboard.png"
 
 interface ReviewDetailModalProps {
@@ -11,7 +11,7 @@ interface ReviewDetailModalProps {
   onSave: () => void;
 }
 
-const ReviewDetailModal: React.FC<ReviewDetailModalProps> = ({ review, onClose, onSave }) => {
+const ReviewModal: React.FC<ReviewDetailModalProps> = ({ review, onClose, onSave }) => {
   const { t } = useTranslation();
   const [isEditing, setIsEditing] = useState(false);
   const [reviewText, setReviewText] = useState(review.review);
@@ -20,12 +20,6 @@ const ReviewDetailModal: React.FC<ReviewDetailModalProps> = ({ review, onClose, 
   const [error, setError] = useState<string | null>(null);
   const backendUrl = import.meta.env.DEV ? import.meta.env.VITE_BACKEND_URL : import.meta.env.VITE_BACKEND_URL_PROD;
   const [isImageLoaded, setIsImageLoaded] = useState(false);
-
-  //const [showFullReview, setShowFullReview] = useState(false);
-
-  //  const truncatedReview = review.review.length > 200
-  //    ? review.review.slice(0, 200) + "..."
-  //    : review.review;
 
   useEffect(() => {
     const handleEsc = (e: KeyboardEvent) => {
@@ -39,15 +33,15 @@ const ReviewDetailModal: React.FC<ReviewDetailModalProps> = ({ review, onClose, 
   }, [onClose]);
 
   useEffect(() => {
-    if (!review.image_path) {
+    if (!review.backdrop_path && !review.poster_path) {
       setIsImageLoaded(true);
       return;
     }
 
     const img = new Image();
-    img.src = `${review.image_path}`;
+    img.src = getImageUrl(review.backdrop_path || review.poster_path);
     img.onload = () => setIsImageLoaded(true);
-  }, [review.image_path]);
+  }, [review.backdrop_path, review.poster_path]);
 
   useEffect(() => {
     setError(null);
@@ -60,6 +54,11 @@ const ReviewDetailModal: React.FC<ReviewDetailModalProps> = ({ review, onClose, 
   };
 
   const handleSave = async () => {
+    if (textCount > 400) {
+      setError(t("Review cannot exceed 400 characters."));
+      return;
+    }
+
     try {
       await authAxios(`${backendUrl}/api/review/reviews/`, {
         method: "PATCH",
@@ -96,20 +95,10 @@ const ReviewDetailModal: React.FC<ReviewDetailModalProps> = ({ review, onClose, 
     }
   };
 
-  //if (!isImageLoaded) {
-  //  return (
-  //    <div className={styles.overlay}>
-  //      <div className={styles.modalContainer}>
-  //        <div className={styles.spinner}></div>
-  //      </div>
-  //    </div>
-  //  );
-  //}
-
   return (
     <div className={styles.overlay} onClick={onClose}>
       <div
-        className={`${styles.modalContainer} ${styles.modalBackgroundImage}`}
+        className={`${styles.modalContainer} ${styles.modalBackgroundImage} ${!isEditing ? '' : styles.blurred}`}
         style={{
           backgroundImage: `url(${getImageUrl(review.backdrop_path || review.poster_path)})`
         }}
@@ -125,8 +114,7 @@ const ReviewDetailModal: React.FC<ReviewDetailModalProps> = ({ review, onClose, 
                 {[1, 2, 3, 4, 5].map((star) => (
                   <span
                     key={star}
-                    className={star <= review.rating ? styles.starActive : styles.star}
-                    style={{ fontSize: "24px" }}
+                    className={`${styles.star} ${star <= review.rating ? styles.starActive : ""}`}
                   >
                     ★
                   </span>
@@ -134,7 +122,7 @@ const ReviewDetailModal: React.FC<ReviewDetailModalProps> = ({ review, onClose, 
               </div>
 
               {review.review && (
-                <div className={`${styles.reviewBlock}`}>
+                <div className={styles.reviewBlock}>
                   {review.review.split("\n").map((line, index) => (
                     <span key={index}>
                       {line}
@@ -160,8 +148,7 @@ const ReviewDetailModal: React.FC<ReviewDetailModalProps> = ({ review, onClose, 
                 {[1, 2, 3, 4, 5].map((star) => (
                   <span
                     key={star}
-                    className={star <= rating ? styles.starActive : styles.star}
-                    style={{ fontSize: "24px", cursor: "pointer" }}
+                    className={`${styles.star} ${star <= rating ? styles.starActive : ""}`}
                     onClick={() => setRating(star)}
                   >
                     ★
@@ -179,7 +166,13 @@ const ReviewDetailModal: React.FC<ReviewDetailModalProps> = ({ review, onClose, 
                 />
               </div>
 
-              <div style={{ textAlign: "right", width: "90%", color: textCount > 400 ? "red" : "white"}}>
+              <div style={{
+                textAlign: "right",
+                width: "100%",
+                color: textCount > 400 ? "#ff6b6b" : "rgba(255,255,255,0.6)",
+                fontSize: "14px",
+                marginTop: "5px"
+              }}>
                 {textCount} / 400
               </div>
 
@@ -189,9 +182,15 @@ const ReviewDetailModal: React.FC<ReviewDetailModalProps> = ({ review, onClose, 
             </div>
 
             <div className={styles.buttonSection}>
-              <button className={`${styles.button}`} onClick={handleSave}>{t("Save")}</button>
-              <button className={`${styles.button} ${styles.closeButton}`} onClick={() => setIsEditing(false)}>{t("Cancel")}</button>
-              <button className={`${styles.button} ${styles.deleteButton}`} onClick={handleDelete}>{t("Delete")}</button>
+              <button className={`${styles.button} ${styles.deleteButton}`} onClick={handleDelete}>
+                {t("Delete")}
+              </button>
+              <button className={`${styles.button} ${styles.saveButton}`} onClick={handleSave}>
+                {t("Save")}
+              </button>
+              <button className={`${styles.button}`} onClick={() => setIsEditing(false)}>
+                {t("Cancel")}
+              </button>
             </div>
           </>
         )}
@@ -200,4 +199,4 @@ const ReviewDetailModal: React.FC<ReviewDetailModalProps> = ({ review, onClose, 
   );
 };
 
-export default ReviewDetailModal;
+export default ReviewModal;

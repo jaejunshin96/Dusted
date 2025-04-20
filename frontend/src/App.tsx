@@ -6,7 +6,7 @@ import ActivationConfirmPage from "./pages/authentications/ActivationConfirmPage
 import PasswordResetPage from "./pages/authentications/PasswordResetPage";
 import NewPasswordPage from "./pages/authentications/NewPasswordPage";
 import ExplorePage from "./pages/ExplorePage";
-import CreatePage from "./pages/CreatePage";
+import SearchPage from "./pages/SearchPage";
 import ProfilePage from "./pages/ProfilePage";
 import NotFoundPage from "./pages/404/NotFoundPage";
 import ProtectedRoute from "./utils/authentications/ProtectedRoute";
@@ -35,8 +35,8 @@ function App() {
               {/* authenticated access */}
               <Route element={<ProtectedRoute />}>
                 <Route path="/explore" element={<ExplorePage />} />
+                <Route path="/search" element={<SearchPage />} />
                 <Route path="/reviews" element={<ReviewCollectionPage />} />
-                <Route path="/create" element={<CreatePage />} />
                 <Route path="/profile" element={<ProfilePage />} />
               </Route>
 
