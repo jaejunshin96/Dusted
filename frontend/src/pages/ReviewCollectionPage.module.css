@@ -18,13 +18,13 @@
   margin-right: 10px;
   background-color: var(--card-background);
   color: var(--text-primary);
-  border: 1px solid var(--border-color);
+  border: 3px solid var(--accent-color);
 }
 
 .sortDropdown {
   padding: 8px;
   background-color: var(--card-background);
-  border: 1px solid var(--border-color);
+  border: 3px solid var(--accent-color);
   border-radius: 5px;
   cursor: pointer;
   font-size: 0.9rem;
@@ -43,6 +43,7 @@
   display: inline-block;
 	cursor: pointer;
 	vertical-align: middle;
+  color: var(--text-primary);
 }
 
 .rotateUp {

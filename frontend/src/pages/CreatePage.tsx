@@ -101,6 +101,10 @@ const CreatePage: React.FC = () => {
     }
   };
 
+  const handleClear = () => {
+    setQuery('');
+  };
+
   const handleLoadMore = useCallback(() => {
     setPage(prevPage => prevPage + 1);
   }, []);
@@ -120,6 +124,14 @@ const CreatePage: React.FC = () => {
           value={query}
           onChange={handleInputChange}
         />
+        <button
+          type="button"
+          className={`${styles.clearButton} ${!query ? styles.hidden : ''}`}
+          onClick={handleClear}
+          aria-label="Clear search"
+        >
+          ✕
+        </button>
       </form>
 
       {error && <p className={styles.error}>{error}</p>}

@@ -83,9 +83,10 @@ const ProfilePage: React.FC = () => {
           </div>
 
           <div className={styles.infoItem}>
-            <span className={styles.label}>{t('Joined')}</span>
-            <span className={styles.value}>{profile && formatDate(profile.date_joined)}</span>
+            <span className={styles.label}>{t('Reviews')}</span>
+            <span className={styles.value}>{profile?.review_count || 0}</span>
           </div>
+
 
           <div className={styles.infoItem}>
             <span className={styles.label}>{t('Language')}</span>
@@ -95,8 +96,8 @@ const ProfilePage: React.FC = () => {
           </div>
 
           <div className={styles.infoItem}>
-            <span className={styles.label}>{t('Reviews')}</span>
-            <span className={styles.value}>{profile?.review_count || 0}</span>
+            <span className={styles.label}>{t('Joined')}</span>
+            <span className={styles.value}>{profile && formatDate(profile.date_joined)}</span>
           </div>
         </div>
       </div>

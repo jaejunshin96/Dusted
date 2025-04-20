@@ -42,14 +42,14 @@ const DesktopSidebar: React.FC = () => {
           <span>{t("Explore")}</span>
         </div>
 
-        <div className={styles.sidebarLink} onClick={() => navigate("/reviews")}>
-          <FaBookmark size={24} />
-          <span>{t("Collections")}</span>
-        </div>
-
         <div className={styles.sidebarLink} onClick={() => navigate("/create")}>
           <FaPlus size={24} />
           <span>{t("Create")}</span>
+        </div>
+        
+        <div className={styles.sidebarLink} onClick={() => navigate("/reviews")}>
+          <FaBookmark size={24} />
+          <span>{t("Collections")}</span>
         </div>
 
         <div className={styles.sidebarLink} onClick={() => navigate("/profile")}>

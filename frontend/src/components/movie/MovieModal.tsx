@@ -18,15 +18,9 @@ const MovieModal: React.FC<MovieModalProps> = ({ movie, onClose }) => {
   const [textCount, setTextCount] = useState(0);
   const [error, setError] = useState<string | null>(null);
   const [isReviewed, setIsReviewed] = useState(false);
+  const [loading, setLoading] = useState(false);
+  const [showDetails, setShowDetails] = useState(false);
   const backendUrl = import.meta.env.DEV ? import.meta.env.VITE_BACKEND_URL : import.meta.env.VITE_BACKEND_URL_PROD;
-
-  const [isImageLoaded, setIsImageLoaded] = useState(false);
-
-  const [showFullOverview, setShowFullOverview] = useState(false);
-
-  const truncatedOverview = movie.overview.length > 200
-    ? movie.overview.slice(0, 200) + "..."
-    : movie.overview;
 
   useEffect(() => {
     const handleEsc = (e: KeyboardEvent) => {
@@ -58,15 +52,20 @@ const MovieModal: React.FC<MovieModalProps> = ({ movie, onClose }) => {
     fetchReviewStatus();
   }, [movie.id]);
 
+  const getImageUrl = (path: string | null) => {
+    if (!path) return clapperboard;
+    return `https://image.tmdb.org/t/p/original${path}`;
+  };
+
   useEffect(() => {
     if (!movie.backdrop_path) {
-      setIsImageLoaded(true);
+      setLoading(true);
       return;
     }
 
     const img = new Image();
     img.src = `https://image.tmdb.org/t/p/original${movie.backdrop_path}`;
-    img.onload = () => setIsImageLoaded(true);
+    img.onload = () => setLoading(true);
   }, [movie.backdrop_path]);
 
   useEffect(() => {
@@ -111,114 +110,121 @@ const MovieModal: React.FC<MovieModalProps> = ({ movie, onClose }) => {
     }
   };
 
-  //if (!isImageLoaded) {
-  //  return (
-  //    <div className={styles.overlay}>
-  //      <div className={styles.modalContainer}>
-  //        <div className={styles.spinner}></div>
-  //      </div>
-  //    </div>
-  //  );
-  //}
+  const handleImageClick = () => {
+    setShowDetails(true);
+  };
 
   return (
     <div className={styles.overlay} onClick={onClose}>
       <div
-        className={`${styles.modalContainer} ${styles.modalBackgroundImage}`}
+        className={`${styles.modalContainer} ${styles.modalBackgroundImage} ${showDetails ? styles.blurred : ''}`}
         style={{
-          backgroundImage:
-            `url(${movie.backdrop_path && isImageLoaded
-            ? `https://image.tmdb.org/t/p/original${movie.backdrop_path}`
-            : clapperboard})`
+          backgroundImage: `url(${getImageUrl(movie.backdrop_path || movie.poster_path)})`
         }}
         onClick={(e) => e.stopPropagation()}
       >
-        {!isImageLoaded ? (<div className={styles.spinner}></div>) :
-        !writingReview ? (
+        {!loading ? (<div className={styles.spinner}></div>) : (
           <>
-            <div className={styles.detailsContainer}>
-              <h2 className={styles.textBlock}>
-                {movie.title}
-              </h2>
-              <p className={styles.textBlock}>
-                {t("Director")}:{" "}
-                <strong>
-                  {Array.isArray(movie.directors)
-                    ? movie.directors.join(", ")
-                    : movie.directors || "Not found"}
-                </strong>
-              </p>
-              <p className={styles.textBlock}>{t("Release Date")}: <strong>{movie.release_date || "Not found."}</strong></p>
-              <div className={`${styles.textBlock} ${showFullOverview ? styles.scrollableOverview : ""}`}>
-                {showFullOverview ? movie.overview : truncatedOverview}
-                {movie.overview.length > 200 && (
-                  <text
-                    className={styles.readMoreButton}
-                    onClick={() => setShowFullOverview(!showFullOverview)}
-                  >
-                    {showFullOverview ? t("Show Less") : t("Read More")}
-                  </text>
-                )}
-              </div>
-            </div>
-
-            <div className={styles.buttonSection}>
-              <button
-                className={`${styles.button}`}
-                onClick={() => setWritingReview(true)}
-                disabled={isReviewed}
+            {!showDetails ? (
+              <div
+                className={styles.clickableBackdrop}
+                onClick={handleImageClick}
               >
-                {isReviewed ? t("Reviewed") : t("Review")}
-              </button>
-            </div>
-          </>
-        ) : (
-          <>
-            <div className={styles.detailsContainer}>
-              <h2 className={styles.textBlock}>
-                {t("Review for")} {movie.title}
-                  {movie.original_title !== movie.title ? " (" + (movie.original_title) + ")" : ""}
-              </h2>
+                <div className={styles.tapToViewOverlay}>
+                  <span>{t("Tap to view details")}</span>
+                </div>
+              </div>
+            ) : !writingReview ? (
+              <>
+                <div className={styles.detailsContainer}>
+                  <h2 className={styles.textBlock}>
+                    {movie.title}
+                  </h2>
+                  <p className={styles.textBlock}>
+                    <span style={{ opacity: 0.7 }}>{t("Director")}: </span>
+                    <strong>
+                      {Array.isArray(movie.directors)
+                        ? movie.directors.join(", ")
+                        : movie.directors || "Not found"}
+                    </strong>
+                  </p>
+                  <p className={styles.textBlock}>
+                    <span style={{ opacity: 0.7 }}>{t("Release Date")}: </span>
+                    <strong>{movie.release_date || "Not found."}</strong>
+                  </p>
+                  <div className={styles.textBlock}>
+                    <span style={{ opacity: 0.7 }}>{t("Overview")}: </span>
+                    <div style={{ marginTop: "8px" }}>
+                      <strong>{movie.overview}</strong>
+                    </div>
+                  </div>
+                </div>
 
-              <div className={styles.ratingStars}>
-                {[1, 2, 3, 4, 5].map((star) => (
-                  <span
-                    key={star}
-                    className={`${styles.star} ${star <= rating ? styles.starActive : ""}`}
-                    onClick={() => setRating(star)}
+                <div className={styles.buttonSection}>
+                  <button
+                    className={`${styles.button}`}
+                    onClick={() => setWritingReview(true)}
+                    disabled={isReviewed}
                   >
-                    ★
-                  </span>
-                ))}
-              </div>
+                    {isReviewed ? t("Reviewed") : t("Write a Review")}
+                  </button>
+                </div>
+              </>
+            ) : (
+              <>
+                <div className={styles.detailsContainer}>
+                  <h2 className={styles.textBlock}>
+                    {t("Review for")} {movie.title}
+                    {movie.original_title !== movie.title ? ` (${movie.original_title})` : ""}
+                  </h2>
 
-              <div className={styles.parentOfTextarea}>
-                <textarea
-                  className={styles.textarea}
-                  value={reviewText}
-                  rows={6}
-                  placeholder={t("What do you think about this film?")}
-                  onChange={(e) => setReviewText(e.target.value)}
-                />
-              </div>
+                  <div className={styles.ratingStars}>
+                    {[1, 2, 3, 4, 5].map((star) => (
+                      <span
+                        key={star}
+                        className={`${styles.star} ${star <= rating ? styles.starActive : ""}`}
+                        onClick={() => setRating(star)}
+                      >
+                        ★
+                      </span>
+                    ))}
+                  </div>
 
-              <div style={{ textAlign: "right", width: "90%", color: textCount > 400 ? "red" : "white"}}>
-                {textCount} / 400
-              </div>
+                  <div className={styles.parentOfTextarea}>
+                    <textarea
+                      className={styles.textarea}
+                      value={reviewText}
+                      rows={6}
+                      placeholder={t("What do you think about this film?")}
+                      onChange={(e) => setReviewText(e.target.value)}
+                    />
+                  </div>
 
-              <div className={styles.errorContainer}>
-                {error && <p className={styles.error}>{error}</p>}
-              </div>
-            </div>
+                  <div style={{
+                    textAlign: "right",
+                    width: "100%",
+                    color: textCount > 400 ? "#ff6b6b" : "rgba(255,255,255,0.6)",
+                    fontSize: "14px",
+                    marginTop: "5px"
+                  }}>
+                    {textCount} / 400
+                  </div>
 
-            <div className={styles.buttonSection}>
-              <button className={`${styles.button}`} onClick={handleSubmitReview}>
-                {t("Save")}
-              </button>
-              <button className={`${styles.button} ${styles.closeButton}`} onClick={() => setWritingReview(false)}>
-                {t("Back")}
-              </button>
-            </div>
+                  <div className={styles.errorContainer}>
+                    {error && <p className={styles.error}>{error}</p>}
+                  </div>
+                </div>
+
+                <div className={styles.buttonSection}>
+                  <button className={`${styles.button} ${styles.closeButton}`} onClick={() => setWritingReview(false)}>
+                    {t("Cancel")}
+                  </button>
+                  <button className={`${styles.button}`} onClick={handleSubmitReview}>
+                    {t("Submit Review")}
+                  </button>
+                </div>
+              </>
+            )}
           </>
         )}
       </div>
