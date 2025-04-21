@@ -19,9 +19,7 @@ const LogoutButton: React.FC<LogoutButtonProps> = ({ onLogout }) => {
   };
 
   return (
-    <span onClick={handleLogout}>
-      {t("Log out")}
-    </span>
+    <span onClick={handleLogout}>{t("Log out")}</span>
   );
 };
 

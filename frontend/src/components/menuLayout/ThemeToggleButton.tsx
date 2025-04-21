@@ -21,12 +21,9 @@ const ThemeToggleButton: React.FC = () => {
 
   const [theme, setTheme] = useState<'light' | 'dark' | 'system'>(getInitialTheme);
 
-  const toggleTheme = () => {
-    const themeOrder: ('light' | 'dark' | 'system')[] = ['light', 'dark', 'system'];
-    const currentIndex = themeOrder.indexOf(theme);
-    const nextTheme = themeOrder[(currentIndex + 1) % themeOrder.length];
-    setTheme(nextTheme);
-    applyTheme(nextTheme);
+  const setSpecificTheme = (newTheme: 'light' | 'dark' | 'system') => {
+    setTheme(newTheme);
+    applyTheme(newTheme);
   };
 
   const applyTheme = (newTheme: 'light' | 'dark' | 'system') => {
@@ -63,26 +60,37 @@ const ThemeToggleButton: React.FC = () => {
     applyTheme(theme);
   }, []);
 
-  // Get label for current theme state
-  const getThemeLabel = () => {
-    switch(theme) {
-      case 'light': return t("Light mode");
-      case 'dark': return t("Dark mode");
-      default: return t("System theme");
-    }
-  };
-
   return (
-    <div className={styles.themeToggleContainer} onClick={toggleTheme}>
-      <div className={styles.themeIcon}>
-        {theme === 'light' ? <PiSun size={20} /> : theme === 'dark' ? <PiMoon size={20} /> : (
-          <div className={styles.systemIcon}>
-            <PiSun className={styles.sunIcon} size={20} />
-            <PiMoon className={styles.moonIcon} size={20} />
-          </div>
-        )}
-      </div>
-      <span className={styles.themeLabel}>{getThemeLabel()}</span>
+    <div className={styles.themeSubmenu}>
+      <button
+        className={`${styles.themeOption} ${theme === 'light' ? styles.activeTheme : ''}`}
+        onClick={() => setSpecificTheme('light')}
+      >
+        <div className={styles.themeIcon}><PiSun size={20} /></div>
+        <span>{t("Light mode")}</span>
+        {theme === 'light' && <div className={styles.activeIndicator}></div>}
+      </button>
+
+      <button
+        className={`${styles.themeOption} ${theme === 'dark' ? styles.activeTheme : ''}`}
+        onClick={() => setSpecificTheme('dark')}
+      >
+        <div className={styles.themeIcon}><PiMoon size={20} /></div>
+        <span>{t("Dark mode")}</span>
+        {theme === 'dark' && <div className={styles.activeIndicator}></div>}
+      </button>
+
+      <button
+        className={`${styles.themeOption} ${theme === 'system' ? styles.activeTheme : ''}`}
+        onClick={() => setSpecificTheme('system')}
+      >
+        <div className={styles.systemIcon}>
+          <PiSun className={styles.sunIcon} size={20} />
+          <PiMoon className={styles.moonIcon} size={20} />
+        </div>
+        <span>{t("System theme")}</span>
+        {theme === 'system' && <div className={styles.activeIndicator}></div>}
+      </button>
     </div>
   );
 };

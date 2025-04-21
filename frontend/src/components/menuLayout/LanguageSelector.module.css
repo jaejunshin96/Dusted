@@ -1,24 +1,21 @@
-.languageToggleContainer {
+.languageToggle {
   display: flex;
   align-items: center;
-  cursor: pointer;
-  position: relative;
+  gap: 12px;
+  padding: 12px;
+  border-radius: 8px;
   width: 100%;
-  padding: 8px 0; /* Match ThemeToggleButton padding */
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+  color: var(--text-primary);
 }
 
-.languageIcon {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  margin-right: 16px; /* Match ThemeToggleButton margin */
-  color: #fff;
-}
-
-.languageLabel {
+.languageToggle span {
   font-size: 16px;
-  font-weight: 400; /* Match ThemeToggleButton weight */
-  color: #fff;
+}
+
+.languageToggle:hover {
+  background-color: rgba(128, 128, 128, 0.1);
 }
 
 .languageOptions {
@@ -40,7 +37,7 @@
 .languageOptions button {
   background: none;
   border: none;
-  color: #fff;
+  color: var(--text-primary);
   text-align: left;
   padding: 12px 16px;
   cursor: pointer;
@@ -54,7 +51,32 @@
 }
 
 .languageOptions button:hover {
-  background-color: rgba(255, 255, 255, 0.05);
+  background-color: rgba(128, 128, 128, 0.1);
+}
+
+.languageSubmenu {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+}
+
+.languageSubmenu button {
+  background: none;
+  border: none;
+  color: var(--text-primary);
+  text-align: left;
+  padding: 16px;
+  cursor: pointer;
+  width: 100%;
+  font-size: 16px;
+  transition: background-color 0.2s ease;
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+.languageSubmenu button:hover {
+  background-color: rgba(128, 128, 128, 0.1);
 }
 
 .activeLanguage {

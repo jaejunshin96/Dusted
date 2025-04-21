@@ -1,76 +1,72 @@
-.themeToggle {
-    background: transparent;
-    border: none;
-    cursor: pointer;
-    color: var(--text-primary);
-    font-size: 18px;
-    border-radius: 50%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    transition: background-color 0.3s;
-  }
+.themeSubmenu {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+}
 
-  .themeToggle:hover {
-    background-color: rgba(128, 128, 128, 0.1);
-  }
+.themeOption {
+  background: none;
+  border: none;
+  color: var(--text-primary);
+  text-align: left;
+  padding: 16px 16px;
+  cursor: pointer;
+  width: 100%;
+  font-size: 16px;
+  transition: background-color 0.2s ease;
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
 
-  .themeToggleContainer {
-    display: flex;
-    align-items: center;
-    width: 100%;
-    padding: 8px 0;
-    cursor: pointer;
-    position: relative;
-  }
+.themeOption:hover {
+  background-color: rgba(128, 128, 128, 0.1);
+}
 
-  .themeIcon {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    margin-right: 16px;
-    color: #fff;
-  }
+.themeOption:focus {
+  outline: none;
+}
 
-  .themeLabel {
-    color: #fff;
-    font-size: 16px;
-    font-weight: 400;
-  }
+.activeTheme {
+  color: var(--accent-color, #8090ff);
+}
 
-  .activeIndicator {
-    width: 8px;
-    height: 8px;
-    background-color: #8090ff;
-    border-radius: 50%;
-    position: absolute;
-    right: 12px;
-    opacity: 0;
-    transition: opacity 0.2s;
-  }
+.activeTheme .activeIndicator {
+  position: absolute;
+  right: 16px;
+  width: 8px;
+  height: 8px;
+  background-color: var(--accent-color, #8090ff);
+  border-radius: 50%;
+  opacity: 1;
+}
 
-  /* Show the indicator for the active theme */
-  .themeToggleContainer:hover .activeIndicator {
-    opacity: 0.6;
-  }
+.themeIcon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--text-primary);
+}
 
-  .systemIcon {
-    position: relative;
-    width: 20px;
-    height: 20px;
-    display: flex;
-  }
+.systemIcon {
+  color: var(--text-primary);
+  position: relative;
+  width: 20px;
+  height: 20px;
+  display: flex;
+}
 
-  .sunIcon, .moonIcon {
-    position: absolute;
-    top: 0;
-    left: 0;
-  }
+.sunIcon, .moonIcon {
+  position: absolute;
+  top: 0;
+  left: 0;
+}
 
-  .sunIcon {
-    clip-path: polygon(0 0, 50% 0, 50% 100%, 0 100%);
-  }
+.sunIcon {
+  clip-path: polygon(0 0, 50% 0, 50% 100%, 0 100%);
+}
 
-  .moonIcon {
-    clip-path: polygon(50% 0, 100% 0, 100% 100%, 50% 100%);
-  }
+.moonIcon {
+  clip-path: polygon(50% 0, 100% 0, 100% 100%, 50% 100%);
+}
