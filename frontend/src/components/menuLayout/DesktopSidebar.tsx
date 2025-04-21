@@ -2,6 +2,7 @@ import React, { useState, useRef, useEffect } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import { FaSearch, FaBookmark, FaUserAlt, FaRegCompass } from "react-icons/fa";
+import { MdCollections } from "react-icons/md";
 import { PiMoon, PiSun, PiGlobe } from 'react-icons/pi';
 import { GiHamburgerMenu } from "react-icons/gi";
 import { IoChevronBack } from "react-icons/io5";
@@ -86,10 +87,18 @@ const DesktopSidebar: React.FC = () => {
         </div>
 
         <div
+          className={`${styles.sidebarLink} ${isActive("/watchlist") ? styles.active : ""}`}
+          onClick={() => navigate("/watchlist")}
+        >
+          <FaBookmark size={24} />
+          <span>{t("Watchlist")}</span>
+        </div>
+
+        <div
           className={`${styles.sidebarLink} ${isActive("/reviews") ? styles.active : ""}`}
           onClick={() => navigate("/reviews")}
         >
-          <FaBookmark size={24} />
+          <MdCollections size={24} />
           <span>{t("Collections")}</span>
         </div>
 

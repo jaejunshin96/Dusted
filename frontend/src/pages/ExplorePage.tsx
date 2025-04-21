@@ -17,34 +17,40 @@ interface Movie {
   release_date: string;
 }
 
-type SearchType = 'now_playing' | 'upcoming';
+type SearchType = 'popular' | 'now_playing' | 'upcoming';
 
 const ExplorePage: React.FC = () => {
   const { t, i18n } = useTranslation();
 
   // Replace single movies state with a cache object
   const [movieCache, setMovieCache] = useState<{
+    popular: Movie[];
     now_playing: Movie[];
     upcoming: Movie[];
   }>({
+    popular: [],
     now_playing: [],
     upcoming: [],
   });
 
   // Track page number for each type
   const [pageCache, setPageCache] = useState<{
+    popular: number;
     now_playing: number;
     upcoming: number;
   }>({
+    popular: 1,
     now_playing: 1,
     upcoming: 1,
   });
 
   // Track hasMore state for each type
   const [hasMoreCache, setHasMoreCache] = useState<{
+    popular: boolean;
     now_playing: boolean;
     upcoming: boolean;
   }>({
+    popular: true,
     now_playing: true,
     upcoming: true,
   });
@@ -127,6 +133,15 @@ const ExplorePage: React.FC = () => {
     <div className={styles.container}>
       {/* toggle buttons */}
       <div className={styles.switchContainer}>
+      <button
+          className={cn(styles.switchButton, {
+            [styles.active]: searchType === 'popular',
+          })}
+          onClick={() => setSearchType('popular')}
+        >
+          {t('Popular')}
+        </button>
+
         <button
           className={cn(styles.switchButton, {
             [styles.active]: searchType === 'now_playing',
