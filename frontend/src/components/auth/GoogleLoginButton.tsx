@@ -1,19 +1,43 @@
-import { GoogleLogin } from "@react-oauth/google";
+import { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import axios from "axios";
+import { FcGoogle } from "react-icons/fc";
+import styles from './GoogleLoginButton.module.css';
 
 const GoogleLoginButton = () => {
-  const { i18n } = useTranslation();
+  const { t } = useTranslation();
   const navigate = useNavigate();
   const backendUrl = import.meta.env.DEV ? import.meta.env.VITE_BACKEND_URL : import.meta.env.VITE_BACKEND_URL_PROD;
 
-  const lang = i18n.language;
+  useEffect(() => {
+    // Load the Google Identity Services SDK
+    const script = document.createElement("script");
+    script.src = "https://accounts.google.com/gsi/client";
+    script.async = true;
+    script.defer = true;
+    document.body.appendChild(script);
 
-  const handleSuccess = async (response: any) => {
+    return () => {
+      document.body.removeChild(script);
+    };
+  }, []);
+
+  const handleGoogleLogin = () => {
+    // @ts-ignore (google is added to window by the script)
+    window.google.accounts.id.initialize({
+      client_id: import.meta.env.VITE_GOOGLE_CLIENT_ID,
+      callback: handleCredentialResponse
+    });
+
+    // @ts-ignore
+    window.google.accounts.id.prompt();
+  };
+
+  const handleCredentialResponse = async (response: any) => {
     try {
       const res = await axios.post(`${backendUrl}/api/social_auth/google/`, {
-        auth_token: response.credential, // Send Google token to Django backend
+        auth_token: response.credential,
       });
 
       localStorage.setItem("email", res.data.email);
@@ -28,12 +52,13 @@ const GoogleLoginButton = () => {
   };
 
   return (
-    <GoogleLogin
-      onSuccess={handleSuccess}
-      onError={() => alert("Google login failed")}
-      text="continue_with"
-      locale={lang}
-    />
+    <button
+      onClick={handleGoogleLogin}
+      className={styles.googleButton}
+    >
+      <FcGoogle className={styles.googleIcon} />
+      {t("Continue with Google")}
+    </button>
   );
 };
 

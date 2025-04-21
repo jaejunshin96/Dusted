@@ -4,14 +4,14 @@
   justify-content: center;
   align-items: center;
   min-height: 90vh;
-  background-color: #f0f2f5;
+  background-color: var(--background-color);
 }
 
 .contentWrapper {
   display: flex;
-  background: white;
+  background: var(--card-background);
   border-radius: 8px;
-  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+  box-shadow: 0 0 10px var(--shadow-color);
   overflow: hidden;
   width: 60vw;
 }
@@ -32,7 +32,7 @@
 h2 {
   margin-bottom: 20px;
   font-size: 1.8rem;
-  color: #333;
+  color: var(--text-primary);
 }
 
 form {
@@ -43,21 +43,21 @@ form {
 
 input {
   padding: 12px;
-  border: 1px solid #ddd;
+  border: 1px solid var(--border-color);
   border-radius: 5px;
   outline: none;
   font-size: 1rem;
-  background-color: #f5f5f5;
+  background-color: var(--card-background);
   transition: border 0.3s;
 }
 
 input:focus {
-  border-color: #8090ff;
+  border-color: var(--accent-color);
 }
 
 button {
   padding: 12px;
-  background-color: #8090ff;
+  background-color: var(--accent-color);
   color: white;
   border: none;
   border-radius: 5px;
@@ -67,11 +67,11 @@ button {
 }
 
 button:hover {
-  background-color: #5a6ccc;
+  background-color: var(--accent-hover);
 }
 
 a {
-  color: #8090ff;
+  color: var(--accent-color);
   text-decoration: none;
   font-size: 0.9rem;
 }
@@ -81,8 +81,15 @@ a:hover {
 }
 
 .error {
-  color: red;
+  color: var(--danger-color);
   margin-bottom: 10px;
+}
+
+.socialLoginContainer {
+  margin-top: 20px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
 @media (max-width: 430px) {

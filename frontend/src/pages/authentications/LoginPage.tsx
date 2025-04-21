@@ -96,7 +96,7 @@ const LoginPage: React.FC = () => {
           <p>
             <a href="/register">{t("Create Account")}</a> | <a href="/password-reset">{t("Forgot Password?")}</a>
           </p>
-          <div style={{ display:"flex", alignItems:"center", justifyContent:"center" }}>
+          <div className={styles.socialLoginContainer}>
             <GoogleOAuthProvider clientId={import.meta.env.VITE_GOOGLE_CLIENT_ID}>
               <GoogleLoginButton />
             </GoogleOAuthProvider>

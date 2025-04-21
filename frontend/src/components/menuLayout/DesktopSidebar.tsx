@@ -6,7 +6,6 @@ import { PiMoon, PiSun, PiGlobe } from 'react-icons/pi';
 import { GiHamburgerMenu } from "react-icons/gi";
 import { IoChevronBack } from "react-icons/io5";
 import ThemeToggleButton from "./ThemeToggleButton";
-import LogoutButton from "../auth/LogoutButton";
 import LanguageSelector from "./LanguageSelector";
 import styles from "./DesktopSidebar.module.css";
 
@@ -20,16 +19,6 @@ const DesktopSidebar: React.FC = () => {
 
   // Helper function to check if a route is active
   const isActive = (path: string) => location.pathname === path;
-
-  const getInitialTheme = (): 'light' | 'dark' | 'system' => {
-      const savedTheme = localStorage.getItem('theme');
-      if (savedTheme === 'light' || savedTheme === 'dark') {
-        return savedTheme;
-      }
-      return 'system';
-    };
-
-    const [theme, setTheme] = useState<'light' | 'dark' | 'system'>(getInitialTheme);
 
   // Close dropdown when clicking outside
   useEffect(() => {
@@ -64,6 +53,16 @@ const DesktopSidebar: React.FC = () => {
     e.stopPropagation();
     setCurrentView('main');
   };
+
+  const handleLogout = () => {
+    localStorage.removeItem("email");
+    localStorage.removeItem("username");
+    localStorage.removeItem("access_token");
+    localStorage.removeItem("refresh_token");
+
+    navigate("/login");
+  };
+
 
   return (
     <nav className={styles.desktopSidebar}>
@@ -128,8 +127,8 @@ const DesktopSidebar: React.FC = () => {
                     <span>{t("Switch appearance")}</span>
                   </div>
 
-                  <div className={`${styles.dropdownItem} ${styles.logoutButton}`}>
-                    <LogoutButton />
+                  <div className={`${styles.dropdownItem} ${styles.logoutButton}`} onClick={handleLogout}>
+                    <span>{t("Log out")}</span>
                   </div>
                 </div>
               )}
