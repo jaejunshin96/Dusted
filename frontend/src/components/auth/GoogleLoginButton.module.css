@@ -3,7 +3,7 @@
   align-items: center;
   justify-content: center;
   padding: 10px 16px;
-  background-color: var(--card-background);
+  background-color: var(--google-button-background);
   color: var(--text-primary);
   border: 1px solid var(--border-color);
   border-radius: 4px;
@@ -13,7 +13,7 @@
   cursor: pointer;
   width: 240px;
   height: 50px;
-  box-shadow: 0 2px 4px var(--shadow-color);
+  box-shadow: 0 1px 1px var(--shadow-color);
   transition: background-color 0.2s, border-color 0.2s;
 }
 
@@ -27,11 +27,4 @@
   width: 24px;
   height: 24px;
   margin-right: 12px;
-}
-
-/* Dark mode specific adjustments */
-@media (prefers-color-scheme: dark) {
-  .googleButton {
-    background-color: #282828;
-  }
 }

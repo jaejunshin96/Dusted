@@ -71,7 +71,7 @@ const MovieModal: React.FC<MovieModalProps> = ({ movie, onClose }) => {
   useEffect(() => {
     setError(null);
     setTextCount(reviewText.length);
-  }, [reviewText]);
+  }, [reviewText, rating]);
 
   const handleSubmitReview = async () => {
     if (rating === 0) {

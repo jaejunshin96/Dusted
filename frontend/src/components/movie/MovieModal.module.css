@@ -227,7 +227,7 @@ h2.textBlock {
 
 .errorContainer {
   display: flex;
-  justify-content: flex-start;
+  justify-content: center;
   width: 100%;
 }
 
@@ -238,8 +238,8 @@ h2.textBlock {
   color: #ff6b6b;
   margin: 10px 0;
   font-size: 14px;
-  width: 100%;
-  border-left: 3px solid #ff3b30;
+  /*width: 100%;*/
+  /*border-left: 3px solid #ff3b30;*/
 }
 
 .spinner {

@@ -31,6 +31,7 @@
   :root:not([data-theme="light"]) {
     --background-color: #121212;
     --card-background: #1e1e1e;
+    --google-button-background: #282828;
     --text-primary: #ffffff;
     --text-secondary: #aaaaaa;
     /* ... other dark variables ... */
