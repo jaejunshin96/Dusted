@@ -1,7 +1,7 @@
 import React, { useRef, useCallback } from 'react';
 import styles from './MovieGrid.module.css';
 import clapperboard from "../../assets/clapperboard.png";
-import { FaHeart, FaRegHeart } from 'react-icons/fa'; // Import heart icons
+import { FaBookmark, FaRegBookmark } from 'react-icons/fa';
 
 interface Movie {
   id: number;
@@ -20,8 +20,8 @@ interface MovieGridProps {
   hasMore: boolean;
   onMovieClick: (movie: Movie) => void;
   onLoadMore: () => void;
-  watchlistIds: number[]; // Add this new prop to track watchlist items
-  onWatchlistToggle: (movie: Movie, isAdding: boolean) => void; // Add this handler
+  watchlistIds: number[];
+  onWatchlistToggle: (movie: Movie, isAdding: boolean) => void;
 }
 
 const MovieGrid: React.FC<MovieGridProps> = ({
@@ -86,7 +86,7 @@ const MovieGrid: React.FC<MovieGridProps> = ({
                   onClick={(e) => handleWatchlistClick(e, movie, isInWatchlist)}
                   aria-label={isInWatchlist ? "Remove from watchlist" : "Add to watchlist"}
                 >
-                  {isInWatchlist ? <FaHeart className={styles.heartFilled} /> : <FaRegHeart />}
+                  {isInWatchlist ? <FaBookmark className={styles.heartFilled} /> : <FaRegBookmark />}
                 </button>
 
                 <div className={styles.overlay}>

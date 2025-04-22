@@ -6,7 +6,7 @@ import MovieModal from '../components/movie/MovieModal';
 import MovieGrid from '../components/movie/MovieGrid';
 import cn from 'classnames';
 import { getWatchlist, addToWatchlist, removeFromWatchlist } from '../services/watchlist';
-import { toast } from 'react-toastify'; // Add this if you're using react-toastify
+//import { toast } from 'react-toastify';
 
 interface Movie {
   id: number;
@@ -150,15 +150,15 @@ const ExplorePage: React.FC = () => {
       if (isAdding) {
         await addToWatchlist(movie);
         setWatchlistIds(prev => [...prev, movie.id]);
-        toast?.success(`${movie.title} added to watchlist`);
+        //toast?.success(`${movie.title} added to watchlist`);
       } else {
         await removeFromWatchlist(movie.id);
         setWatchlistIds(prev => prev.filter(id => id !== movie.id));
-        toast?.success(`${movie.title} removed from watchlist`);
+        //toast?.success(`${movie.title} removed from watchlist`);
       }
     } catch (error) {
       console.error('Watchlist operation failed:', error);
-      toast?.error('Failed to update watchlist');
+      //toast?.error('Failed to update watchlist');
     }
   };
 

@@ -5,7 +5,6 @@ import MovieModal from "../components/movie/MovieModal";
 import styles from "./SearchPage.module.css";
 import { useTranslation } from "react-i18next";
 import { getWatchlist, addToWatchlist, removeFromWatchlist } from '../services/watchlist';
-import { toast } from 'react-toastify';
 
 export interface Movie {
   id: number;
@@ -134,15 +133,12 @@ const SearchPage: React.FC = () => {
       if (isAdding) {
         await addToWatchlist(movie);
         setWatchlistIds(prev => [...prev, movie.id]);
-        toast?.success(`${movie.title} added to watchlist`);
       } else {
         await removeFromWatchlist(movie.id);
         setWatchlistIds(prev => prev.filter(id => id !== movie.id));
-        toast?.success(`${movie.title} removed from watchlist`);
       }
     } catch (error) {
       console.error('Watchlist operation failed:', error);
-      toast?.error('Failed to update watchlist');
     }
   };
 
