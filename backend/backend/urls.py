@@ -26,5 +26,5 @@ urlpatterns = [
 	path('api/auth/', include('users.urls'), name='users'),
 	path('api/review/', include('reviews.urls'), name='review'),
 	path('api/film/', include('films.urls'), name='film'),
+    path('api/watchlist/', include('watchlist.urls'), name='watchlist'),
 ]
-

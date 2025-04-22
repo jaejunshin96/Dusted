@@ -4,20 +4,25 @@ import MovieGrid from "../components/movie/MovieGrid";
 import MovieModal from "../components/movie/MovieModal";
 import styles from "./SearchPage.module.css";
 import { useTranslation } from "react-i18next";
+import { getWatchlist, addToWatchlist, removeFromWatchlist } from '../services/watchlist';
+import { toast } from 'react-toastify';
 
 export interface Movie {
   id: number;
   original_title: string;
   title: string;
   directors: [string];
+  release_date: string;
   overview: string;
   backdrop_path: string | null;
   poster_path: string | null;
-  release_date: string;
 }
 
 const SearchPage: React.FC = () => {
   const { t, i18n } = useTranslation();
+
+  const [watchlistIds, setWatchlistIds] = useState<number[]>([]);
+
   const [movies, setMovies] = useState<Movie[]>([]);
   const [loading, setLoading] = useState(false);
   const [page, setPage] = useState(1);
@@ -29,6 +34,20 @@ const SearchPage: React.FC = () => {
   const backendUrl = import.meta.env.DEV
     ? import.meta.env.VITE_BACKEND_URL
     : import.meta.env.VITE_BACKEND_URL_PROD;
+
+  // Fetch watchlist when component mounts
+  useEffect(() => {
+    const fetchWatchlistData = async () => {
+      try {
+        const watchlistData = await getWatchlist();
+        setWatchlistIds(watchlistData.map((item: any) => item.movie_id));
+      } catch (error) {
+        console.error('Failed to fetch watchlist:', error);
+      }
+    };
+
+    fetchWatchlistData();
+  }, []);
 
   useEffect(() => {
     if (selectedMovie) {
@@ -109,6 +128,24 @@ const SearchPage: React.FC = () => {
     setPage(prevPage => prevPage + 1);
   }, []);
 
+  // Handle watchlist toggle
+  const handleWatchlistToggle = async (movie: Movie, isAdding: boolean) => {
+    try {
+      if (isAdding) {
+        await addToWatchlist(movie);
+        setWatchlistIds(prev => [...prev, movie.id]);
+        toast?.success(`${movie.title} added to watchlist`);
+      } else {
+        await removeFromWatchlist(movie.id);
+        setWatchlistIds(prev => prev.filter(id => id !== movie.id));
+        toast?.success(`${movie.title} removed from watchlist`);
+      }
+    } catch (error) {
+      console.error('Watchlist operation failed:', error);
+      toast?.error('Failed to update watchlist');
+    }
+  };
+
   return (
     <div className={styles.container}>
       <form
@@ -152,6 +189,8 @@ const SearchPage: React.FC = () => {
         hasMore={hasMore}
         onMovieClick={handleMovieClick}
         onLoadMore={handleLoadMore}
+        watchlistIds={watchlistIds}
+        onWatchlistToggle={handleWatchlistToggle}
       />
 
       {selectedMovie && (

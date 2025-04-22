@@ -61,6 +61,34 @@
   color: white; /* Ensuring text is visible */
 }
 
+.watchlistButton {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  background: rgba(0, 0, 0, 0.5);
+  border: none;
+  border-radius: 50%;
+  width: 36px;
+  height: 36px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  z-index: 10;
+  transition: all 0.2s ease;
+  color: white;
+  padding: 8px;
+}
+
+.watchlistButton:hover {
+  transform: scale(1.1);
+  background: rgba(0, 0, 0, 0.7);
+}
+
+.heartFilled {
+  color: #ff3e69;
+}
+
 .loader {
   text-align: center;
   padding: 20px;

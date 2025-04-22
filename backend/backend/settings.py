@@ -57,6 +57,7 @@ INSTALLED_APPS = [
 	'social_auth',
 	'reviews',
 	'films',
+    'watchlist',
 ]
 
 MIDDLEWARE = [
