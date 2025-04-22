@@ -2,22 +2,12 @@ import React, { useEffect, useState, useCallback } from 'react';
 import { useTranslation } from 'react-i18next';
 import authAxios from '../utils/authentications/authFetch';
 import styles from './ExplorePage.module.css';
+import { Movie } from '../types/types';
 import MovieModal from '../components/movie/MovieModal';
 import MovieGrid from '../components/movie/MovieGrid';
 import cn from 'classnames';
 import { getWatchlist, addToWatchlist, removeFromWatchlist } from '../services/watchlist';
 //import { toast } from 'react-toastify';
-
-interface Movie {
-  id: number;
-  original_title: string;
-  title: string;
-  directors: [string];
-  release_date: string;
-  overview: string;
-  backdrop_path: string | null;
-  poster_path: string | null;
-}
 
 type SearchType = 'popular' | 'now_playing' | 'upcoming';
 
@@ -112,7 +102,12 @@ const ExplorePage: React.FC = () => {
         },
       });
 
-      const newMovies = response.data.results || [];
+      //const newMovies = response.data.results || [];
+
+      const newMovies = (response.data.results || []).map((movie: any) => ({
+        ...movie,
+        movie_id: movie.id
+      }));
 
       setMovieCache(prev => ({
         ...prev,
@@ -149,11 +144,11 @@ const ExplorePage: React.FC = () => {
     try {
       if (isAdding) {
         await addToWatchlist(movie);
-        setWatchlistIds(prev => [...prev, movie.id]);
+        setWatchlistIds(prev => [...prev, movie.movie_id]);
         //toast?.success(`${movie.title} added to watchlist`);
       } else {
-        await removeFromWatchlist(movie.id);
-        setWatchlistIds(prev => prev.filter(id => id !== movie.id));
+        await removeFromWatchlist(movie.movie_id);
+        setWatchlistIds(prev => prev.filter(id => id !== movie.movie_id));
         //toast?.success(`${movie.title} removed from watchlist`);
       }
     } catch (error) {

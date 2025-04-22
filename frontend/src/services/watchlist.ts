@@ -1,20 +1,10 @@
 import authAxios from '../utils/authentications/authFetch';
+import { Movie } from '../types/types';
 
 const backendUrl = import.meta.env.DEV
     ? import.meta.env.VITE_BACKEND_URL
     : import.meta.env.VITE_BACKEND_URL_PROD;
 const API_URL = `${backendUrl}/api/watchlist/watchlist/`;
-
-interface Movie {
-  id: number;
-  original_title: string;
-  title: string;
-  directors: [string];
-  release_date: string;
-  overview: string;
-  backdrop_path: string | null;
-  poster_path: string | null;
-}
 
 export const getWatchlist = async () => {
   const response = await authAxios(API_URL, {

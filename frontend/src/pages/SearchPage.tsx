@@ -2,20 +2,10 @@ import { useState, useEffect, useCallback } from "react";
 import authAxios from "../utils/authentications/authFetch";
 import MovieGrid from "../components/movie/MovieGrid";
 import MovieModal from "../components/movie/MovieModal";
+import { Movie } from '../types/types';
 import styles from "./SearchPage.module.css";
 import { useTranslation } from "react-i18next";
 import { getWatchlist, addToWatchlist, removeFromWatchlist } from '../services/watchlist';
-
-export interface Movie {
-  id: number;
-  original_title: string;
-  title: string;
-  directors: [string];
-  release_date: string;
-  overview: string;
-  backdrop_path: string | null;
-  poster_path: string | null;
-}
 
 const SearchPage: React.FC = () => {
   const { t, i18n } = useTranslation();
@@ -39,7 +29,7 @@ const SearchPage: React.FC = () => {
     const fetchWatchlistData = async () => {
       try {
         const watchlistData = await getWatchlist();
-        setWatchlistIds(watchlistData.map((item: any) => item.movie_id));
+        setWatchlistIds(watchlistData.map((movie: Movie) => movie.movie_id));
       } catch (error) {
         console.error('Failed to fetch watchlist:', error);
       }
@@ -83,7 +73,12 @@ const SearchPage: React.FC = () => {
         },
       });
 
-      const newMovies = response.data.results || [];
+      //const newMovies = response.data.results || [];
+
+      const newMovies = (response.data.results || []).map((movie: any) => ({
+        ...movie,
+        movie_id: movie.id
+      }));
 
       if (page === 1) {
         setMovies(newMovies);
@@ -132,10 +127,10 @@ const SearchPage: React.FC = () => {
     try {
       if (isAdding) {
         await addToWatchlist(movie);
-        setWatchlistIds(prev => [...prev, movie.id]);
+        setWatchlistIds(prev => [...prev, movie.movie_id]);
       } else {
-        await removeFromWatchlist(movie.id);
-        setWatchlistIds(prev => prev.filter(id => id !== movie.id));
+        await removeFromWatchlist(movie.movie_id);
+        setWatchlistIds(prev => prev.filter(id => id !== movie.movie_id));
       }
     } catch (error) {
       console.error('Watchlist operation failed:', error);

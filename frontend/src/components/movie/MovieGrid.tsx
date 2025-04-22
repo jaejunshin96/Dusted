@@ -2,17 +2,7 @@ import React, { useRef, useCallback } from 'react';
 import styles from './MovieGrid.module.css';
 import clapperboard from "../../assets/clapperboard.png";
 import { FaBookmark, FaRegBookmark } from 'react-icons/fa';
-
-interface Movie {
-  id: number;
-  original_title: string;
-  title: string;
-  directors: [string];
-  release_date: string;
-  overview: string;
-  backdrop_path: string | null;
-  poster_path: string | null;
-}
+import { Movie } from '../../types/types';
 
 interface MovieGridProps {
   movies: Movie[];
@@ -66,7 +56,8 @@ const MovieGrid: React.FC<MovieGridProps> = ({
       <div className={styles.grid}>
         {movies.map((movie, index) => {
           const isLastElement = index === movies.length - 1;
-          const isInWatchlist = watchlistIds.includes(movie.id);
+          // movies from the API - movie.id and watchlistIds - movie.movie_id
+          const isInWatchlist = watchlistIds.includes(movie.movie_id);
 
           return (
             <div
@@ -91,7 +82,9 @@ const MovieGrid: React.FC<MovieGridProps> = ({
 
                 <div className={styles.overlay}>
                   <h3>{movie.title}</h3>
-                  <p>{movie.directors?.join(', ')}</p>
+                  {Array.isArray(movie.directors)
+                        ? movie.directors.join(", ")
+                        : movie.directors || "Not found"}
                 </div>
               </div>
             </div>

@@ -7,6 +7,7 @@ import PasswordResetPage from "./pages/authentications/PasswordResetPage";
 import NewPasswordPage from "./pages/authentications/NewPasswordPage";
 import ExplorePage from "./pages/ExplorePage";
 import SearchPage from "./pages/SearchPage";
+import WatchlistPage from "./pages/WatchlistPage";
 import ProfilePage from "./pages/ProfilePage";
 import NotFoundPage from "./pages/404/NotFoundPage";
 import ProtectedRoute from "./utils/authentications/ProtectedRoute";
@@ -37,6 +38,7 @@ function App() {
             <Route element={<ProtectedRoute />}>
               <Route path="/explore" element={<ExplorePage />} />
               <Route path="/search" element={<SearchPage />} />
+              <Route path="/watchlist" element={<WatchlistPage />} />
               <Route path="/reviews" element={<ReviewCollectionPage />} />
               <Route path="/profile" element={<ProfilePage />} />
             </Route>

@@ -5,19 +5,7 @@ import styles from "./ReviewCollectionPage.module.css"
 import { useTranslation } from "react-i18next";
 import { FaArrowDownLong } from "react-icons/fa6";
 import clapperboard from "../assets/clapperboard.png"
-
-export interface Review {
-  id: number;
-  movie_id: number;
-  title: string;
-  directors: string;
-  review: string;
-  rating: number;
-  image_path: URL | null;
-  backdrop_path: string | null;
-  poster_path: string | null;
-  created_at: string;
-}
+import { Review } from "../types/types";
 
 const ReviewCollectionPage: React.FC = () => {
   const { t } = useTranslation();

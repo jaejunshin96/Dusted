@@ -2,14 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import authAxios from '../utils/authentications/authFetch';
 import styles from './ProfilePage.module.css';
-
-interface UserProfile {
-  email: string;
-  username: string;
-  date_joined: string;
-  language: string;
-  review_count: number;
-}
+import { UserProfile } from '../types/types';
 
 const ProfilePage: React.FC = () => {
   const { t, i18n } = useTranslation();

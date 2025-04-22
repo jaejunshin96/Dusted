@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { Review } from "../../pages/ReviewCollectionPage";
+import { Review } from "../../types/types";
 import authAxios from "../../utils/authentications/authFetch";
 import { useTranslation } from "react-i18next";
 import styles from "./ReviewModal.module.css";
