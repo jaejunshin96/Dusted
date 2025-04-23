@@ -4,6 +4,8 @@ import authAxios from "../../utils/authentications/authFetch";
 import { useTranslation } from "react-i18next";
 import styles from "./MovieModal.module.css";
 import clapperboard from "../../assets/clapperboard.png"
+import YouTube from 'react-youtube';
+import { FaYoutube } from "react-icons/fa";
 
 interface MovieModalProps {
   movie: Movie;
@@ -11,7 +13,7 @@ interface MovieModalProps {
 }
 
 const MovieModal: React.FC<MovieModalProps> = ({ movie, onClose }) => {
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
   const [writingReview, setWritingReview] = useState(false);
   const [reviewText, setReviewText] = useState("");
   const [rating, setRating] = useState(0);
@@ -20,25 +22,39 @@ const MovieModal: React.FC<MovieModalProps> = ({ movie, onClose }) => {
   const [isReviewed, setIsReviewed] = useState(false);
   const [loading, setLoading] = useState(false);
   const [showDetails, setShowDetails] = useState(false);
+  const [trailerKey, setTrailerKey] = useState<string | null>(null);
+  const [showTrailer, setShowTrailer] = useState(false);
   const backendUrl = import.meta.env.DEV ? import.meta.env.VITE_BACKEND_URL : import.meta.env.VITE_BACKEND_URL_PROD;
 
   useEffect(() => {
     const handleEsc = (e: KeyboardEvent) => {
       if (e.key === "Escape") {
-        onClose();
+        if (showTrailer) {
+          // First, close trailer if it's open
+          setShowTrailer(false);
+        } else if (writingReview) {
+          // Then, exit review writing mode if active
+          setWritingReview(false);
+        } else if (showDetails) {
+          // Then, exit details view if showing
+          setShowDetails(false);
+        } else {
+          // Finally, close the entire modal
+          onClose();
+        }
       }
     };
 
     document.addEventListener("keydown", handleEsc);
     return () => document.removeEventListener("keydown", handleEsc);
-  }, [onClose]);
+  }, [onClose, showTrailer, writingReview, showDetails]);
 
   useEffect(() => {
     const fetchReviewStatus = async () => {
       try {
         const response = await authAxios(`${backendUrl}/api/review/reviews/status/`, {
           method: "GET",
-          params: { movie_id: movie.id }
+          params: { movie_id: movie.movie_id }
         });
 
         if (response.status === 200 && response.data.reviewed) {
@@ -50,7 +66,7 @@ const MovieModal: React.FC<MovieModalProps> = ({ movie, onClose }) => {
     };
 
     fetchReviewStatus();
-  }, [movie.id]);
+  }, [movie.movie_id]);
 
   const getImageUrl = (path: string | null) => {
     if (!path) return clapperboard;
@@ -73,6 +89,31 @@ const MovieModal: React.FC<MovieModalProps> = ({ movie, onClose }) => {
     setTextCount(reviewText.length);
   }, [reviewText, rating]);
 
+  useEffect(() => {
+    // Add this function to fetch trailer data
+    const fetchTrailer = async () => {
+      if (!movie.id) return;
+
+      try {
+        const response = await authAxios(`${backendUrl}/api/film/trailer/`, {
+          method: "GET",
+          params: {
+            movie_id: movie.movie_id,
+            lang: i18n.language === 'ko' ? 'ko-KR' : 'en-US',
+          }
+        });
+
+        if (response.status === 200 && response.data.key) {
+          setTrailerKey(response.data.key);
+        }
+      } catch (error) {
+        console.error("Failed to fetch trailer:", error);
+      }
+    };
+
+    fetchTrailer();
+  }, [movie.movie_id]);
+
   const handleSubmitReview = async () => {
     if (rating === 0) {
       setError(t("Please select a rating before submitting your review."));
@@ -83,7 +124,7 @@ const MovieModal: React.FC<MovieModalProps> = ({ movie, onClose }) => {
       const response = await authAxios(`${backendUrl}/api/review/reviews/`, {
         method: "POST",
         data: {
-          movie_id: movie.id,
+          movie_id: movie.movie_id,
           title: movie.title,
           directors: Array.isArray(movie.directors)
             ? movie.directors.join(", ")
@@ -114,8 +155,19 @@ const MovieModal: React.FC<MovieModalProps> = ({ movie, onClose }) => {
     setShowDetails(true);
   };
 
+  // Add helper function for back button behavior
+  const handleBackButton = () => {
+    if (showTrailer) {
+      setShowTrailer(false);
+    } else if (writingReview) {
+      setWritingReview(false);
+    } else if (showDetails) {
+      setShowDetails(false);
+    }
+  };
+
   return (
-    <div className={styles.overlay} onClick={onClose}>
+    <div className={styles.overlay} onClick={showTrailer ? undefined : onClose}>
       <div
         className={`${styles.modalContainer} ${styles.modalBackgroundImage} ${showDetails ? styles.blurred : ''}`}
         style={{
@@ -123,6 +175,25 @@ const MovieModal: React.FC<MovieModalProps> = ({ movie, onClose }) => {
         }}
         onClick={(e) => e.stopPropagation()}
       >
+        {/* Add global navigation buttons */}
+        <div className={styles.navigationButtons}>
+          {(showDetails || writingReview || showTrailer) && (
+            <button
+              className={`${styles.navButton} ${styles.backButton}`}
+              onClick={handleBackButton}
+            >
+              ←
+            </button>
+          )}
+          <button
+            className={`${styles.navButton} ${styles.closeButton}`}
+            onClick={onClose}
+          >
+            ×
+          </button>
+        </div>
+
+        {/* Rest of the existing UI */}
         {!loading ? (<div className={styles.spinner}></div>) : (
           <>
             {!showDetails ? (
@@ -158,6 +229,15 @@ const MovieModal: React.FC<MovieModalProps> = ({ movie, onClose }) => {
                       <strong>{movie.overview}</strong>
                     </div>
                   </div>
+
+                  {trailerKey && (
+                    <button
+                      className={`${styles.trailerButton}`}
+                      onClick={() => setShowTrailer(true)}
+                    >
+                      {t("Watch Trailer")} <FaYoutube className={styles.trailerIcon} />
+                    </button>
+                  )}
                 </div>
 
                 <div className={styles.buttonSection}>
@@ -228,6 +308,31 @@ const MovieModal: React.FC<MovieModalProps> = ({ movie, onClose }) => {
           </>
         )}
       </div>
+
+
+      {showTrailer && trailerKey && (
+        <div className={styles.trailerOverlay}>
+          <div className={styles.trailerContainer} onClick={(e) => e.stopPropagation()}>
+            <button
+              className={`${styles.navButton} ${styles.closeTrailerButton}`}
+              onClick={() => setShowTrailer(false)}
+            >
+              ×
+            </button>
+            <YouTube
+              videoId={trailerKey}
+              className={styles.youtubePlayer}
+              opts={{
+                height: '100%',
+                width: '100%',
+                playerVars: {
+                  autoplay: 1,
+                },
+              }}
+            />
+          </div>
+        </div>
+      )}
     </div>
   );
 };

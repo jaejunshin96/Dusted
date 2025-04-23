@@ -73,16 +73,19 @@ const ExplorePage: React.FC = () => {
     fetchMovies();
   }, [pageCache, i18n.language, searchType]);
 
-  // Handle body overflow when modal is open
+  // Add this effect to disable scrolling when modal is open
   useEffect(() => {
     if (selectedMovie) {
       document.body.style.overflow = "hidden";
+      document.documentElement.style.overflow = "hidden";
     } else {
       document.body.style.overflow = "";
+      document.documentElement.style.overflow = "";
     }
 
     return () => {
       document.body.style.overflow = "";
+      document.documentElement.style.overflow = "";
     };
   }, [selectedMovie]);
 

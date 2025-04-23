@@ -5,6 +5,38 @@ from rest_framework.response import Response
 from rest_framework import status
 from datetime import datetime
 
+class TrailerAPIView(APIView):
+    def get(self, request):
+        movie_id = request.GET.get("movie_id")
+        lang = request.GET.get('lang', 'en-US')
+
+        if not movie_id:
+            return Response({"error": "movie_id parameter is required"}, status=status.HTTP_400_BAD_REQUEST)
+
+        url = f"https://api.themoviedb.org/3/movie/{movie_id}/videos?language={lang}"
+
+        headers = {
+            "accept": "application/json",
+            "Authorization": f"Bearer {settings.TMDB_API_ACCESS_TOKEN}"
+        }
+
+        try:
+            response = requests.get(url, headers=headers)
+            if response.status_code != 200:
+                return Response({"error": "Failed to fetch trailer"}, status=response.status_code)
+
+            data = response.json()
+            trailers = data.get("results", [])
+            if trailers:
+                # Filter for the first trailer
+                trailer = trailers[0]
+                return Response(trailer, status=status.HTTP_200_OK)
+            else:
+                return Response({"error": "No trailers found"}, status=status.HTTP_404_NOT_FOUND)
+
+        except requests.RequestException as e:
+            return Response({"error": "Request failed", "details": str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+
 class ExploreMoviesAPIView(APIView):
     def get(self, request):
         search_type = request.GET.get("search_type", "now_playing")
