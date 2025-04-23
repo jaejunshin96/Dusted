@@ -1,6 +1,6 @@
 .grid {
   display: grid;
-  grid-template-columns: repeat(3, 1fr); /* 3 columns on desktop */
+  grid-template-columns: repeat(4, 1fr); /* 3 columns on desktop */
   gap: 5px;
   padding-bottom: 40px;
   width: 100%;

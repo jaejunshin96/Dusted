@@ -1,12 +1,12 @@
 import React, { useEffect, useState, useCallback } from 'react';
 import { useTranslation } from 'react-i18next';
-import authAxios from '../utils/authentications/authFetch';
 import styles from './ExplorePage.module.css';
 import { Movie } from '../types/types';
 import MovieModal from '../components/movie/MovieModal';
 import MovieGrid from '../components/movie/MovieGrid';
 import cn from 'classnames';
 import { getWatchlist, addToWatchlist, removeFromWatchlist } from '../services/watchlist';
+import { getMovieExplore } from '../services/movie';
 //import { toast } from 'react-toastify';
 
 type SearchType = 'popular' | 'now_playing' | 'upcoming';
@@ -50,9 +50,6 @@ const ExplorePage: React.FC = () => {
   const [error, setError] = useState('');
   const [selectedMovie, setSelectedMovie] = useState<Movie | null>(null);
   const [searchType, setSearchType] = useState<SearchType>('now_playing');
-  const backendUrl = import.meta.env.DEV
-    ? import.meta.env.VITE_BACKEND_URL
-    : import.meta.env.VITE_BACKEND_URL_PROD;
 
   // Fetch watchlist when component mounts
   useEffect(() => {
@@ -95,19 +92,9 @@ const ExplorePage: React.FC = () => {
     const currentPage = pageCache[searchType];
 
     try {
-      const response = await authAxios(`${backendUrl}/api/film/explore/`, {
-        method: "GET",
-        params: {
-          search_type: searchType,
-          page: currentPage,
-          lang: i18n.language === 'ko' ? 'ko-KR' : 'en-US',
-          region: i18n.language === 'ko' ? 'kr' : 'us',
-        },
-      });
+      const movieData = await getMovieExplore(searchType, currentPage, i18n.language);
 
-      //const newMovies = response.data.results || [];
-
-      const newMovies = (response.data.results || []).map((movie: any) => ({
+      const newMovies = (movieData.results || []).map((movie: any) => ({
         ...movie,
         movie_id: movie.id
       }));

@@ -1,4 +1,4 @@
-import React, { useRef, useCallback, useEffect } from 'react';
+import React, { useRef, useCallback } from 'react';
 import styles from './MovieGrid.module.css';
 import clapperboard from "../../assets/clapperboard.png";
 import { FaBookmark, FaRegBookmark } from 'react-icons/fa';

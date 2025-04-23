@@ -1,11 +1,12 @@
 import React, { useState, useEffect } from "react";
 import { Movie } from "../../types/types";
-import authAxios from "../../utils/authentications/authFetch";
 import { useTranslation } from "react-i18next";
 import styles from "./MovieModal.module.css";
 import clapperboard from "../../assets/clapperboard.png"
 import YouTube from 'react-youtube';
 import { FaYoutube } from "react-icons/fa";
+import { getMovieTrailer } from "../../services/movie";
+import { getReviewStatus, postReview } from "../../services/review";
 
 interface MovieModalProps {
   movie: Movie;
@@ -24,7 +25,7 @@ const MovieModal: React.FC<MovieModalProps> = ({ movie, onClose }) => {
   const [showDetails, setShowDetails] = useState(false);
   const [trailerKey, setTrailerKey] = useState<string | null>(null);
   const [showTrailer, setShowTrailer] = useState(false);
-  const backendUrl = import.meta.env.DEV ? import.meta.env.VITE_BACKEND_URL : import.meta.env.VITE_BACKEND_URL_PROD;
+
 
   useEffect(() => {
     const handleEsc = (e: KeyboardEvent) => {
@@ -52,12 +53,9 @@ const MovieModal: React.FC<MovieModalProps> = ({ movie, onClose }) => {
   useEffect(() => {
     const fetchReviewStatus = async () => {
       try {
-        const response = await authAxios(`${backendUrl}/api/review/reviews/status/`, {
-          method: "GET",
-          params: { movie_id: movie.movie_id }
-        });
+        const statusData = await getReviewStatus(movie.movie_id);
 
-        if (response.status === 200 && response.data.reviewed) {
+        if (statusData && statusData.reviewed) {
           setIsReviewed(true);
         }
       } catch (error) {
@@ -89,22 +87,16 @@ const MovieModal: React.FC<MovieModalProps> = ({ movie, onClose }) => {
     setTextCount(reviewText.length);
   }, [reviewText, rating]);
 
+  //to fetch trailer data
   useEffect(() => {
-    // Add this function to fetch trailer data
     const fetchTrailer = async () => {
       if (!movie.id) return;
 
       try {
-        const response = await authAxios(`${backendUrl}/api/film/trailer/`, {
-          method: "GET",
-          params: {
-            movie_id: movie.movie_id,
-            lang: i18n.language === 'ko' ? 'ko-KR' : 'en-US',
-          }
-        });
+        const trailerData = await getMovieTrailer(movie.movie_id, i18n.language);
 
-        if (response.status === 200 && response.data.key) {
-          setTrailerKey(response.data.key);
+        if (trailerData && trailerData.key) {
+          setTrailerKey(trailerData.key);
         }
       } catch (error) {
         console.error("Failed to fetch trailer:", error);
@@ -112,7 +104,7 @@ const MovieModal: React.FC<MovieModalProps> = ({ movie, onClose }) => {
     };
 
     fetchTrailer();
-  }, [movie.movie_id]);
+  }, [movie.movie_id, i18n.language]);
 
   const handleSubmitReview = async () => {
     if (rating === 0) {
@@ -121,27 +113,12 @@ const MovieModal: React.FC<MovieModalProps> = ({ movie, onClose }) => {
     }
 
     try {
-      const response = await authAxios(`${backendUrl}/api/review/reviews/`, {
-        method: "POST",
-        data: {
-          movie_id: movie.movie_id,
-          title: movie.title,
-          directors: Array.isArray(movie.directors)
-            ? movie.directors.join(", ")
-            : movie.directors,
-          review: reviewText,
-          rating: rating,
-          backdrop_path: movie.backdrop_path,
-          poster_path: movie.poster_path,
-        }
-      });
+      await postReview(movie, reviewText, rating);
 
-      if (response.status === 201) {
-        alert(t("Review submitted successfully!"));
-        setWritingReview(false);
-        setReviewText("");
-        setRating(0);
-      }
+      alert(t("Review submitted successfully!"));
+      setWritingReview(false);
+      setReviewText("");
+      setRating(0);
     } catch (err: any) {
       if (err.response?.data?.review) {
         setError(t("Review over 400"));
@@ -246,7 +223,7 @@ const MovieModal: React.FC<MovieModalProps> = ({ movie, onClose }) => {
                     onClick={() => setWritingReview(true)}
                     disabled={isReviewed}
                   >
-                    {isReviewed ? t("Reviewed") : t("Write a Review")}
+                    {isReviewed ? t("Reviewed") : t("Review")}
                   </button>
                 </div>
               </>
@@ -300,7 +277,7 @@ const MovieModal: React.FC<MovieModalProps> = ({ movie, onClose }) => {
                     {t("Cancel")}
                   </button>
                   <button className={`${styles.button}`} onClick={handleSubmitReview}>
-                    {t("Submit Review")}
+                    {t("Submit")}
                   </button>
                 </div>
               </>

@@ -1,11 +1,11 @@
 import React, { useEffect, useState, useRef, useCallback } from "react";
-import authAxios from "../utils/authentications/authFetch";
 import ReviewModal from "../components/movie/ReviewModal";
 import styles from "./ReviewCollectionPage.module.css"
 import { useTranslation } from "react-i18next";
 import { FaArrowDownLong } from "react-icons/fa6";
 import clapperboard from "../assets/clapperboard.png"
 import { Review } from "../types/types";
+import { getReviews } from "../services/review";
 
 const ReviewCollectionPage: React.FC = () => {
   const { t } = useTranslation();
@@ -20,9 +20,6 @@ const ReviewCollectionPage: React.FC = () => {
   const [order, setOrder] = useState("dsc");
   let debounceTimeout: NodeJS.Timeout;
   const observer = useRef<IntersectionObserver | null>(null);
-  const backendUrl = import.meta.env.DEV
-    ? import.meta.env.VITE_BACKEND_URL
-    : import.meta.env.VITE_BACKEND_URL_PROD;
 
   useEffect(() => {
     fetchReviews();
@@ -64,17 +61,9 @@ const ReviewCollectionPage: React.FC = () => {
     setErrorMessage("");
 
     try {
-      const response = await authAxios(`${backendUrl}/api/review/reviews/`, {
-        method: "GET",
-        params: {
-          page,
-          query,
-          sorting,
-          order
-        },
-      });
+      const reviewData = await getReviews(page, query, sorting, order);
 
-      const fetchedReviews = response.data.results || [];
+      const fetchedReviews = reviewData.results || [];
 
       if (page === 1) {
         setReviews(fetchedReviews);

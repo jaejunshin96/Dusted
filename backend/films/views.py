@@ -93,11 +93,12 @@ class SearchMovieAPIView(APIView):
         query = request.GET.get("query")
         page = request.GET.get("page", 1)
         lang = request.GET.get('lang', 'en-US')
+        region = request.GET.get('region', 'us')
 
         if not query:
             return Response({"error": "Query parameter is required"}, status=status.HTTP_400_BAD_REQUEST)
 
-        url = f"https://api.themoviedb.org/3/search/movie?query={query}&include_adult=false&language={lang}&page={page}"
+        url = f"https://api.themoviedb.org/3/search/movie?query={query}&include_adult=false&language={lang}&page={page}&region={region}"
 
         headers = {
             "accept": "application/json",

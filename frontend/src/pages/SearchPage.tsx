@@ -1,11 +1,11 @@
 import { useState, useEffect, useCallback } from "react";
-import authAxios from "../utils/authentications/authFetch";
 import MovieGrid from "../components/movie/MovieGrid";
 import MovieModal from "../components/movie/MovieModal";
 import { Movie } from '../types/types';
 import styles from "./SearchPage.module.css";
 import { useTranslation } from "react-i18next";
 import { getWatchlist, addToWatchlist, removeFromWatchlist } from '../services/watchlist';
+import { getMovieSearch } from "../services/movie";
 
 const SearchPage: React.FC = () => {
   const { t, i18n } = useTranslation();
@@ -20,9 +20,6 @@ const SearchPage: React.FC = () => {
   const [hasMore, setHasMore] = useState(false);
   const [selectedMovie, setSelectedMovie] = useState<Movie | null>(null);
   const [searchAttempted, setSearchAttempted] = useState(false);
-  const backendUrl = import.meta.env.DEV
-    ? import.meta.env.VITE_BACKEND_URL
-    : import.meta.env.VITE_BACKEND_URL_PROD;
 
   // Fetch watchlist when component mounts
   useEffect(() => {
@@ -64,18 +61,9 @@ const SearchPage: React.FC = () => {
     setError("");
 
     try {
-      const response = await authAxios(`${backendUrl}/api/film/search/`, {
-        method: "GET",
-        params: {
-          page,
-          query,
-          lang: i18n.language,
-        },
-      });
+      const movieData = await getMovieSearch(query, page, i18n.language);
 
-      //const newMovies = response.data.results || [];
-
-      const newMovies = (response.data.results || []).map((movie: any) => ({
+      const newMovies = (movieData.results || []).map((movie: any) => ({
         ...movie,
         movie_id: movie.id
       }));

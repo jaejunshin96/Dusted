@@ -1,9 +1,9 @@
 import React, { useState, useEffect } from "react";
 import { Review } from "../../types/types";
-import authAxios from "../../utils/authentications/authFetch";
 import { useTranslation } from "react-i18next";
 import styles from "./ReviewModal.module.css";
 import clapperboard from "../../assets/clapperboard.png"
+import { patchReview, deleteReview } from "../../services/review";
 
 interface ReviewDetailModalProps {
   review: Review;
@@ -18,7 +18,6 @@ const ReviewModal: React.FC<ReviewDetailModalProps> = ({ review, onClose, onSave
   const [textCount, setTextCount] = useState(review.review.length);
   const [rating, setRating] = useState(review.rating);
   const [error, setError] = useState<string | null>(null);
-  const backendUrl = import.meta.env.DEV ? import.meta.env.VITE_BACKEND_URL : import.meta.env.VITE_BACKEND_URL_PROD;
   const [isImageLoaded, setIsImageLoaded] = useState(false);
 
   useEffect(() => {
@@ -60,14 +59,7 @@ const ReviewModal: React.FC<ReviewDetailModalProps> = ({ review, onClose, onSave
     }
 
     try {
-      await authAxios(`${backendUrl}/api/review/reviews/`, {
-        method: "PATCH",
-        data: {
-          id: review.id,
-          review: reviewText,
-          rating: rating,
-        }
-      });
+      await patchReview(review.id, reviewText, rating);
       onSave();
       setIsEditing(false);
     } catch (err: any) {
@@ -82,11 +74,7 @@ const ReviewModal: React.FC<ReviewDetailModalProps> = ({ review, onClose, onSave
   const handleDelete = async () => {
     if (window.confirm(t("Are you sure you want to delete this review?"))) {
       try {
-        await authAxios(`${backendUrl}/api/review/reviews/`, {
-          method: "DELETE",
-          data: { id: review.id }
-        });
-
+        await deleteReview(review.id);
         onSave();
         onClose();
       } catch (error) {
