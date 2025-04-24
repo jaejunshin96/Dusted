@@ -1,6 +1,7 @@
 /* CreatePage.module.css */
 .container {
   padding: 20px;
+  padding-top: 0;
   min-width: 65vw;
   margin: 0 auto;
   display: flex;
