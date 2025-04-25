@@ -98,10 +98,6 @@ const ReviewCollectionPage: React.FC = () => {
     setSelectedReview(review);
   };
 
-  const handleCloseModal = () => {
-    setSelectedReview(null);
-  }
-
   const getImageUrl = (path: string | null) => {
     if (!path) return clapperboard;
     return `https://image.tmdb.org/t/p/w500${path}`;
@@ -128,8 +124,24 @@ const ReviewCollectionPage: React.FC = () => {
     setOrder(order === "dsc" ? "asc" : "dsc");
   }
 
-  const handleEditSave = async () => {
-    await fetchReviews();
+  /* Modal button actions */
+  const handleCloseModal = () => {
+    setSelectedReview(null);
+  }
+
+  const handleEditSave = (updatedReview: Review) => {
+    setReviews(prevReviews =>
+      prevReviews.map(review =>
+        review.id === updatedReview.id ? updatedReview : review
+      )
+    );
+    //setSelectedReview(null);
+  };
+
+  const handleDelete = (deletedReview: Review) => {
+    setReviews(prevReviews =>
+      prevReviews.filter(review => review.id !== deletedReview.id)
+    );
     setSelectedReview(null);
   };
 
@@ -200,6 +212,7 @@ const ReviewCollectionPage: React.FC = () => {
           review={selectedReview}
           onClose={handleCloseModal}
           onSave={handleEditSave}
+          onDelete={handleDelete}
         />
       )}
     </div>

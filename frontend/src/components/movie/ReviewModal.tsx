@@ -4,19 +4,23 @@ import { useTranslation } from "react-i18next";
 import styles from "./ReviewModal.module.css";
 import clapperboard from "../../assets/clapperboard.png"
 import { patchReview, deleteReview } from "../../services/review";
+import { toast } from "react-toastify";
 
 interface ReviewDetailModalProps {
   review: Review;
   onClose: () => void;
-  onSave: () => void;
+  onSave: (updatedReview: Review) => void;
+  onDelete: (deletedReview: Review) => void;
 }
 
-const ReviewModal: React.FC<ReviewDetailModalProps> = ({ review, onClose, onSave }) => {
+const ReviewModal: React.FC<ReviewDetailModalProps> = ({ review, onClose, onSave, onDelete }) => {
   const { t } = useTranslation();
   const [isEditing, setIsEditing] = useState(false);
-  const [reviewText, setReviewText] = useState(review.review);
-  const [textCount, setTextCount] = useState(review.review.length);
   const [rating, setRating] = useState(review.rating);
+  const [editedRating, setEditedRating] = useState(review.rating);
+  const [reviewText, setReviewText] = useState(review.review);
+  const [editedReview, setEditedReview] = useState(review.review);
+  const [textCount, setTextCount] = useState(review.review.length);
   const [error, setError] = useState<string | null>(null);
   const [isImageLoaded, setIsImageLoaded] = useState(false);
 
@@ -59,9 +63,15 @@ const ReviewModal: React.FC<ReviewDetailModalProps> = ({ review, onClose, onSave
     }
 
     try {
-      await patchReview(review.id, reviewText, rating);
-      onSave();
+      await patchReview(review.id, editedReview, editedRating);
+      const updatedReview = {...review, review: editedReview, rating: editedRating};
+      onSave(updatedReview);
+
+      setRating(editedRating);
+      setReviewText(editedReview);
       setIsEditing(false);
+
+      toast.success(t("Review updated successfully!"));
     } catch (err: any) {
       if (err.response?.data?.review) {
         setError(t("Review over 400"));
@@ -75,12 +85,18 @@ const ReviewModal: React.FC<ReviewDetailModalProps> = ({ review, onClose, onSave
     if (window.confirm(t("Are you sure you want to delete this review?"))) {
       try {
         await deleteReview(review.id);
-        onSave();
-        onClose();
+        const deletedReview = {...review};
+        onDelete(deletedReview);
+
+        toast.success(t("Review deleted successfully!"));
       } catch (error) {
         alert(t("Failed to delete the review. Please try again."));
       }
     }
+  };
+
+  const handleBackButton = () => {
+    setIsEditing(!isEditing);
   };
 
   return (
@@ -92,6 +108,24 @@ const ReviewModal: React.FC<ReviewDetailModalProps> = ({ review, onClose, onSave
         }}
         onClick={(e) => e.stopPropagation()}
       >
+        {/* Add global navigation buttons */}
+        <div className={styles.navigationButtons}>
+          {(isEditing) && (
+            <button
+              className={`${styles.navButton} ${styles.backButton}`}
+              onClick={handleBackButton}
+            >
+              ←
+            </button>
+          )}
+          <button
+            className={`${styles.navButton} ${styles.closeButton}`}
+            onClick={onClose}
+          >
+            ×
+          </button>
+        </div>
+
         {!isImageLoaded ? (<div className={styles.spinner}></div>) :
         !isEditing ? (
           <>
@@ -102,7 +136,7 @@ const ReviewModal: React.FC<ReviewDetailModalProps> = ({ review, onClose, onSave
                 {[1, 2, 3, 4, 5].map((star) => (
                   <span
                     key={star}
-                    className={`${styles.star} ${star <= review.rating ? styles.starActive : ""}`}
+                    className={`${styles.star} ${star <= rating ? styles.starActive : ""}`}
                   >
                     ★
                   </span>
@@ -111,7 +145,7 @@ const ReviewModal: React.FC<ReviewDetailModalProps> = ({ review, onClose, onSave
 
               {review.review && (
                 <div className={styles.reviewBlock}>
-                  {review.review.split("\n").map((line, index) => (
+                  {reviewText.split("\n").map((line, index) => (
                     <span key={index}>
                       {line}
                       <br />
@@ -136,8 +170,8 @@ const ReviewModal: React.FC<ReviewDetailModalProps> = ({ review, onClose, onSave
                 {[1, 2, 3, 4, 5].map((star) => (
                   <span
                     key={star}
-                    className={`${styles.star} ${star <= rating ? styles.starActive : ""}`}
-                    onClick={() => setRating(star)}
+                    className={`${styles.star} ${star <= editedRating ? styles.starActive : ""}`}
+                    onClick={() => setEditedRating(star)}
                   >
                     ★
                   </span>
@@ -147,10 +181,10 @@ const ReviewModal: React.FC<ReviewDetailModalProps> = ({ review, onClose, onSave
               <div className={styles.parentOfTextarea}>
                 <textarea
                   className={styles.textarea}
-                  value={reviewText}
+                  value={editedReview}
                   rows={6}
                   placeholder={t("What do you think about this film?")}
-                  onChange={(e) => setReviewText(e.target.value)}
+                  onChange={(e) => setEditedReview(e.target.value)}
                 />
               </div>
 

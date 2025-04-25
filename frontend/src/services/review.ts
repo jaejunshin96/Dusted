@@ -41,7 +41,7 @@ export const getReviews = async (page: number, query: string, sorting: string, o
 }
 
 export const postReview = async (movie: Movie, reviewText: string, rating: number) => {
-  const response = await authAxios(`${backendUrl}`, {
+  const response = await authAxios(`${API_URL}`, {
     method: "POST",
     data: {
       movie_id: movie.movie_id,

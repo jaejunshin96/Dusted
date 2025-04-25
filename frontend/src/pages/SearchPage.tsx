@@ -6,6 +6,7 @@ import styles from "./SearchPage.module.css";
 import { useTranslation } from "react-i18next";
 import { getWatchlist, addToWatchlist, removeFromWatchlist } from '../services/watchlist';
 import { getMovieSearch } from "../services/movie";
+import { toast } from "react-toastify";
 
 const SearchPage: React.FC = () => {
   const { t, i18n } = useTranslation();
@@ -116,6 +117,7 @@ const SearchPage: React.FC = () => {
       if (isAdding) {
         await addToWatchlist(movie);
         setWatchlistIds(prev => [...prev, movie.movie_id]);
+        toast.success(`${movie.title} added to watchlist`);
       } else {
         await removeFromWatchlist(movie.movie_id);
         setWatchlistIds(prev => prev.filter(id => id !== movie.movie_id));

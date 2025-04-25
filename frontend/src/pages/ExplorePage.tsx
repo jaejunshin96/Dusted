@@ -7,7 +7,7 @@ import MovieGrid from '../components/movie/MovieGrid';
 import cn from 'classnames';
 import { getWatchlist, addToWatchlist, removeFromWatchlist } from '../services/watchlist';
 import { getMovieExplore } from '../services/movie';
-//import { toast } from 'react-toastify';
+import { toast } from 'react-toastify';
 
 type SearchType = 'popular' | 'now_playing' | 'upcoming';
 
@@ -135,7 +135,7 @@ const ExplorePage: React.FC = () => {
       if (isAdding) {
         await addToWatchlist(movie);
         setWatchlistIds(prev => [...prev, movie.movie_id]);
-        //toast?.success(`${movie.title} added to watchlist`);
+        toast.success(`${movie.title} added to watchlist`);
       } else {
         await removeFromWatchlist(movie.movie_id);
         setWatchlistIds(prev => prev.filter(id => id !== movie.movie_id));

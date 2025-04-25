@@ -7,6 +7,7 @@ import YouTube from 'react-youtube';
 import { FaYoutube } from "react-icons/fa";
 import { getMovieTrailer } from "../../services/movie";
 import { getReviewStatus, postReview } from "../../services/review";
+import { toast } from "react-toastify";
 
 interface MovieModalProps {
   movie: Movie;
@@ -115,10 +116,11 @@ const MovieModal: React.FC<MovieModalProps> = ({ movie, onClose }) => {
     try {
       await postReview(movie, reviewText, rating);
 
-      alert(t("Review submitted successfully!"));
       setWritingReview(false);
       setReviewText("");
       setRating(0);
+      setIsReviewed(true);
+      toast.success(t("Review submitted successfully!"));
     } catch (err: any) {
       if (err.response?.data?.review) {
         setError(t("Review over 400"));

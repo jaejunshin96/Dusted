@@ -38,6 +38,9 @@ const ThemeToggleButton: React.FC = () => {
       localStorage.setItem('theme', newTheme);
       root.setAttribute('data-theme', newTheme);
     }
+
+    // Dispatch custom event so App.tsx knows theme changed in same window
+    window.dispatchEvent(new Event('themeChanged'));
   };
 
   // Listen for system theme changes when in 'system' mode

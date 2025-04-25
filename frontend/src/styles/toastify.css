@@ -1,0 +1,41 @@
+/* Base toast styles that respect theme */
+.Toastify__toast {
+  border-radius: 8px;
+}
+
+/* Dark mode toast */
+html[data-theme='dark'] .Toastify__toast {
+  background-color: #1F2937; /* dark gray-800 */
+  color: #F9FAFB; /* gray-50 */
+}
+
+/* Light mode toast */
+html[data-theme='light'] .Toastify__toast {
+  background-color: #F9FAFB; /* gray-50 */
+  color: #111827; /* gray-900 */
+}
+
+/* Success toast with accent color */
+
+/* Change the color of success icon (checkmark) */
+.Toastify__toast--success .Toastify__toast-icon svg {
+  fill: var(--accent-color) !important; /* Change to your desired color */
+}
+
+/* Progress bar color for success toasts */
+.Toastify__toast--success .Toastify__progress-bar {
+  background-color: var(--accent-color) !important;
+}
+
+/* Optional: Style other toast types */
+.Toastify__toast--error {
+  background-color: #EF4444 !important; /* red-500 */
+}
+
+.Toastify__toast--warning {
+  background-color: #F59E0B !important; /* amber-500 */
+}
+
+.Toastify__toast--info {
+  background-color: #3B82F6 !important; /* blue-500 */
+}

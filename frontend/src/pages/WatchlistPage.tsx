@@ -6,6 +6,7 @@ import MovieModal from '../components/movie/MovieModal';
 import { Movie } from '../types/types';
 import styles from './WatchlistPage.module.css';
 import { useTranslation } from 'react-i18next';
+import { toast } from 'react-toastify';
 
 const WatchlistPage: React.FC = () => {
   const { t } = useTranslation();
@@ -71,6 +72,7 @@ const WatchlistPage: React.FC = () => {
       await removeFromWatchlist(movie.movie_id);
       setMovies(prevMovies => prevMovies.filter(m => m.movie_id !== movie.movie_id));
       setWatchlistIds(prevIds => prevIds.filter(id => id !== movie.movie_id));
+      toast.success(`${movie.title} removed from watchlist`);
     } catch (err) {
       console.error('Error updating watchlist:', err);
       fetchWatchlist();

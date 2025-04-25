@@ -16,6 +16,7 @@ import ReviewCollectionPage from "./pages/ReviewCollectionPage";
 import MenuLayout from "./components/menuLayout/MenuLayout";
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import './styles/toastify.css';
 import "./App.css";
 
 function App() {
@@ -47,7 +48,7 @@ function App() {
             <Route path="*" element={<NotFoundPage />} />
           </Route>
         </Routes>
-        <ToastContainer position="bottom-right" autoClose={3000} />
+        <ToastContainer position="top-right" autoClose={3000}/>
       </Router>
     </AuthProvider>
   );
