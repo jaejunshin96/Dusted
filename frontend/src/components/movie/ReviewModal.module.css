@@ -205,6 +205,8 @@ h2.textBlock {
   cursor: pointer;
   font-size: 14px;
   transition: all 0.2s ease;
+  box-shadow: 0 0px 4px rgba(0, 0, 0, 0.3);
+  text-shadow: 0 0px 2px rgba(0, 0, 0, 0.3);
 }
 
 .backButton:hover {
