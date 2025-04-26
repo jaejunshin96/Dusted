@@ -79,6 +79,10 @@
   background-color: rgba(128, 128, 128, 0.1);
 }
 
+.languageSubmenu button:focus {
+  outline: none;
+}
+
 .activeLanguage {
   color: var(--accent-color, #8090ff) !important;
 }

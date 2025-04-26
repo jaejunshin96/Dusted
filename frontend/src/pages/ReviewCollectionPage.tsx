@@ -156,9 +156,15 @@ const ReviewCollectionPage: React.FC = () => {
           onChange={handleInputChange}
           placeholder={t("Search for reviews...")}
           className={styles.searchInput}
+          aria-label="Search reviews"
         />
 
-        <select className={styles.sortDropdown} value={sorting} onChange={handleSortingChange}>
+        <select
+          className={styles.sortDropdown}
+          value={sorting}
+          onChange={handleSortingChange}
+          aria-label="Sort reviews"
+        >
           <option value="created_at">{t("by Created")}</option>
           <option value="rating">{t("by Rating")}</option>
           <option value="5">{t("5 Stars")}</option>
@@ -168,11 +174,17 @@ const ReviewCollectionPage: React.FC = () => {
           <option value="1">{t("1 Stars")}</option>
         </select>
 
-        <FaArrowDownLong
-          size={24}
+        <div
+          className={styles.sortIcon}
           onClick={handleOrder}
-          className={`${styles.sortIcon} ${order === "dsc" ? styles.rotateDown : styles.rotateUp}`}
-        />
+          role="button"
+          aria-label={order === "dsc" ? "Sort ascending" : "Sort descending"}
+        >
+          <FaArrowDownLong
+            size={20}
+            className={order === "dsc" ? styles.rotateDown : styles.rotateUp}
+          />
+        </div>
       </div>
 
       {errorMessage && <p className="text-danger text-center">{errorMessage}</p>}

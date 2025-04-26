@@ -37,7 +37,7 @@ function App() {
           {/* authenticated access */}
           <Route element={<MenuLayout><Outlet /></MenuLayout>}>
             <Route element={<ProtectedRoute />}>
-              <Route path="/explore" element={<ExplorePage />} />
+              <Route path="/" element={<ExplorePage />} />
               <Route path="/search" element={<SearchPage />} />
               <Route path="/watchlist" element={<WatchlistPage />} />
               <Route path="/reviews" element={<ReviewCollectionPage />} />

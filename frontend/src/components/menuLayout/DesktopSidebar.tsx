@@ -71,8 +71,8 @@ const DesktopSidebar: React.FC = () => {
 
       <div className={styles.sidebarLinks}>
         <div
-          className={`${styles.sidebarLink} ${isActive("/explore") ? styles.active : ""}`}
-          onClick={() => navigate("/explore")}
+          className={`${styles.sidebarLink} ${isActive("/") ? styles.active : ""}`}
+          onClick={() => navigate("/")}
         >
           <FaRegCompass size={24} />
           <span>{t("Explore")}</span>
