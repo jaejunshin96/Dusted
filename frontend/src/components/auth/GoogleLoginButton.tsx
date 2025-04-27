@@ -27,7 +27,8 @@ const GoogleLoginButton = () => {
     // @ts-ignore (google is added to window by the script)
     window.google.accounts.id.initialize({
       client_id: import.meta.env.VITE_GOOGLE_CLIENT_ID,
-      callback: handleCredentialResponse
+      callback: handleCredentialResponse,
+      scope: "profile email openid",
     });
 
     // @ts-ignore
@@ -36,8 +37,11 @@ const GoogleLoginButton = () => {
 
   const handleCredentialResponse = async (response: any) => {
     try {
+      const browserLocale = navigator.language;
+
       const res = await axios.post(`${backendUrl}/api/social_auth/google/`, {
         auth_token: response.credential,
+        locale: browserLocale,
       });
 
       localStorage.setItem("email", res.data.email);

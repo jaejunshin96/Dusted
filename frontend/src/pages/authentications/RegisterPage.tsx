@@ -1,13 +1,8 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import axios from "axios";
 import styles from "./RegisterPage.module.css";
 import { useTranslation } from "react-i18next";
 import { useNavigate } from "react-router-dom";
-
-//interface RegisterResponse {
-//  success?: string;
-//  Error?: string;
-//}
 
 const RegisterPage: React.FC = () => {
   const { t } = useTranslation();
@@ -15,11 +10,29 @@ const RegisterPage: React.FC = () => {
   const [email, setEmail] = useState<string>("");
   const [password, setPassword] = useState<string>("");
   const [password2, setPassword2] = useState<string>("");
+  const [country, setCountry] = useState<string>("");
+  const [language, setLanguage] = useState<string>("");
   const [error, setError] = useState<string | null>(null);
   const [message, setMessage] = useState<string | null>(null);
   const [loading, setLoading] = useState<boolean>(false);
   const navigate = useNavigate();
   const backendUrl = import.meta.env.DEV ? import.meta.env.VITE_BACKEND_URL : import.meta.env.VITE_BACKEND_URL_PROD;
+
+  // Set default country and language from browser settings
+  useEffect(() => {
+    // Get browser language (e.g., "en-US")
+    const browserLang = navigator.language || navigator.languages?.[0] || "en-US";
+
+    // Extract language code (e.g., "en" from "en-US")
+    const langCode = browserLang.split('-')[0];
+    setLanguage(langCode);
+
+    // Extract country code if available (e.g., "US" from "en-US")
+    if (browserLang.includes('-')) {
+      const countryCode = browserLang.split('-')[1];
+      setCountry(countryCode);
+    }
+  }, []);
 
   const handleRegister = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -29,7 +42,7 @@ const RegisterPage: React.FC = () => {
 
     try {
       await axios.post(`${backendUrl}/api/auth/register/`,
-        { username, email, password, password2 },
+        { username, email, password, password2, country, language },
         { headers: { "Content-Type": "application/json" } }
       );
 
@@ -55,6 +68,32 @@ const RegisterPage: React.FC = () => {
       setLoading(false);
     }
   };
+
+  // Common languages
+  const languages = [
+    { code: "en", name: "English" },
+    { code: "es", name: "Spanish" },
+    { code: "fr", name: "French" },
+    { code: "de", name: "German" },
+    { code: "zh", name: "Chinese" },
+    { code: "ja", name: "Japanese" },
+    { code: "ko", name: "Korean" },
+  ];
+
+  // Top countries (sample list)
+  const countries = [
+    { code: "US", name: "United States" },
+    { code: "GB", name: "United Kingdom" },
+    { code: "CA", name: "Canada" },
+    { code: "AU", name: "Australia" },
+    { code: "FR", name: "France" },
+    { code: "DE", name: "Germany" },
+    { code: "JP", name: "Japan" },
+    { code: "KR", name: "South Korea" },
+    { code: "CN", name: "China" },
+    { code: "IN", name: "India" },
+    { code: "BR", name: "Brazil" },
+  ];
 
   return (
     <div className={styles.container}>
@@ -86,6 +125,35 @@ const RegisterPage: React.FC = () => {
             onChange={(e) => setUsername(e.target.value)}
             required
           />
+
+          {/* Language Selection */}
+          <select
+            value={language}
+            onChange={(e) => setLanguage(e.target.value)}
+            required
+          >
+            <option value="" disabled>{t("Select Language")}</option>
+            {languages.map((lang) => (
+              <option key={lang.code} value={lang.code}>
+                {lang.name}
+              </option>
+            ))}
+          </select>
+
+          {/* Country Selection */}
+          <select
+            value={country}
+            onChange={(e) => setCountry(e.target.value)}
+            required
+          >
+            <option value="" disabled>{t("Select Country")}</option>
+            {countries.map((c) => (
+              <option key={c.code} value={c.code}>
+                {c.name}
+              </option>
+            ))}
+          </select>
+
           <input
             type="password"
             placeholder={t("Password")}

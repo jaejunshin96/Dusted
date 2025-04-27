@@ -109,6 +109,30 @@ button:disabled {
   cursor: not-allowed;
 }
 
+select {
+  padding: 12px;
+  border: 1px solid var(--border-color);
+  border-radius: 5px;
+  outline: none;
+  font-size: 1rem;
+  background-color: var(--input-background);
+  color: var(--text-primary);
+  transition: border 0.3s;
+  width: 100%;
+  cursor: pointer;
+  appearance: auto; /* Preserves native dropdown arrow */
+}
+
+select:focus {
+  border-color: var(--accent-color);
+}
+
+select option {
+  background-color: var(--input-background);
+  color: var(--text-primary);
+  padding: 8px;
+}
+
 @media (max-width: 430px) {
   .registerBox {
     width: 50vw;

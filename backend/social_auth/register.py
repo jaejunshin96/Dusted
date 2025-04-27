@@ -13,12 +13,22 @@ def generate_username(name):
         random_username = username + str(random.randint(0, 1000))
         return generate_username(random_username)
 
-def register_social_user(provider, email, name):
+def register_social_user(provider, email, name, language='', country=''):
     filtered_user_by_email = CustomUser.objects.filter(email=email)
 
     if filtered_user_by_email.exists():
+        user = filtered_user_by_email[0]
 
-        if provider == filtered_user_by_email[0].auth_provider:
+        # Update language and country if they're provided
+        if language and not user.language:
+            user.language = language
+            user.save(update_fields=['language'])
+
+        if country and not user.country:
+            user.country = country
+            user.save(update_fields=['country'])
+
+        if provider == user.auth_provider:
 
             registered_user = authenticate(
                 email=email, password=os.environ.get('SOCIAL_SECRET')
@@ -42,7 +52,9 @@ def register_social_user(provider, email, name):
         user = {
             'email': email,
             'username': generate_username(name),
-            'password': os.environ.get('SOCIAL_SECRET')
+            'password': os.environ.get('SOCIAL_SECRET'),
+            'language': language,
+            'country': country
         }
         user = CustomUser.objects.create_user(**user)
         user.is_verified = True
