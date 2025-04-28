@@ -50,6 +50,7 @@ const ExplorePage: React.FC = () => {
   const [error, setError] = useState('');
   const [selectedMovie, setSelectedMovie] = useState<Movie | null>(null);
   const [searchType, setSearchType] = useState<SearchType>('now_playing');
+  const currentCountry = localStorage.getItem('country') || 'US';
 
   // Fetch watchlist when component mounts
   useEffect(() => {
@@ -92,7 +93,7 @@ const ExplorePage: React.FC = () => {
     const currentPage = pageCache[searchType];
 
     try {
-      const movieData = await getMovieExplore(searchType, currentPage, i18n.language);
+      const movieData = await getMovieExplore(searchType, currentPage, i18n.language, currentCountry);
 
       const newMovies = (movieData.results || []).map((movie: any) => ({
         ...movie,

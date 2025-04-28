@@ -21,6 +21,7 @@ const SearchPage: React.FC = () => {
   const [hasMore, setHasMore] = useState(false);
   const [selectedMovie, setSelectedMovie] = useState<Movie | null>(null);
   const [searchAttempted, setSearchAttempted] = useState(false);
+  const currentCountry = localStorage.getItem("country") || "US";
 
   // Fetch watchlist when component mounts
   useEffect(() => {
@@ -62,7 +63,7 @@ const SearchPage: React.FC = () => {
     setError("");
 
     try {
-      const movieData = await getMovieSearch(query, page, i18n.language);
+      const movieData = await getMovieSearch(query, page, i18n.language, currentCountry);
 
       const newMovies = (movieData.results || []).map((movie: any) => ({
         ...movie,

@@ -10,6 +10,8 @@ import { useTranslation } from "react-i18next";
 interface LoginResponse {
   email: string;
   username: string;
+  language: string;
+  country: string;
   access_token: string;
   refresh_token: string;
 }
@@ -46,6 +48,8 @@ const LoginPage: React.FC = () => {
       if (data.access_token && data.refresh_token) {
         localStorage.setItem("email", data.email);
         localStorage.setItem("username", data.username);
+        localStorage.setItem("language", data.language);
+        localStorage.setItem("country", data.country);
         localStorage.setItem("access_token", data.access_token);
         localStorage.setItem("refresh_token", data.refresh_token);
 

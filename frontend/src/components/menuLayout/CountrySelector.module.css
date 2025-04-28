@@ -1,11 +1,10 @@
-
-.languageSubmenu {
+.countrySubmenu {
   display: flex;
   flex-direction: column;
   width: 100%;
 }
 
-.languageSubmenu button {
+.countrySubmenu button {
   background: none;
   border: none;
   color: var(--text-primary);
@@ -20,19 +19,19 @@
   align-items: center;
 }
 
-.languageSubmenu button:hover {
+.countrySubmenu button:hover {
   background-color: rgba(128, 128, 128, 0.1);
 }
 
-.languageSubmenu button:focus {
+.countrySubmenu button:focus {
   outline: none;
 }
 
-.activeLanguage {
+.activeCountry {
   color: var(--accent-color, #8090ff) !important;
 }
 
-.activeLanguage::after {
+.activeCountry::after {
   content: '';
   position: absolute;
   right: 16px;

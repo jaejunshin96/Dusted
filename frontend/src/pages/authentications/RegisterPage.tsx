@@ -72,12 +72,12 @@ const RegisterPage: React.FC = () => {
   // Common languages
   const languages = [
     { code: "en", name: "English" },
+    { code: "ko", name: "Korean" },
     { code: "es", name: "Spanish" },
     { code: "fr", name: "French" },
     { code: "de", name: "German" },
     { code: "zh", name: "Chinese" },
     { code: "ja", name: "Japanese" },
-    { code: "ko", name: "Korean" },
   ];
 
   // Top countries (sample list)

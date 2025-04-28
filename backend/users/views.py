@@ -186,3 +186,29 @@ class SetNewPasswordAPIView(APIView):
         serializer = SetNewPasswordSerializer(data=request.data)
         serializer.is_valid(raise_exception=True)
         return Response({'success': True, 'message': 'Password reset successful'}, status=status.HTTP_200_OK)
+
+class UpdateUserLanguageView(APIView):
+    permission_classes = [IsAuthenticated]
+
+    def patch(self, request):
+        user = request.user
+        language = request.data.get('language')
+
+        if language:
+            user.language = language
+            user.save(update_fields=['language'])
+            return Response({'message': 'Language updated successfully'}, status=status.HTTP_200_OK)
+        return Response({'error': 'Language not provided'}, status=status.HTTP_400_BAD_REQUEST)
+    
+class UpdateUserCountryView(APIView):
+    permission_classes = [IsAuthenticated]
+
+    def patch(self, request):
+        user = request.user
+        country = request.data.get('country')
+
+        if country:
+            user.country = country
+            user.save(update_fields=['country'])
+            return Response({'message': 'Country updated successfully'}, status=status.HTTP_200_OK)
+        return Response({'error': 'Country not provided'}, status=status.HTTP_400_BAD_REQUEST)

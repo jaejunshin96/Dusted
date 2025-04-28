@@ -11,7 +11,7 @@ export const getMovieTrailer = async (movieId: number, lang: string) => {
     method: 'GET',
     params: {
         movie_id: movieId,
-        lang: lang === 'ko' ? 'ko-KR' : 'en-US',
+        lang: lang,
      },
   });
 
@@ -22,14 +22,14 @@ export const getMovieTrailer = async (movieId: number, lang: string) => {
   return response.data;
 }
 
-export const getMovieExplore = async (searchType: string, page: number, lang: string) => {
+export const getMovieExplore = async (searchType: string, page: number, lang: string, country: string) => {
   const response = await authAxios(`${API_URL}/explore/`, {
     method: 'GET',
     params: {
       search_type: searchType,
       page: page,
-      lang: lang === 'ko' ? 'ko-KR' : 'en-US',
-      region: lang === 'ko' ? 'kr' : 'us',
+      lang: lang,
+      region: country,
     },
   });
 
@@ -40,14 +40,14 @@ export const getMovieExplore = async (searchType: string, page: number, lang: st
   return response.data;
 }
 
-export const getMovieSearch = async (query: string, page: number, lang: string) => {
+export const getMovieSearch = async (query: string, page: number, lang: string, country: string) => {
   const response = await authAxios(`${API_URL}/search/`, {
     method: 'GET',
     params: {
       query: query,
       page: page,
-      lang: lang === 'ko' ? 'ko-KR' : 'en-US',
-      region: lang === 'ko' ? 'kr' : 'us',
+      lang: lang,
+      region: country,
     },
   });
 

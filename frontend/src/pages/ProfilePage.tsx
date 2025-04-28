@@ -89,6 +89,13 @@ const ProfilePage: React.FC = () => {
           </div>
 
           <div className={styles.infoItem}>
+            <span className={styles.label}>{t('Country')}</span>
+            <span className={styles.value}>
+              {profile?.country}
+            </span>
+          </div>
+
+          <div className={styles.infoItem}>
             <span className={styles.label}>{t('Joined')}</span>
             <span className={styles.value}>{profile && formatDate(profile.date_joined)}</span>
           </div>

@@ -9,13 +9,14 @@ import { IoChevronBack } from "react-icons/io5";
 import ThemeToggleButton from "./ThemeToggleButton";
 import LanguageSelector from "./LanguageSelector";
 import styles from "./DesktopSidebar.module.css";
+import CountrySelector from "./CountrySelector";
 
 const DesktopSidebar: React.FC = () => {
   const { t } = useTranslation();
   const navigate = useNavigate();
   const location = useLocation();
   const [showDropdown, setShowDropdown] = useState(false);
-  const [currentView, setCurrentView] = useState<'main' | 'language' | 'theme'>('main');
+  const [currentView, setCurrentView] = useState<'main' | 'language' | 'country' | 'theme'>('main');
   const dropdownRef = useRef<HTMLDivElement>(null);
 
   // Helper function to check if a route is active
@@ -43,6 +44,11 @@ const DesktopSidebar: React.FC = () => {
   const handleLanguageClick = (e: React.MouseEvent) => {
     e.stopPropagation();
     setCurrentView('language');
+  };
+
+  const handleCountryClick = (e: React.MouseEvent) => {
+    e.stopPropagation();
+    setCurrentView('country');
   };
 
   const handleThemeClick = (e: React.MouseEvent) => {
@@ -128,6 +134,11 @@ const DesktopSidebar: React.FC = () => {
                     <span>{t("Language")}</span>
                   </div>
 
+                  <div className={styles.dropdownItem} onClick={handleCountryClick}>
+                    <PiGlobe size={20} />
+                    <span>{t("Country")}</span>
+                  </div>
+
                   <div className={styles.dropdownItem} onClick={handleThemeClick}>
                     <div className={styles.systemIcon}>
                       <PiSun className={styles.sunIcon} size={20} />
@@ -149,6 +160,16 @@ const DesktopSidebar: React.FC = () => {
                     <span>{t("Language")}</span>
                   </div>
                   <LanguageSelector />
+                </div>
+              )}
+
+              {currentView === 'country' && (
+                <div className={styles.menuView}>
+                  <div className={styles.menuHeader} onClick={handleBackClick}>
+                    <IoChevronBack size={20} />
+                    <span>{t("Country")}</span>
+                  </div>
+                  <CountrySelector />
                 </div>
               )}
 

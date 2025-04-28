@@ -15,6 +15,7 @@ export interface UserProfile {
   username: string;
   date_joined: string;
   language: string;
+  country: string;
   review_count: number;
 }
 
