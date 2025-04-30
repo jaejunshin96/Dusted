@@ -123,14 +123,10 @@
 }
 
 /* Mobile view */
-@media (max-width: 768px) {
+@media (max-width: 425px) {
   .grid {
     grid-template-columns: 1fr; /* 1 column on mobile */
     gap: 15px;
-  }
-
-  .overlay {
-    opacity: 1; /* Always show overlay on mobile for better UX */
   }
 
   .card {

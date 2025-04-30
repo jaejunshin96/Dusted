@@ -3,21 +3,7 @@ import { useTranslation } from "react-i18next";
 import styles from "./LanguageSelector.module.css";
 import { updateLanguage } from "../../services/user";
 import { toast } from "react-toastify";
-
-type LanguageOption = {
-  code: string;
-  name: string;
-};
-
-const languages: LanguageOption[] = [
-  { code: "en", name: "English" },
-  { code: "ko", name: "Korean" },
-  { code: "es", name: "Spanish" },
-  { code: "fr", name: "French" },
-  { code: "de", name: "German" },
-  { code: "zh", name: "Chinese" },
-  { code: "ja", name: "Japanese" },
-];
+import { languages } from "../../constants/localization";
 
 const LanguageSelector: React.FC = () => {
   const { i18n } = useTranslation();
@@ -27,6 +13,7 @@ const LanguageSelector: React.FC = () => {
     localStorage.setItem("language", lang);
     try {
       await updateLanguage(lang);
+      //window.location.reload();
     } catch (error) {
       toast.error("Failed to update language. Please try again.");
     }

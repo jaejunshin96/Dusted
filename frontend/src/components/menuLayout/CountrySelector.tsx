@@ -2,34 +2,17 @@ import React, { useState } from "react";
 import styles from "./CountrySelector.module.css";
 import { updateCountry } from "../../services/user";
 import { toast } from "react-toastify";
-
-type CountryOption = {
-  code: string;
-  name: string;
-};
-
-const countries: CountryOption[] = [
-  { code: "US", name: "United States" },
-  { code: "GB", name: "United Kingdom" },
-  { code: "CA", name: "Canada" },
-  { code: "AU", name: "Australia" },
-  { code: "FR", name: "France" },
-  { code: "DE", name: "Germany" },
-  { code: "JP", name: "Japan" },
-  { code: "KR", name: "South Korea" },
-  { code: "CN", name: "China" },
-  { code: "IN", name: "India" },
-  { code: "BR", name: "Brazil" },
-];
+import { countries } from "../../constants/localization";
 
 const CountrySelector: React.FC = () => {
   const [currentCountry, setCurrentCountry] = useState<string>(localStorage.getItem("country") || "US");
 
-  const handleLanguageChange = async (country: string) => {
-    localStorage.setItem("country", country);
-    setCurrentCountry(country);
+  const handleLanguageChange = async (countryCode: string) => {
+    localStorage.setItem("country", countryCode);
+    setCurrentCountry(countryCode);
     try {
-      await updateCountry(country);
+      await updateCountry(countryCode);
+      //window.location.reload();
     } catch (error) {
       toast.error("Failed to update country. Please try again.");
     }

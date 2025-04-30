@@ -23,6 +23,7 @@ const ReviewModal: React.FC<ReviewDetailModalProps> = ({ review, onClose, onSave
   const [textCount, setTextCount] = useState(review.review.length);
   const [error, setError] = useState<string | null>(null);
   const [isImageLoaded, setIsImageLoaded] = useState(false);
+  const [isMobile, setIsMobile] = useState(false);
 
   useEffect(() => {
     const handleEsc = (e: KeyboardEvent) => {
@@ -50,6 +51,22 @@ const ReviewModal: React.FC<ReviewDetailModalProps> = ({ review, onClose, onSave
     setError(null);
     setTextCount(reviewText.length);
   }, [reviewText]);
+
+  // Add useEffect to detect mobile screen
+  useEffect(() => {
+    const checkIfMobile = () => {
+      setIsMobile(window.innerWidth <= 430);
+    };
+
+    // Initial check
+    checkIfMobile();
+
+    // Add event listener for window resize
+    window.addEventListener('resize', checkIfMobile);
+
+    // Cleanup
+    return () => window.removeEventListener('resize', checkIfMobile);
+  }, []);
 
   const getImageUrl = (path: string | null) => {
     if (!path) return clapperboard;
@@ -104,7 +121,7 @@ const ReviewModal: React.FC<ReviewDetailModalProps> = ({ review, onClose, onSave
       <div
         className={`${styles.modalContainer} ${styles.modalBackgroundImage} ${!isEditing ? '' : styles.blurred}`}
         style={{
-          backgroundImage: `url(${getImageUrl(review.backdrop_path || review.poster_path)})`
+          backgroundImage: `url(${getImageUrl(isMobile ? review.poster_path : (review.backdrop_path || review.poster_path))})`
         }}
         onClick={(e) => e.stopPropagation()}
       >

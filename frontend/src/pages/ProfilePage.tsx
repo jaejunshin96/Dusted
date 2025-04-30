@@ -3,6 +3,7 @@ import { useTranslation } from 'react-i18next';
 import authAxios from '../utils/authentications/authFetch';
 import styles from './ProfilePage.module.css';
 import { UserProfile } from '../types/types';
+import { languages, countries } from '../constants/localization';
 
 const ProfilePage: React.FC = () => {
   const { t, i18n } = useTranslation();
@@ -44,13 +45,17 @@ const ProfilePage: React.FC = () => {
       day: 'numeric'
     };
     return new Date(dateString).toLocaleDateString(
-      i18n.language === 'ko' ? 'ko-KR' : 'en-US',
+      i18n.language,
       options
     );
   };
 
   if (loading) {
-    return <div className={styles.container}>{t('Loading...')}</div>;
+    return (
+      <div className={styles.spinnerContainer}>
+        <div className={styles.spinner}></div>
+      </div>
+    );
   }
 
   if (error) {
@@ -84,14 +89,14 @@ const ProfilePage: React.FC = () => {
           <div className={styles.infoItem}>
             <span className={styles.label}>{t('Language')}</span>
             <span className={styles.value}>
-              {profile?.language === 'ko' ? t('Korean') : t('English')}
+              {profile?.language && languages.find(l => l.code === profile.language)?.name}
             </span>
           </div>
 
           <div className={styles.infoItem}>
             <span className={styles.label}>{t('Country')}</span>
             <span className={styles.value}>
-              {profile?.country}
+              {profile?.country && countries.find(c => c.code === profile.country)?.name}
             </span>
           </div>
 

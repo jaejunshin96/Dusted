@@ -93,9 +93,9 @@ const SearchPage: React.FC = () => {
   };
 
   const handleSearch = () => {
-    setMovies([]);
-    setHasMore(false);
     if (query.trim().length > 0) {
+      setMovies([]);
+      setHasMore(false);
       setSearchAttempted(true);
       setPage(1);
       fetchMovies();

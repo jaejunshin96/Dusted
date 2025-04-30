@@ -3,6 +3,7 @@ import axios from "axios";
 import styles from "./RegisterPage.module.css";
 import { useTranslation } from "react-i18next";
 import { useNavigate } from "react-router-dom";
+import { languages, countries } from "../../constants/localization";
 
 const RegisterPage: React.FC = () => {
   const { t } = useTranslation();
@@ -68,32 +69,6 @@ const RegisterPage: React.FC = () => {
       setLoading(false);
     }
   };
-
-  // Common languages
-  const languages = [
-    { code: "en", name: "English" },
-    { code: "ko", name: "Korean" },
-    { code: "es", name: "Spanish" },
-    { code: "fr", name: "French" },
-    { code: "de", name: "German" },
-    { code: "zh", name: "Chinese" },
-    { code: "ja", name: "Japanese" },
-  ];
-
-  // Top countries (sample list)
-  const countries = [
-    { code: "US", name: "United States" },
-    { code: "GB", name: "United Kingdom" },
-    { code: "CA", name: "Canada" },
-    { code: "AU", name: "Australia" },
-    { code: "FR", name: "France" },
-    { code: "DE", name: "Germany" },
-    { code: "JP", name: "Japan" },
-    { code: "KR", name: "South Korea" },
-    { code: "CN", name: "China" },
-    { code: "IN", name: "India" },
-    { code: "BR", name: "Brazil" },
-  ];
 
   return (
     <div className={styles.container}>

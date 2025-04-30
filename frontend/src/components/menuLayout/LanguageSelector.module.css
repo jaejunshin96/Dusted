@@ -1,8 +1,23 @@
-
 .languageSubmenu {
   display: flex;
   flex-direction: column;
   width: 100%;
+  max-height: 300px; /* Limit height */
+  overflow-y: auto; /* Enable vertical scrolling */
+  scrollbar-width: thin; /* For Firefox */
+}
+
+.languageSubmenu::-webkit-scrollbar {
+  width: 6px;
+}
+
+.languageSubmenu::-webkit-scrollbar-track {
+  background: rgba(0, 0, 0, 0.05);
+}
+
+.languageSubmenu::-webkit-scrollbar-thumb {
+  background-color: rgba(128, 128, 128, 0.5);
+  border-radius: 3px;
 }
 
 .languageSubmenu button {
@@ -42,4 +57,10 @@
   height: 8px;
   background-color: var(--accent-color, #8090ff);
   border-radius: 50%;
+}
+
+@media (max-width: 480px) {
+  .languageSubmenu {
+    max-height: none;
+  }
 }

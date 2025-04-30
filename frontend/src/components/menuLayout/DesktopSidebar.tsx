@@ -1,7 +1,7 @@
 import React, { useState, useRef, useEffect } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
 import { useTranslation } from "react-i18next";
-import { FaSearch, FaBookmark, FaUserAlt, FaRegCompass } from "react-icons/fa";
+import { FaSearch, FaBookmark, FaUserAlt, FaRegCompass, FaLanguage } from "react-icons/fa";
 import { MdCollections } from "react-icons/md";
 import { PiMoon, PiSun, PiGlobe } from 'react-icons/pi';
 import { GiHamburgerMenu } from "react-icons/gi";
@@ -130,7 +130,7 @@ const DesktopSidebar: React.FC = () => {
               {currentView === 'main' && (
                 <div className={styles.menuView}>
                   <div className={styles.dropdownItem} onClick={handleLanguageClick}>
-                    <PiGlobe size={20} />
+                    <FaLanguage size={20} />
                     <span>{t("Language")}</span>
                   </div>
 

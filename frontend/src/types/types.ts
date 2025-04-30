@@ -30,3 +30,8 @@ export interface Review {
   poster_path: string | null;
   date_created: string;
 }
+
+export type LanguageOption = {
+  code: string;
+  name: string;
+};

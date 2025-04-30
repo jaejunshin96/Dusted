@@ -31,9 +31,9 @@
   color: var(--text-primary);
   box-shadow: 0 8px 32px rgba(0, 0, 0, 0.5);
   position: relative;
-  animation: fadeIn 0.4s ease;
   overflow-y: auto;
   backdrop-filter: blur(3px);
+  animation: fadeIn 0.4s ease;
 }
 
 /* Modal Background Image */
@@ -57,6 +57,8 @@
   border-radius: 16px;
   z-index: -1;
   animation: zoomBlur 0.5s cubic-bezier(0.23, 1, 0.32, 1) forwards;
+  height: 100%;
+  min-height: 100%;
 }
 
 .clickableBackdrop {
@@ -115,9 +117,10 @@
 }
 
 h2.textBlock {
-  font-size: 2rem;
+  font-size: 1.5rem;
   font-weight: 600;
   margin-bottom: 10px;
+  width: 80%;
 }
 
 /* Review Textarea */
@@ -152,7 +155,6 @@ h2.textBlock {
 
 /* Centered Button Section */
 .buttonSection {
-  margin-top: 20px;
   display: flex;
   justify-content: flex-end;
   gap: 12px;
@@ -205,7 +207,7 @@ h2.textBlock {
   gap: 8px;
   background-color: transparent;
   padding: 0;
-  margin: 15px 0;
+  margin: 0;
 }
 
 /* Star Icon */
@@ -365,67 +367,49 @@ h2.textBlock {
 
 @media (max-width: 768px) {
   .modalContainer {
-    width: 90vw;
-    max-height: 80vh;
-    padding: 20px;
-  }
-
-  h2.textBlock {
-    font-size: 1.5rem;
-  }
-
-  .scrollableOverview {
-    max-height: 25vh;
-    overflow-y: auto;
-    padding-right: 5px;
-  }
-
-  .scrollableOverview::-webkit-scrollbar {
-    width: 6px;
-  }
-
-  .scrollableOverview::-webkit-scrollbar-thumb {
-    background-color: #888;
-    border-radius: 4px;
-  }
-
-  .scrollableOverview::-webkit-scrollbar-thumb:hover {
-    background-color: #555;
+    width: 100vw;
   }
 }
 
 @media (max-width: 430px) {
-  h2 {
-    font-size: medium;
-  }
-
-  .textarea {
-    width: 100%;
-  }
-
   .modalContainer {
-    width: 95vw;
-    padding: 15px;
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    width: 100%;
+    height: 100vh;
+    margin: 0;
+    border-radius: 0;
+    box-sizing: border-box;
   }
 
   h2.textBlock {
-    font-size: 1.2rem;
+    margin-top: 20px;
+    font-size: 2rem;
   }
 
-  .button {
-    padding: 8px 16px;
-    font-size: 14px;
+  .modalBackgroundImage {
+    border-radius: 0;
   }
 
-  .star {
-    font-size: 28px;
+  .blurred::before {
+    border-radius: 0;
   }
-}
 
-@media (max-width: 375px) {
-  .scrollableOverview {
-    max-height: 25vh;
-    overflow-y: auto;
-    padding-right: 5px;
+  .tapToViewOverlay {
+    opacity: 1;
+    font-size: 1rem;
+  }
+
+  .trailerContainer {
+    width: 100%;
+    height: 0;
+    padding-bottom: 56.25%; /* 16:9 aspect ratio */
+  }
+
+  .closeTrailerButton {
+    right: 10px;
   }
 }

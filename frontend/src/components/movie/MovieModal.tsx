@@ -26,7 +26,7 @@ const MovieModal: React.FC<MovieModalProps> = ({ movie, onClose }) => {
   const [showDetails, setShowDetails] = useState(false);
   const [trailerKey, setTrailerKey] = useState<string | null>(null);
   const [showTrailer, setShowTrailer] = useState(false);
-
+  const [isMobile, setIsMobile] = useState(false);
 
   useEffect(() => {
     const handleEsc = (e: KeyboardEvent) => {
@@ -107,6 +107,22 @@ const MovieModal: React.FC<MovieModalProps> = ({ movie, onClose }) => {
     fetchTrailer();
   }, [movie.movie_id, i18n.language]);
 
+  // Add useEffect to detect mobile screen
+  useEffect(() => {
+    const checkIfMobile = () => {
+      setIsMobile(window.innerWidth <= 430);
+    };
+
+    // Initial check
+    checkIfMobile();
+
+    // Add event listener for window resize
+    window.addEventListener('resize', checkIfMobile);
+
+    // Cleanup
+    return () => window.removeEventListener('resize', checkIfMobile);
+  }, []);
+
   const handleSubmitReview = async () => {
     if (rating === 0) {
       setError(t("Please select a rating before submitting your review."));
@@ -150,7 +166,7 @@ const MovieModal: React.FC<MovieModalProps> = ({ movie, onClose }) => {
       <div
         className={`${styles.modalContainer} ${styles.modalBackgroundImage} ${showDetails ? styles.blurred : ''}`}
         style={{
-          backgroundImage: `url(${getImageUrl(movie.backdrop_path || movie.poster_path)})`
+          backgroundImage: `url(${getImageUrl(isMobile ? movie.poster_path : (movie.backdrop_path || movie.poster_path))})`
         }}
         onClick={(e) => e.stopPropagation()}
       >

@@ -1,10 +1,7 @@
 /* ReviewCollectionPage.module.css */
 .container {
-  padding: 20px;
-  padding-top: 0;
   min-width: 65vw;
   margin: 0 auto;
-  margin-top: -20px;
 }
 
 .searchSection {
@@ -15,7 +12,7 @@
   margin-left: auto;
   margin-right: auto;
   gap: 12px;
-  width: clamp(300px, 90%, 800px);
+  width: clamp(300px, 50%, 800px);
 }
 
 .searchInput {
@@ -38,7 +35,6 @@
 
 .sortDropdown {
   flex: 1;
-  min-width: 40px;
   padding: 12px 20px;
   padding-right: 30px;
   background-color: var(--card-background);
@@ -168,94 +164,3 @@
   opacity: 0.8;
   color: white; /* Ensuring text is visible */
 }
-
-
-/* Tablet View (Max width: 1024px) */
-@media (max-width: 1024px) {
-  .rowContainer {
-    grid-template-columns: repeat(3, 1fr);
-  }
-}
-
-/* Mobile View (Max width: 768px) */
-@media (max-width: 768px) {
-  .rowContainer {
-    grid-template-columns: repeat(3, 1fr);
-    gap: 15px;
-  }
-
-  .searchSection {
-    flex-wrap: wrap;
-    gap: 10px;
-  }
-
-  .searchInput {
-    flex-basis: 100%;
-  }
-
-  .sortDropdown {
-    flex-grow: 1;
-  }
-}
-
-/* Small Mobile View (Max width: 430px) */
-@media (max-width: 430px) {
-	.searchSection {
-		display: block;
-		margin-bottom: 10px;
-	}
-
-	.searchInput {
-    width: 80vw; /* Takes more space on smaller screens */
-    margin-right: 0; /* Remove margin for better fit */
-  }
-
-	.sortDropdown {
-		margin-top: 10px;
-	}
-
-	.sortIcon {
-		margin-left: 20px;
-	}
-
-  .rowContainer {
-    grid-template-columns: repeat(3, 1fr); /* Single column for small mobile devices */
-    gap: 2px;
-  }
-
-	.card {
-    width: clamp(20px, 13vw, 60px);
-    height: clamp(100px, 13vh, 150px);
-		transition: transform 0.2s;
-		border-radius: 0;
-		display: flex;
-		flex-direction: column;
-		align-items: center;
-		box-shadow: none;
-	}
-
-	.cardTitle {
-    visibility: hidden; /* Hides the text but preserves space */
-  }
-
-	.ratingBackground {
-		background-color: rgba(0, 0, 0, 0.6); /* Semi-transparent black background */
-		padding: 4px 8px; /* Padding to give some spacing around the stars */
-		border-radius: 4px; /* Rounded corners for a nice look */
-		display: inline-block; /* Keeps it tight around the stars */
-	}
-}
-
-@media (max-width: 390px) {
-	.card {
-		width: clamp(20px, 11vw, 60px);
-	}
-}
-
-@media (max-width: 375px) {
-	.card {
-		width: clamp(20px, 10vw, 60px);
-	}
-}
-
-
