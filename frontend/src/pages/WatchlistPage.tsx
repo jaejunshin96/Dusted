@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
 import { getWatchlist, removeFromWatchlist } from '../services/watchlist';
 import MovieGrid from '../components/movie/MovieGrid';
 import MovieModal from '../components/movie/MovieModal';
@@ -7,10 +6,10 @@ import { Movie } from '../types/types';
 import styles from './WatchlistPage.module.css';
 import { useTranslation } from 'react-i18next';
 import { toast } from 'react-toastify';
+import EmptyContainer from '../components/movie/EmptyContainer';
 
 const WatchlistPage: React.FC = () => {
   const { t } = useTranslation();
-  const navigate = useNavigate();
 
   const [movies, setMovies] = useState<Movie[]>([]);
   const [watchlistIds, setWatchlistIds] = useState<number[]>([]);
@@ -88,14 +87,17 @@ const WatchlistPage: React.FC = () => {
 
       {error && <div className={styles.error}>{error}</div>}
 
-      {!loading && movies.length === 0 ? (
-        <div className={styles.emptyState}>
-          <p>{t('Your watchlist is empty.')}</p>
-          <button className={styles.browseButton} onClick={() => navigate('/search')}>
-            {t('Browse Movies')}
-          </button>
-        </div>
-      ) : (
+      {loading && <div className={styles.spinner}></div>}
+
+      {!loading && movies.length === 0 && (
+        <EmptyContainer
+          icon="📚"
+          title={t('Your watchlist is empty')}
+          text={t('Add movies to your watchlist to see them here.')}
+        />
+      )}
+
+      {!loading && movies.length !== 0 && (
         <MovieGrid
           movies={movies}
           loading={loading}

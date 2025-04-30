@@ -6,6 +6,7 @@ import { FaArrowDownLong } from "react-icons/fa6";
 import clapperboard from "../assets/clapperboard.png"
 import { Review } from "../types/types";
 import { getReviews } from "../services/review";
+import EmptyContainer from "../components/movie/EmptyContainer";
 
 const ReviewCollectionPage: React.FC = () => {
   const { t } = useTranslation();
@@ -147,8 +148,6 @@ const ReviewCollectionPage: React.FC = () => {
 
   return (
     <div className={styles.container}>
-      {/*<h1 className={styles.h1}>{t("ReviewsByUser", { username })}</h1>*/}
-
       <div className={styles.searchSection}>
         <input
           type="search"
@@ -188,6 +187,16 @@ const ReviewCollectionPage: React.FC = () => {
       </div>
 
       {errorMessage && <p className="text-danger text-center">{errorMessage}</p>}
+
+      {loading && <div className={styles.spinner}></div>}
+
+      {!loading && reviews.length === 0 && (
+        <EmptyContainer
+          icon="🎬"
+          title={t("No reviews found")}
+          text={t("Try searching with different keywords or check back later.")}
+        />
+      )}
 
       <div className={styles.grid}>
         {reviews.map((review, index) => {

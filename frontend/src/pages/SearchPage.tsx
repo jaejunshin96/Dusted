@@ -7,6 +7,7 @@ import { useTranslation } from "react-i18next";
 import { getWatchlist, addToWatchlist, removeFromWatchlist } from '../services/watchlist';
 import { getMovieSearch } from "../services/movie";
 import { toast } from "react-toastify";
+import EmptyContainer from "../components/movie/EmptyContainer";
 
 const SearchPage: React.FC = () => {
   const { t, i18n } = useTranslation();
@@ -156,13 +157,11 @@ const SearchPage: React.FC = () => {
       {error && <p className={styles.error}>{error}</p>}
 
       {!searchAttempted && movies.length === 0 && (
-        <div className={styles.emptyStateContainer}>
-          <div className={styles.emptyStateIcon}>🎬</div>
-          <h2 className={styles.emptyStateTitle}>{t("Discover your next favorite movie")}</h2>
-          <p className={styles.emptyStateText}>
-            {t("Type a movie title in the search box above to get started")}
-          </p>
-        </div>
+        <EmptyContainer
+          icon="🔍"
+          title={t("Discover your next favorite movie")}
+          text={t("Type a movie title in the search box above to get started")}
+        />
       )}
 
       <MovieGrid
