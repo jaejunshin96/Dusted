@@ -42,7 +42,7 @@
   background-position: center;
   background-repeat: no-repeat;
   position: relative;
-  transition: all 0.3s ease;
+  /*transition: all 0.3s ease;*/
 }
 
 /* Apply blur and overlay gradient when showDetails is true */

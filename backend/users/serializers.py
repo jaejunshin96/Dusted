@@ -55,6 +55,8 @@ class EmailVerificationSerializer(serializers.ModelSerializer):
 class LoginSerializer(serializers.Serializer):
     email = serializers.EmailField()
     username = serializers.CharField(max_length=150, read_only=True)
+    language = serializers.CharField(max_length=100, read_only=True)
+    country = serializers.CharField(max_length=100, read_only=True)
     password = serializers.CharField(max_length=68, write_only=True)
     access_token = serializers.CharField(max_length=255, read_only=True)
     refresh_token = serializers.CharField(max_length=255, read_only=True)

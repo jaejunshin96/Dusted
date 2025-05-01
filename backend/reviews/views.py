@@ -47,7 +47,7 @@ class ReviewsList(APIView):
 
 		paginator = PageNumberPagination()
 		paginator.page = int(page)
-		paginator.page_size = 12
+		paginator.page_size = 18
 		result_page = paginator.paginate_queryset(reviews, request)
 		serializer = ReviewsSerializer(result_page, many=True)
 		return paginator.get_paginated_response(serializer.data)

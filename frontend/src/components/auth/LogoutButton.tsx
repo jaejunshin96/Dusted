@@ -12,6 +12,8 @@ const LogoutButton: React.FC<LogoutButtonProps> = ({ onLogout }) => {
   const handleLogout = () => {
     localStorage.removeItem("email");
     localStorage.removeItem("username");
+    localStorage.removeItem("country");
+    localStorage.removeItem("language");
     localStorage.removeItem("access_token");
     localStorage.removeItem("refresh_token");
     if (onLogout) onLogout();

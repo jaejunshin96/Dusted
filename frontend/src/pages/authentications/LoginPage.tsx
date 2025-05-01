@@ -6,6 +6,7 @@ import axios from "axios";
 import styles from "./LoginPage.module.css";
 import videoSrc from "../../assets/The horse in motion.mp4";
 import { useTranslation } from "react-i18next";
+import i18n from "../../i18n";
 
 interface LoginResponse {
   email: string;
@@ -52,6 +53,7 @@ const LoginPage: React.FC = () => {
         localStorage.setItem("country", data.country);
         localStorage.setItem("access_token", data.access_token);
         localStorage.setItem("refresh_token", data.refresh_token);
+        i18n.changeLanguage(data.language);
 
         navigate("/");
       }

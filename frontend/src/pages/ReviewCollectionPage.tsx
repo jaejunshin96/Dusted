@@ -1,12 +1,12 @@
-import React, { useEffect, useState, useRef, useCallback } from "react";
+import React, { useEffect, useState } from "react";
 import ReviewModal from "../components/movie/ReviewModal";
 import styles from "./ReviewCollectionPage.module.css"
 import { useTranslation } from "react-i18next";
 import { FaArrowDownLong } from "react-icons/fa6";
-import clapperboard from "../assets/clapperboard.png"
 import { Review } from "../types/types";
 import { getReviews } from "../services/review";
 import EmptyContainer from "../components/movie/EmptyContainer";
+import ReviewGrid from "../components/movie/ReviewGrid";
 
 const ReviewCollectionPage: React.FC = () => {
   const { t } = useTranslation();
@@ -19,28 +19,19 @@ const ReviewCollectionPage: React.FC = () => {
   const [query, setQuery] = useState("");
   const [sorting, setSorting] = useState("created_at");
   const [order, setOrder] = useState("dsc");
+  const [inputValue, setInputValue] = useState("");
   let debounceTimeout: NodeJS.Timeout;
-  const observer = useRef<IntersectionObserver | null>(null);
 
   useEffect(() => {
-    fetchReviews();
     setPage(1);
+    fetchReviews();
   }, [query, sorting, order]);
 
   useEffect(() => {
-    if (selectedReview) {
-      document.body.style.overflow = "hidden";
-      document.documentElement.style.overflow = "hidden";
-    } else {
-      document.body.style.overflow = "";
-      document.documentElement.style.overflow = "";
+    if (page > 1) {
+      fetchReviews();
     }
-
-    return () => {
-      document.body.style.overflow = "";
-      document.documentElement.style.overflow = "";
-    };
-  }, [selectedReview]);
+  }, [page]);
 
   useEffect(() => {
     if (selectedReview) {
@@ -72,7 +63,8 @@ const ReviewCollectionPage: React.FC = () => {
         setReviews(prev => [...prev, ...fetchedReviews]);
       }
 
-      setHasMore(fetchedReviews.length > 0);
+      const PAGE_SIZE = 18;
+      setHasMore(fetchedReviews.length === PAGE_SIZE);
     } catch (err: any) {
       setErrorMessage(err.response?.data?.Error || t("Failed to fetch reviews."));
     } finally {
@@ -80,33 +72,17 @@ const ReviewCollectionPage: React.FC = () => {
     }
   };
 
-  // Set up intersection observer for potential infinite scroll (same as ExplorePage)
-  const lastReviewElementRef = useCallback((node: HTMLDivElement | null) => {
-    if (loading) return;
-
-    if (observer.current) observer.current.disconnect();
-
-    observer.current = new IntersectionObserver(entries => {
-      if (entries[0].isIntersecting && hasMore) {
-        setPage(prevPage => prevPage + 1);
-      }
-    });
-
-    if (node) observer.current.observe(node);
-  }, [loading, hasMore]);
+  const handleLoadMore = () => {
+    setPage(prevPage => prevPage + 1);
+  };
 
   const handleReviewClick = (review: Review) => {
     setSelectedReview(review);
   };
 
-  const getImageUrl = (path: string | null) => {
-    if (!path) return clapperboard;
-    return `https://image.tmdb.org/t/p/w500${path}`;
-  };
-
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const value = e.target.value;
-    setQuery(value);
+    setInputValue(value);
 
     clearTimeout(debounceTimeout);
     debounceTimeout = setTimeout(() => {
@@ -151,7 +127,7 @@ const ReviewCollectionPage: React.FC = () => {
       <div className={styles.searchSection}>
         <input
           type="search"
-          value={query}
+          value={inputValue}
           onChange={handleInputChange}
           placeholder={t("Search for reviews...")}
           className={styles.searchInput}
@@ -186,9 +162,7 @@ const ReviewCollectionPage: React.FC = () => {
         </div>
       </div>
 
-      {errorMessage && <p className="text-danger text-center">{errorMessage}</p>}
-
-      {loading && <div className={styles.spinner}></div>}
+      {errorMessage && <p className={styles.error}>{errorMessage}</p>}
 
       {!loading && reviews.length === 0 && (
         <EmptyContainer
@@ -198,35 +172,13 @@ const ReviewCollectionPage: React.FC = () => {
         />
       )}
 
-      <div className={styles.grid}>
-        {reviews.map((review, index) => {
-          const isLastElement = index === reviews.length - 1;
-
-          return (
-            <div
-              key={`${review.id}-${index}`}
-              ref={isLastElement ? lastReviewElementRef : null}
-              className={styles.card}
-              onClick={() => handleReviewClick(review)}
-            >
-              <div
-                className={styles.poster}
-                style={{
-                  backgroundImage: `url(${getImageUrl(review.poster_path || review.backdrop_path)})`
-                }}
-              >
-                <div className={styles.ratingBadge}>
-                  {review.rating.toFixed(1)}
-                </div>
-                <div className={styles.overlay}>
-                  <h3>{review.title}</h3>
-                  <p>{review.directors}</p>
-                </div>
-              </div>
-            </div>
-          );
-        })}
-      </div>
+      <ReviewGrid
+        reviews={reviews}
+        loading={loading}
+        hasMore={hasMore}
+        onReviewClick={handleReviewClick}
+        onLoadMore={handleLoadMore}
+      />
 
       {selectedReview && (
         <ReviewModal

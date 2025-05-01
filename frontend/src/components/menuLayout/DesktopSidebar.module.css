@@ -3,7 +3,7 @@
   left: 0;
   top: 0;
   bottom: 0;
-  width: 220px;
+  width: 180px;
   background-color: var(--background-color);
   border-right: 1px solid rgba(128, 128, 128, 0.3);
   padding: 20px 12px;
@@ -50,6 +50,7 @@
 
 .sidebarLink span {
   font-size: 16px;
+  text-align: start;
 }
 
 .sidebarBottom {

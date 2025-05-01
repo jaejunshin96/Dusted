@@ -87,7 +87,7 @@ const WatchlistPage: React.FC = () => {
 
       {error && <div className={styles.error}>{error}</div>}
 
-      {loading && <div className={styles.spinner}></div>}
+      {/*{loading && <div className={styles.spinner}></div>}*/}
 
       {!loading && movies.length === 0 && (
         <EmptyContainer
@@ -97,17 +97,15 @@ const WatchlistPage: React.FC = () => {
         />
       )}
 
-      {!loading && movies.length !== 0 && (
-        <MovieGrid
-          movies={movies}
-          loading={loading}
-          hasMore={false}
-          onMovieClick={handleMovieClick}
-          onLoadMore={() => {}}
-          watchlistIds={watchlistIds}
-          onWatchlistToggle={handleWatchlistToggle}
-        />
-      )}
+      <MovieGrid
+        movies={movies}
+        loading={loading}
+        hasMore={false}
+        onMovieClick={handleMovieClick}
+        onLoadMore={() => {}}
+        watchlistIds={watchlistIds}
+        onWatchlistToggle={handleWatchlistToggle}
+      />
 
       {selectedMovie && (
         <MovieModal

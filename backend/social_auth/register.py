@@ -40,6 +40,8 @@ def register_social_user(provider, email, name, language='', country=''):
                 'id': registered_user.id,
                 'email': registered_user.email,
                 'username': registered_user.username,
+                'language': registered_user.language,
+                'country': registered_user.country,
                 'access_token': str(user_tokens.get('access')),
                 'refresh_token': str(user_tokens.get('refresh'))
             }
@@ -71,6 +73,8 @@ def register_social_user(provider, email, name, language='', country=''):
             'id': new_user.id,
             'email': new_user.email,
             'username': new_user.username,
+            'language': new_user.language,
+            'country': new_user.country,
             'access_token': str(user_tokens.get('access')),
             'refresh_token': str(user_tokens.get('refresh'))
         }

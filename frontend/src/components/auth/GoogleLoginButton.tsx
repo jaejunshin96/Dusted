@@ -4,6 +4,7 @@ import { useTranslation } from "react-i18next";
 import axios from "axios";
 import { FcGoogle } from "react-icons/fc";
 import styles from './GoogleLoginButton.module.css';
+import i18n from "../../i18n";
 
 const GoogleLoginButton = () => {
   const { t } = useTranslation();
@@ -46,8 +47,12 @@ const GoogleLoginButton = () => {
 
       localStorage.setItem("email", res.data.email);
       localStorage.setItem("username", res.data.username);
+      localStorage.setItem("country", res.data.country);
+      localStorage.setItem("language", res.data.language);
       localStorage.setItem("access_token", res.data.access_token);
       localStorage.setItem("refresh_token", res.data.refresh_token);
+      i18n.changeLanguage(res.data.language);
+
       navigate("/");
     } catch (error) {
       console.error("Google Login Failed:", error);

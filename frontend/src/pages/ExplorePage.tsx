@@ -50,7 +50,10 @@ const ExplorePage: React.FC = () => {
   const [error, setError] = useState('');
   const [selectedMovie, setSelectedMovie] = useState<Movie | null>(null);
   const [searchType, setSearchType] = useState<SearchType>('now_playing');
-  const currentCountry = localStorage.getItem('country') || 'US';
+  const currentLanguage = localStorage.getItem('language') || i18n.language;
+  const [currentCountry, setCurrentCountry] = useState(
+    localStorage.getItem('country') || 'US'
+  );
 
   // Fetch watchlist when component mounts
   useEffect(() => {
@@ -69,7 +72,7 @@ const ExplorePage: React.FC = () => {
   // Fetch movies only when necessary
   useEffect(() => {
     fetchMovies();
-  }, [pageCache, i18n.language, searchType]);
+  }, [pageCache, i18n.language, searchType, currentCountry]);
 
   // Add this effect to disable scrolling when modal is open
   useEffect(() => {
@@ -87,13 +90,34 @@ const ExplorePage: React.FC = () => {
     };
   }, [selectedMovie]);
 
+  // Add this effect to listen for country changes
+  useEffect(() => {
+    const handleStorageChange = () => {
+      const country = localStorage.getItem('country');
+      if (country && country !== currentCountry) {
+        setCurrentCountry(country);
+      }
+    };
+
+    // Listen for storage events from other tabs
+    window.addEventListener('storage', handleStorageChange);
+
+    // Also add a function to check periodically (for same-tab changes)
+    const checkInterval = setInterval(handleStorageChange, 1000);
+
+    return () => {
+      window.removeEventListener('storage', handleStorageChange);
+      clearInterval(checkInterval);
+    };
+  }, [currentCountry]);
+
   const fetchMovies = async () => {
     setLoading(true);
     setError('');
     const currentPage = pageCache[searchType];
 
     try {
-      const movieData = await getMovieExplore(searchType, currentPage, i18n.language, currentCountry);
+      const movieData = await getMovieExplore(searchType, currentPage, currentLanguage, currentCountry);
 
       const newMovies = (movieData.results || []).map((movie: any) => ({
         ...movie,
@@ -152,7 +176,7 @@ const ExplorePage: React.FC = () => {
     <div className={styles.container}>
       {/* toggle buttons */}
       <div className={styles.switchContainer}>
-      <button
+        <button
           className={cn(styles.switchButton, {
             [styles.active]: searchType === 'popular',
           })}

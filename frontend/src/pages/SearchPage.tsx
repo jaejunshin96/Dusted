@@ -11,9 +11,7 @@ import EmptyContainer from "../components/movie/EmptyContainer";
 
 const SearchPage: React.FC = () => {
   const { t, i18n } = useTranslation();
-
   const [watchlistIds, setWatchlistIds] = useState<number[]>([]);
-
   const [movies, setMovies] = useState<Movie[]>([]);
   const [loading, setLoading] = useState(false);
   const [page, setPage] = useState(1);
@@ -22,7 +20,8 @@ const SearchPage: React.FC = () => {
   const [hasMore, setHasMore] = useState(false);
   const [selectedMovie, setSelectedMovie] = useState<Movie | null>(null);
   const [searchAttempted, setSearchAttempted] = useState(false);
-  const currentCountry = localStorage.getItem("country") || "US";
+  const currentLanguage = localStorage.getItem('language') || i18n.language;
+  const currentCountry = localStorage.getItem('country') || 'US';
 
   // Fetch watchlist when component mounts
   useEffect(() => {
@@ -57,14 +56,14 @@ const SearchPage: React.FC = () => {
     if (searchAttempted) {
       fetchMovies();
     }
-  }, [page, i18n.language]);
+  }, [page, searchAttempted]);
 
   const fetchMovies = async () => {
     setLoading(true);
     setError("");
 
     try {
-      const movieData = await getMovieSearch(query, page, i18n.language, currentCountry);
+      const movieData = await getMovieSearch(query, page, currentLanguage, currentCountry);
 
       const newMovies = (movieData.results || []).map((movie: any) => ({
         ...movie,
@@ -156,11 +155,19 @@ const SearchPage: React.FC = () => {
 
       {error && <p className={styles.error}>{error}</p>}
 
-      {!searchAttempted && movies.length === 0 && (
+      {!searchAttempted && movies.length === 0 && !loading && !error && (
         <EmptyContainer
           icon="🔍"
           title={t("Discover your next favorite movie")}
           text={t("Type a movie title in the search box above to get started")}
+        />
+      )}
+
+      {searchAttempted && movies.length === 0 && !loading && !error && (
+        <EmptyContainer
+          icon="😕"
+          title={t("No movies found")}
+          text={t("Try a different search term or check your spelling")}
         />
       )}
 
