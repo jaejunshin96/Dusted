@@ -68,6 +68,12 @@ const PasswordResetPage: React.FC = () => {
             {loading ? t("Sending email...") : t("Send Reset Link")}
           </button>
         </form>
+
+        <div className={styles.loginPrompt}>
+          <span>{t("Remember your password?")}</span>
+          <br></br>
+          <a href="/login" className={styles.loginLink}>{t("Sign In")}</a>
+        </div>
       </div>
     </div>
   );

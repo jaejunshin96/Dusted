@@ -89,7 +89,7 @@ const WatchlistPage: React.FC = () => {
 
       {/*{loading && <div className={styles.spinner}></div>}*/}
 
-      {!loading && movies.length === 0 && (
+      {!error && !loading && movies.length === 0 && (
         <EmptyContainer
           icon="📚"
           title={t('Your watchlist is empty')}

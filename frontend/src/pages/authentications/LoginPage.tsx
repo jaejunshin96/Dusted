@@ -72,6 +72,10 @@ const LoginPage: React.FC = () => {
 
   return (
     <div className={styles.container}>
+      <div className={styles.header}>
+        <h1>Dusted</h1>
+      </div>
+
       <div className={styles.contentWrapper}>
         {/* Video Section */}
         <div className={styles.videoContainer}>
@@ -108,9 +112,17 @@ const LoginPage: React.FC = () => {
             />
             <button type="submit" disabled={disabled}>{t("Login")}</button>
           </form>
+
           <p>
-            <a href="/register">{t("Create Account")}</a> | <a href="/password-reset">{t("Forgot Password?")}</a>
+            <a href="/register">{t("Create Account")}</a>
+            <span className={styles.separator}>|</span>
+            <a href="/password-reset">{t("Forgot Password?")}</a>
           </p>
+
+          <div className={styles.divider}>
+            <span>{t("or")}</span>
+          </div>
+
           <div className={styles.socialLoginContainer}>
             <GoogleOAuthProvider clientId={import.meta.env.VITE_GOOGLE_CLIENT_ID}>
               <GoogleLoginButton />

@@ -4,14 +4,15 @@
   display: flex;
   justify-content: center;
   align-items: center;
-  min-height: 90vh;
+  min-height: 100vh;
+  padding-bottom: 50px;
   background-color: var(--background-color);
-  margin-top: 20px;
 }
 
 .registerBox {
   background: var(--card-background);
-  padding: 40px;
+  padding: 10px 40px;
+  padding-bottom: 30px;
   border-radius: 8px;
   box-shadow: 0 0 10px var(--shadow-color);
   width: clamp(300px, 80vw, 400px);
@@ -47,8 +48,9 @@ input:focus {
 
 button {
   padding: 12px;
+  margin-top: 20px;
   background-color: var(--accent-color);
-  color: white;
+  color: var(--text-primary);
   border: none;
   border-radius: 5px;
   cursor: pointer;
@@ -133,8 +135,73 @@ select option {
   padding: 8px;
 }
 
+.formGroup {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+}
+
+.formGroup label {
+  font-size: 0.85rem;
+  margin-bottom: 4px;
+  text-align: left;
+  color: #555;
+  font-weight: 500;
+}
+
+.formGroup input,
+.formGroup select {
+  margin-bottom: 0;
+}
+
+.fieldError {
+  color: #ff3b30;
+  font-size: 0.8rem;
+  margin: 4px 0 0 0;
+  text-align: left;
+}
+
+.inputError {
+  border-color: #ff3b30;
+}
+
+.labelWithValidation {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+  margin-bottom: 4px;
+}
+
+.validationIndicators {
+  display: flex;
+  gap: 6px;
+}
+
+.validRule, .invalidRule {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  font-size: 10px;
+  font-weight: bold;
+  cursor: default;
+}
+
+.validRule {
+  background-color: #34c759;
+  color: white;
+}
+
+.invalidRule {
+  background-color: #eeeeee;
+  color: #888888;
+}
+
 @media (max-width: 430px) {
   .registerBox {
-    width: 50vw;
+    width: 70vw;
   }
 }

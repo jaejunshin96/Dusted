@@ -12,7 +12,7 @@ const ReviewCollectionPage: React.FC = () => {
   const { t } = useTranslation();
   const [reviews, setReviews] = useState<Review[]>([]);
   const [selectedReview, setSelectedReview] = useState<Review | null>(null);
-  const [errorMessage, setErrorMessage] = useState("");
+  const [error, seterror] = useState("");
   const [loading, setLoading] = useState(false);
   const [page, setPage] = useState(1);
   const [hasMore, setHasMore] = useState(false);
@@ -50,7 +50,7 @@ const ReviewCollectionPage: React.FC = () => {
 
   const fetchReviews = async () => {
     setLoading(true);
-    setErrorMessage("");
+    seterror("");
 
     try {
       const reviewData = await getReviews(page, query, sorting, order);
@@ -66,7 +66,7 @@ const ReviewCollectionPage: React.FC = () => {
       const PAGE_SIZE = 18;
       setHasMore(fetchedReviews.length === PAGE_SIZE);
     } catch (err: any) {
-      setErrorMessage(err.response?.data?.Error || t("Failed to fetch reviews."));
+      seterror(err.response?.data?.Error || t("Failed to fetch reviews."));
     } finally {
       setLoading(false);
     }
@@ -162,9 +162,9 @@ const ReviewCollectionPage: React.FC = () => {
         </div>
       </div>
 
-      {errorMessage && <p className={styles.error}>{errorMessage}</p>}
+      {error && <p className={styles.error}>{error}</p>}
 
-      {!loading && reviews.length === 0 && (
+      {!error && !loading && reviews.length === 0 && (
         <EmptyContainer
           icon="🎬"
           title={t("No reviews found")}

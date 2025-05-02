@@ -1,6 +1,7 @@
 .container {
   min-width: 65vw;
   margin: 0 auto;
+  margin-top: -20px;
 }
 
 .error {
