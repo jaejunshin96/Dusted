@@ -69,7 +69,7 @@ const MovieModal: React.FC<MovieModalProps> = ({ movie, onClose }) => {
 
   const getImageUrl = (path: string | null) => {
     if (!path) return clapperboard;
-    return `https://image.tmdb.org/t/p/original${path}`;
+    return `https://image.tmdb.org/t/p/w1280${path}`;
   };
 
   useEffect(() => {
@@ -79,7 +79,7 @@ const MovieModal: React.FC<MovieModalProps> = ({ movie, onClose }) => {
     }
 
     const img = new Image();
-    img.src = `https://image.tmdb.org/t/p/original${movie.backdrop_path}`;
+    img.src = `https://image.tmdb.org/t/p/w1280${movie.backdrop_path}`;
     img.onload = () => setLoading(true);
   }, [movie.backdrop_path]);
 

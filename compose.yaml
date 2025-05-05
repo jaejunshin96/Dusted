@@ -60,6 +60,16 @@ services:
       #- ./backend/staticfiles:/usr/src/app/staticfiles
       - static-data:/vol/static
 
+  #Redis
+  redis:
+    image: redis:latest
+    ports:
+      - "6379:6379"
+    volumes:
+      - redis-data:/data
+    restart: always
+
 volumes:
   postgres-data:
   static-data:
+  redis-data:
