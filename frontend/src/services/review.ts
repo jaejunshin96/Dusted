@@ -22,7 +22,7 @@ export const getReviewStatus = async (movieId: number) => {
   return response.data;
 }
 
-export const getReviews = async (page: number, query: string, sorting: string, order: string) => {
+export const getReviews = async (page: number, query: string, sorting: string, order: string, folderId?: number | null) => {
   const response = await authAxios(`${API_URL}`, {
     method: "GET",
     params: {
@@ -30,6 +30,7 @@ export const getReviews = async (page: number, query: string, sorting: string, o
       query: query,
       sorting: sorting,
       order: order,
+      folder_id: folderId, // Add folder filtering support
     },
   });
 
@@ -40,7 +41,7 @@ export const getReviews = async (page: number, query: string, sorting: string, o
   return response.data;
 }
 
-export const postReview = async (movie: Movie, reviewText: string, rating: number) => {
+export const postReview = async (movie: Movie, reviewText: string, rating: number, folderId?: number) => {
   const response = await authAxios(`${API_URL}`, {
     method: "POST",
     data: {
@@ -53,6 +54,7 @@ export const postReview = async (movie: Movie, reviewText: string, rating: numbe
       rating: rating,
       backdrop_path: movie.backdrop_path,
       poster_path: movie.poster_path,
+      folder_id: folderId, // Add folder assignment on creation
     }
   });
 
@@ -63,13 +65,14 @@ export const postReview = async (movie: Movie, reviewText: string, rating: numbe
   return response.data;
 }
 
-export const patchReview = async (reviewId: number, reviewText: string, rating: number) => {
+export const patchReview = async (reviewId: number, reviewText: string, rating: number, folderId?: number) => {
   const response = await authAxios(`${API_URL}`, {
     method: "PATCH",
     data: {
       id: reviewId,
       review: reviewText,
       rating: rating,
+      folder: folderId, // Add ability to update folder
     }
   });
 
@@ -90,6 +93,23 @@ export const deleteReview = async (reviewId: number) => {
 
   if (response.status !== 204) {
     throw new Error('Failed to delete review');
+  }
+
+  return response.data;
+}
+
+// New function to move reviews between folders
+export const moveReview = async (reviewId: number, folderId: number | null) => {
+  const response = await authAxios(`${API_URL}move/`, {
+    method: "POST",
+    data: {
+      review_id: reviewId,
+      folder_id: folderId,
+    }
+  });
+
+  if (response.status !== 200) {
+    throw new Error('Failed to move review');
   }
 
   return response.data;

@@ -43,7 +43,7 @@ class ReviewsList(APIView):
         page = request.GET.get('page', 1)
         sorting = request.GET.get('sorting', None)
         order = request.GET.get('order', 'asc')
-        folder_id = request.GET.get('folder_id', None)  # New parameter
+        folder_id = request.GET.get('folder_id', None)
         user_id = request.user.id
 
         # Update cache key to include folder_id
@@ -109,13 +109,28 @@ class ReviewsList(APIView):
             return Response({'error': 'You have already reviewed this movie'},
                             status=status.HTTP_409_CONFLICT)
 
+        # Get folder_id from request data
+        folder_id = request.data.get('folder_id', None)
+
         serializer = ReviewsSerializer(data=request.data)
         if serializer.is_valid():
-            serializer.save(user=request.user)
+            # Create review instance but don't save yet
+            review = serializer.save(user=request.user)
+
+            # Handle folder assignment
+            if folder_id:
+                try:
+                    folder = Folder.objects.get(id=folder_id, user=request.user)
+                    review.folder = folder
+                    review.save()
+                except Folder.DoesNotExist:
+                    return Response({'Error': 'Folder not found'}, status=status.HTTP_404_NOT_FOUND)
 
             # Invalidate related caches
             self._invalidate_user_caches(user_id, movie_id)
 
+            # Return updated serialized data with folder info
+            serializer = ReviewsSerializer(review)
             return Response(serializer.data, status=status.HTTP_201_CREATED)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 

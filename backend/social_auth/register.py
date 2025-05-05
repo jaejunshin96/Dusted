@@ -3,7 +3,6 @@ from users.models import CustomUser
 import os
 import random
 from rest_framework.exceptions import AuthenticationFailed
-from reviews.models import Folder
 
 
 def generate_username(name):
@@ -63,12 +62,6 @@ def register_social_user(provider, email, name, language='', country=''):
         user.is_verified = True
         user.auth_provider = provider
         user.save()
-
-        # Create a default "All" folder for the new user
-        Folder.objects.create(
-            name="All",
-            user=user
-        )
 
         new_user = authenticate(
             email=email, password=os.environ.get('SOCIAL_SECRET')

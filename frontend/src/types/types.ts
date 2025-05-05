@@ -31,6 +31,13 @@ export interface Review {
   date_created: string;
 }
 
+export interface Folder {
+  id: number;
+  name: string;
+  created_at: string;
+  updated_at: string;
+}
+
 export type LanguageOption = {
   code: string;
   name: string;

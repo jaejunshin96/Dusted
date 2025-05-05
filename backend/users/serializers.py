@@ -6,7 +6,6 @@ from .models import CustomUser
 from django.utils.encoding import smart_bytes, smart_str
 from django.utils.http import urlsafe_base64_decode
 from django.contrib.auth.tokens import PasswordResetTokenGenerator
-from reviews.models import Folder
 
 class UserSerializer(serializers.ModelSerializer):
     class Meta:
@@ -48,13 +47,6 @@ class UserRegisterationSerializer(serializers.ModelSerializer):
             password = validated_data['password'],
             country = validated_data.get('country', ''),
         )
-
-        # Create a default "All" folder for the new user
-        Folder.objects.create(
-            name="All",
-            user=user
-        )
-
         return user
 
 class EmailVerificationSerializer(serializers.ModelSerializer):
