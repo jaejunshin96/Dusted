@@ -199,7 +199,7 @@ class UpdateUserLanguageView(APIView):
             user.save(update_fields=['language'])
             return Response({'message': 'Language updated successfully'}, status=status.HTTP_200_OK)
         return Response({'error': 'Language not provided'}, status=status.HTTP_400_BAD_REQUEST)
-    
+
 class UpdateUserCountryView(APIView):
     permission_classes = [IsAuthenticated]
 
