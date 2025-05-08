@@ -185,7 +185,7 @@ class FolderView(APIView):
 
     def get(self, request):
         # Get all folders for the current user
-        folders = Folder.objects.filter(user=request.user)
+        folders = Folder.objects.filter(user=request.user).order_by('created_at')
         serializer = FolderSerializer(folders, many=True)
         return Response(serializer.data)
 

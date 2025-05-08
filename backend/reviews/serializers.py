@@ -8,13 +8,13 @@ class FolderSerializer(serializers.ModelSerializer):
         read_only_fields = ['id', 'created_at', 'updated_at']
 
 class ReviewsSerializer(serializers.ModelSerializer):
-    folder_name = serializers.CharField(source='folder.name', read_only=True, allow_null=True)
+    folder_id = serializers.IntegerField(source='folder.id', read_only=True, allow_null=True)
 
     class Meta:
         model = Review
         fields = ['id', 'user', 'movie_id', 'title', 'directors', 'review', 'rating',
-                  'backdrop_path', 'poster_path', 'folder', 'folder_name', 'created_at', 'updated_at']
-        read_only_fields = ['id', 'user', 'created_at', 'updated_at', 'folder_name']
+                  'backdrop_path', 'poster_path', 'folder', 'folder_id', 'created_at', 'updated_at']
+        read_only_fields = ['id', 'user', 'created_at', 'updated_at', 'folder_id']
 
     def validate(self, attrs):
         review_text = attrs.get('review', '')

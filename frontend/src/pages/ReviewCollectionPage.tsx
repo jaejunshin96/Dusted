@@ -1,12 +1,14 @@
 import React, { useEffect, useState } from "react";
-import ReviewModal from "../components/movie/ReviewModal";
+import ReviewModal from "../components/review/ReviewModal";
 import styles from "./ReviewCollectionPage.module.css"
 import { useTranslation } from "react-i18next";
-import { FaArrowDownLong } from "react-icons/fa6";
 import { Review } from "../types/types";
 import { getReviews } from "../services/review";
 import EmptyContainer from "../components/movie/EmptyContainer";
-import ReviewGrid from "../components/movie/ReviewGrid";
+import ReviewGrid from "../components/review/ReviewGrid";
+import FolderSlide from "../components/folder/FolderSlide";
+import { deleteFolder } from "../services/folder";
+import ReviewSearch from "../components/review/ReviewSearch";
 
 const ReviewCollectionPage: React.FC = () => {
   const { t } = useTranslation();
@@ -20,12 +22,14 @@ const ReviewCollectionPage: React.FC = () => {
   const [sorting, setSorting] = useState("created_at");
   const [order, setOrder] = useState("dsc");
   const [inputValue, setInputValue] = useState("");
+  const [selectedFolderId, setSelectedFolderId] = useState<number | null>(null);
   let debounceTimeout: NodeJS.Timeout;
 
   useEffect(() => {
     setPage(1);
     fetchReviews();
-  }, [query, sorting, order]);
+    setReviews([]);
+  }, [query, sorting, order, selectedFolderId]);
 
   useEffect(() => {
     if (page > 1) {
@@ -53,7 +57,7 @@ const ReviewCollectionPage: React.FC = () => {
     seterror("");
 
     try {
-      const reviewData = await getReviews(page, query, sorting, order);
+      const reviewData = await getReviews(page, query, sorting, order, selectedFolderId);
 
       const fetchedReviews = reviewData.results || [];
 
@@ -62,7 +66,7 @@ const ReviewCollectionPage: React.FC = () => {
       } else {
         setReviews(prev => [...prev, ...fetchedReviews]);
       }
-
+      console.log(fetchedReviews);
       const PAGE_SIZE = 18;
       setHasMore(fetchedReviews.length === PAGE_SIZE);
     } catch (err: any) {
@@ -101,7 +105,26 @@ const ReviewCollectionPage: React.FC = () => {
     setOrder(order === "dsc" ? "asc" : "dsc");
   }
 
-  /* Modal button actions */
+  const handleFolderSelect = (folderId: number | null) => {
+    setSelectedFolderId(folderId);
+    setPage(1);
+  };
+
+  const handleDeleteFolder = async () => {
+    if (!selectedFolderId) return;
+
+    if (window.confirm(t("Are you sure you want to delete this folder?"))) {
+      try {
+        await deleteFolder(selectedFolderId);
+        setSelectedFolderId(null);
+        setPage(1);
+        fetchReviews();
+      } catch (err) {
+        seterror(t("Failed to delete folder"));
+      }
+    }
+  };
+
   const handleCloseModal = () => {
     setSelectedReview(null);
   }
@@ -112,7 +135,6 @@ const ReviewCollectionPage: React.FC = () => {
         review.id === updatedReview.id ? updatedReview : review
       )
     );
-    //setSelectedReview(null);
   };
 
   const handleDelete = (deletedReview: Review) => {
@@ -124,43 +146,20 @@ const ReviewCollectionPage: React.FC = () => {
 
   return (
     <div className={styles.container}>
-      <div className={styles.searchSection}>
-        <input
-          type="search"
-          value={inputValue}
-          onChange={handleInputChange}
-          placeholder={t("Search for reviews...")}
-          className={styles.searchInput}
-          aria-label="Search reviews"
-        />
-
-        <select
-          className={styles.sortDropdown}
-          value={sorting}
-          onChange={handleSortingChange}
-          aria-label="Sort reviews"
-        >
-          <option value="created_at">{t("by Created")}</option>
-          <option value="rating">{t("by Rating")}</option>
-          <option value="5">{t("5 Stars")}</option>
-          <option value="4">{t("4 Stars")}</option>
-          <option value="3">{t("3 Stars")}</option>
-          <option value="2">{t("2 Stars")}</option>
-          <option value="1">{t("1 Stars")}</option>
-        </select>
-
-        <div
-          className={styles.sortIcon}
-          onClick={handleOrder}
-          role="button"
-          aria-label={order === "dsc" ? "Sort ascending" : "Sort descending"}
-        >
-          <FaArrowDownLong
-            size={20}
-            className={order === "dsc" ? styles.rotateDown : styles.rotateUp}
-          />
-        </div>
-      </div>
+      <FolderSlide
+        onFolderSelect={handleFolderSelect}
+        selectedFolderId={selectedFolderId}
+        onOptionClicked={handleDeleteFolder}
+      />
+      
+      <ReviewSearch
+        inputValue={inputValue}
+        onInputChange={handleInputChange}
+        sorting={sorting}
+        onSortingChange={handleSortingChange}
+        order={order}
+        onOrderChange={handleOrder}
+      />
 
       {error && <p className={styles.error}>{error}</p>}
 

@@ -5,6 +5,9 @@ import styles from "./ReviewModal.module.css";
 import clapperboard from "../../assets/clapperboard.png"
 import { patchReview, deleteReview } from "../../services/review";
 import { toast } from "react-toastify";
+import { Folder } from "../../types/types";
+import FolderList from "../folder/FolderList";
+import { getFolders, postFolder } from "../../services/folder";
 
 interface ReviewDetailModalProps {
   review: Review;
@@ -24,6 +27,8 @@ const ReviewModal: React.FC<ReviewDetailModalProps> = ({ review, onClose, onSave
   const [error, setError] = useState<string | null>(null);
   const [isImageLoaded, setIsImageLoaded] = useState(false);
   const [isMobile, setIsMobile] = useState(false);
+  const [folders, setFolders] = useState<Folder[]>([]);
+  const [selectedFolder, setSelectedFolder] = useState<number | null>(null);
 
   useEffect(() => {
     const handleEsc = (e: KeyboardEvent) => {
@@ -68,9 +73,39 @@ const ReviewModal: React.FC<ReviewDetailModalProps> = ({ review, onClose, onSave
     return () => window.removeEventListener('resize', checkIfMobile);
   }, []);
 
+  // Add this useEffect to fetch folders
+  useEffect(() => {
+    const fetchFolders = async () => {
+      try {
+        const folderData = await getFolders();
+        setFolders(folderData);
+        if (review.folder_id) {
+          setSelectedFolder(review.folder_id);
+        }
+      } catch (error) {
+        console.error("Failed to fetch folders:", error);
+      }
+    };
+
+    fetchFolders();
+  }, []);
+
   const getImageUrl = (path: string | null) => {
     if (!path) return clapperboard;
     return `https://image.tmdb.org/t/p/original${path}`;
+  };
+
+  const handleCreateFolder = async (folderName: string) => {
+    if (!folderName) {
+      setError(t("Folder name cannot be empty."));
+      return;
+    }
+    try {
+      const newFolder = await postFolder(folderName);
+      setFolders((prevFolders) => [...prevFolders, newFolder]);
+    } catch (error) {
+      setError(t("Failed to create folder. Please try again."));
+    }
   };
 
   const handleSave = async () => {
@@ -80,8 +115,8 @@ const ReviewModal: React.FC<ReviewDetailModalProps> = ({ review, onClose, onSave
     }
 
     try {
-      await patchReview(review.id, editedReview, editedRating);
-      const updatedReview = {...review, review: editedReview, rating: editedRating};
+      await patchReview(review.id, editedReview, editedRating, selectedFolder ?? null);
+      const updatedReview = {...review, review: editedReview, rating: editedRating, folder_id: selectedFolder};
       onSave(updatedReview);
 
       setRating(editedRating);
@@ -161,7 +196,7 @@ const ReviewModal: React.FC<ReviewDetailModalProps> = ({ review, onClose, onSave
               </div>
 
               {review.review && (
-                <div className={styles.reviewBlock}>
+                <div className={styles.reviewTextBlock}>
                   {reviewText.split("\n").map((line, index) => (
                     <span key={index}>
                       {line}
@@ -180,7 +215,7 @@ const ReviewModal: React.FC<ReviewDetailModalProps> = ({ review, onClose, onSave
           </>
         ) : (
           <>
-            <div className={styles.detailsContainer}>
+            <div className={styles.reviewContainer}>
               <h2 className={styles.textBlock}>{review.title}</h2>
 
               <div className={styles.ratingStars}>
@@ -218,6 +253,13 @@ const ReviewModal: React.FC<ReviewDetailModalProps> = ({ review, onClose, onSave
               <div className={styles.errorContainer}>
                 {error && <p className={styles.error}>{error}</p>}
               </div>
+
+              <FolderList
+                folders={folders}
+                selectedFolder={selectedFolder}
+                setSelectedFolder={setSelectedFolder}
+                onCreateFolder={handleCreateFolder}
+              />
             </div>
 
             <div className={styles.buttonSection}>

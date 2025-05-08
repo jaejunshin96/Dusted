@@ -28,6 +28,7 @@ export interface Review {
   rating: number;
   backdrop_path: string | null;
   poster_path: string | null;
+  folder_id: number | null;
   date_created: string;
 }
 

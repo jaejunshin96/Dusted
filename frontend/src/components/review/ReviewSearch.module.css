@@ -1,0 +1,78 @@
+.searchSection {
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  width: 100%;
+  gap: 10px;
+  margin-bottom: 10px;
+}
+
+.searchInput {
+  padding: 0.5rem 1rem;
+  border: 1px solid var(--border-color);
+  border-radius: 10px;
+  font-size: 1rem;
+  background-color: var(--card-background);
+  color: var(--text-primary);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+.searchInput:focus {
+  outline: none;
+  box-shadow: 0 0 0 2px rgba(var(--accent-color-rgb), 0.3), 0 4px 12px rgba(0, 0, 0, 0.12);
+  border-color: var(--accent-color);
+  background-color: var(--card-background);
+}
+
+.sortDropdown {
+  padding: 0.5rem 1rem;
+  max-width: 140px;
+  background-color: var(--card-background);
+  border: 1px solid var(--border-color);
+  border-radius: 10px;
+  cursor: pointer;
+  font-size: 1rem;
+  color: var(--text-primary);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+.sortDropdown:focus {
+  outline: none;
+  box-shadow: 0 0 0 2px rgba(var(--accent-color-rgb), 0.3), 0 4px 12px rgba(0, 0, 0, 0.12);
+}
+
+.sortIcon {
+  padding: 0.5rem 1rem;
+  width: 20px;
+  height: 20px;
+  background-color: var(--card-background);
+  border: 1px solid var(--border-color);
+  border-radius: 10px;
+  color: var(--text-primary);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+.sortIcon:hover {
+  background-color: rgba(var(--accent-color-rgb), 0.1);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+}
+
+.rotateUp {
+  transform: rotate(180deg);
+  transition: transform 0.3s ease;
+}
+
+.rotateDown {
+  transform: rotate(0deg);
+  transition: transform 0.3s ease;
+}
+
+@media (max-width: 430px) {
+  .sortDropdown {
+    max-width: 20px;
+  }
+}

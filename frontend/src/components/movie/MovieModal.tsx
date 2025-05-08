@@ -8,6 +8,9 @@ import { FaYoutube } from "react-icons/fa";
 import { getMovieTrailer } from "../../services/movie";
 import { getReviewStatus, postReview } from "../../services/review";
 import { toast } from "react-toastify";
+import { getFolders, postFolder } from "../../services/folder"; // Assuming this service exists
+import { Folder } from "../../types/types";
+import FolderList from "../folder/FolderList";
 
 interface MovieModalProps {
   movie: Movie;
@@ -27,6 +30,8 @@ const MovieModal: React.FC<MovieModalProps> = ({ movie, onClose }) => {
   const [trailerKey, setTrailerKey] = useState<string | null>(null);
   const [showTrailer, setShowTrailer] = useState(false);
   const [isMobile, setIsMobile] = useState(false);
+  const [folders, setFolders] = useState<Folder[]>([]);
+  const [selectedFolder, setSelectedFolder] = useState<number | null>(null);
 
   useEffect(() => {
     const handleEsc = (e: KeyboardEvent) => {
@@ -123,18 +128,51 @@ const MovieModal: React.FC<MovieModalProps> = ({ movie, onClose }) => {
     return () => window.removeEventListener('resize', checkIfMobile);
   }, []);
 
+  // Add this useEffect to fetch folders
+  useEffect(() => {
+    const fetchFolders = async () => {
+      try {
+        const folderData = await getFolders();
+        setFolders(folderData);
+      } catch (error) {
+        console.error("Failed to fetch folders:", error);
+      }
+    };
+
+    fetchFolders();
+  }, []);
+
+  const handleCreateFolder = async (folderName: string) => {
+    if (!folderName) {
+      setError(t("Folder name cannot be empty."));
+      return;
+    }
+    try {
+      const newFolder = await postFolder(folderName);
+      setFolders((prevFolders) => [...prevFolders, newFolder]);
+    } catch (error) {
+      setError(t("Failed to create folder. Please try again."));
+    }
+  };
+
   const handleSubmitReview = async () => {
     if (rating === 0) {
       setError(t("Please select a rating before submitting your review."));
       return;
     }
 
+    if (!selectedFolder && folders.length > 0) {
+      setError(t("Please select a folder to save your review."));
+      return;
+    }
+
     try {
-      await postReview(movie, reviewText, rating);
+      await postReview(movie, reviewText, rating, selectedFolder);
 
       setWritingReview(false);
       setReviewText("");
       setRating(0);
+      setSelectedFolder(null);
       setIsReviewed(true);
       toast.success(t("Review submitted successfully!"));
     } catch (err: any) {
@@ -171,7 +209,7 @@ const MovieModal: React.FC<MovieModalProps> = ({ movie, onClose }) => {
         onClick={(e) => e.stopPropagation()}
       >
         {/* Add global navigation buttons */}
-        <div className={styles.navigationButtons}>
+        <div className={styles.navigationSection}>
           {(showDetails || writingReview || showTrailer) && (
             <button
               className={`${styles.navButton} ${styles.backButton}`}
@@ -247,10 +285,9 @@ const MovieModal: React.FC<MovieModalProps> = ({ movie, onClose }) => {
               </>
             ) : (
               <>
-                <div className={styles.detailsContainer}>
+                <div className={styles.reviewContainer}>
                   <h2 className={styles.textBlock}>
-                    {t("Review for")} {movie.title}
-                    {movie.original_title !== movie.title ? ` (${movie.original_title})` : ""}
+                    {movie.title}
                   </h2>
 
                   <div className={styles.ratingStars}>
@@ -285,17 +322,24 @@ const MovieModal: React.FC<MovieModalProps> = ({ movie, onClose }) => {
                     {textCount} / 400
                   </div>
 
-                  <div className={styles.errorContainer}>
-                    {error && <p className={styles.error}>{error}</p>}
-                  </div>
+                  <FolderList
+                    folders={folders}
+                    selectedFolder={selectedFolder}
+                    setSelectedFolder={setSelectedFolder}
+                    onCreateFolder={handleCreateFolder}
+                  />
+                </div>
+
+                <div className={styles.errorContainer}>
+                  {error && <p className={styles.error}>{error}</p>}
                 </div>
 
                 <div className={styles.buttonSection}>
-                  <button className={`${styles.button} ${styles.closeButton}`} onClick={() => setWritingReview(false)}>
-                    {t("Cancel")}
-                  </button>
                   <button className={`${styles.button}`} onClick={handleSubmitReview}>
                     {t("Submit")}
+                  </button>
+                  <button className={`${styles.button} ${styles.closeButton}`} onClick={() => setWritingReview(false)}>
+                    {t("Cancel")}
                   </button>
                 </div>
               </>

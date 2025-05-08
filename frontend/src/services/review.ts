@@ -41,7 +41,7 @@ export const getReviews = async (page: number, query: string, sorting: string, o
   return response.data;
 }
 
-export const postReview = async (movie: Movie, reviewText: string, rating: number, folderId?: number) => {
+export const postReview = async (movie: Movie, reviewText: string, rating: number, folderId?: number | null) => {
   const response = await authAxios(`${API_URL}`, {
     method: "POST",
     data: {
@@ -65,7 +65,7 @@ export const postReview = async (movie: Movie, reviewText: string, rating: numbe
   return response.data;
 }
 
-export const patchReview = async (reviewId: number, reviewText: string, rating: number, folderId?: number) => {
+export const patchReview = async (reviewId: number, reviewText: string, rating: number, folderId?: number | null) => {
   const response = await authAxios(`${API_URL}`, {
     method: "PATCH",
     data: {
