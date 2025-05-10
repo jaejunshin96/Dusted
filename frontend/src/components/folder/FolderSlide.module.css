@@ -91,7 +91,7 @@
 
 .folderItem.active {
   /*background-color: var(--accent-color);*/
-  color: white;
+  color: var(--text-primary);
   border-color: var(--accent-color);
   font-weight: 500;
 }

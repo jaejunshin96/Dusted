@@ -162,11 +162,6 @@ const MovieModal: React.FC<MovieModalProps> = ({ movie, onClose }) => {
       return;
     }
 
-    if (!selectedFolder && folders.length > 0) {
-      setError(t("Please select a folder to save your review."));
-      return;
-    }
-
     try {
       await postReview(movie, reviewText, rating, selectedFolder);
 

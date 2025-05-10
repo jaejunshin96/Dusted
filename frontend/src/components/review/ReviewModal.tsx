@@ -55,8 +55,8 @@ const ReviewModal: React.FC<ReviewDetailModalProps> = ({ review, onClose, onSave
 
   useEffect(() => {
     setError(null);
-    setTextCount(reviewText.length);
-  }, [reviewText]);
+    setTextCount(editedReview.length);
+  }, [editedReview]);
 
   // Add useEffect to detect mobile screen
   useEffect(() => {
@@ -226,7 +226,7 @@ const ReviewModal: React.FC<ReviewDetailModalProps> = ({ review, onClose, onSave
               </p>
 
               <p className={styles.textBlock}>
-                <span style={{ opacity: 0.7 }}>{t("Genres")}: </span>
+                <span style={{ opacity: 0.7 }}>{t("Genre")}: </span>
                 <strong>
                   {getGenreNames(review.genre_ids)}
                 </strong>
@@ -287,16 +287,16 @@ const ReviewModal: React.FC<ReviewDetailModalProps> = ({ review, onClose, onSave
                 {textCount} / 400
               </div>
 
-              <div className={styles.errorContainer}>
-                {error && <p className={styles.error}>{error}</p>}
-              </div>
-
               <FolderList
                 folders={folders}
                 selectedFolder={selectedFolder}
                 setSelectedFolder={setSelectedFolder}
                 onCreateFolder={handleCreateFolder}
               />
+            </div>
+
+            <div className={styles.errorContainer}>
+              {error && <p className={styles.error}>{error}</p>}
             </div>
 
             <div className={styles.buttonSection}>
