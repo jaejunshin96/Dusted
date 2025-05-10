@@ -65,7 +65,6 @@ const SearchPage: React.FC = () => {
     try {
       const movieData = await getMovieSearch(query, page, currentLanguage, currentCountry);
 
-      console.log("Movie data:", movieData);
       const newMovies = (movieData.results || []).map((movie: any) => ({
         ...movie,
         movie_id: movie.id
@@ -158,7 +157,6 @@ const SearchPage: React.FC = () => {
 
       {!searchAttempted && movies.length === 0 && !loading && !error && (
         <EmptyContainer
-          icon="🔍"
           title={t("Discover your next favorite movie")}
           text={t("Type a movie title in the search box above to get started")}
         />
@@ -166,7 +164,6 @@ const SearchPage: React.FC = () => {
 
       {searchAttempted && movies.length === 0 && !loading && !error && (
         <EmptyContainer
-          icon="😕"
           title={t("No movies found")}
           text={t("Try a different search term or check your spelling")}
         />

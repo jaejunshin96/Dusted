@@ -1,10 +1,39 @@
+.folderContainer {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+}
+
+.folderHeader {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+  padding: 0;
+  margin: 0;
+  position: relative;
+}
+
+.headerLeft {
+  width: 42px; /* Match the width of the button */
+}
+
+.folderTitle {
+  font-size: 2rem;
+  color: var(--text-primary);
+  margin: 0;
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
+}
+
 .folderSlideContainer {
   display: flex;
   flex-direction: row;
   justify-content: space-between;
   align-items: center;
   width: 100%;
-  padding: 0.5rem 0;
+  /*padding: 0.5rem 0;*/
   /*background-color: green;*/
 }
 
@@ -61,7 +90,7 @@
 }
 
 .folderItem.active {
-  background-color: var(--accent-color);
+  /*background-color: var(--accent-color);*/
   color: white;
   border-color: var(--accent-color);
   font-weight: 500;
@@ -179,7 +208,7 @@
   transition: background-color 0.2s;
   background-color: transparent;
   margin: auto 0;
-  margin-left: 10px;
+  margin-left: auto; /* Ensures it stays at the right */
   color: var(--text-primary);
 }
 

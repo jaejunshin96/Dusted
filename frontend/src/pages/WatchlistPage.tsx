@@ -108,7 +108,6 @@ const WatchlistPage: React.FC = () => {
 
       {!error && !loading && movies.length === 0 && (
         <EmptyContainer
-          icon="📚"
           title={t('Your watchlist is empty')}
           text={t('Add movies to your watchlist to see them here.')}
         />

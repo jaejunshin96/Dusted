@@ -119,7 +119,6 @@ const ExplorePage: React.FC = () => {
     try {
       const movieData = await getMovieExplore(searchType, currentPage, currentLanguage, currentCountry);
 
-      console.log('Fetched movies:', movieData);
       const newMovies = (movieData.results || []).map((movie: any) => ({
         ...movie,
         movie_id: movie.id

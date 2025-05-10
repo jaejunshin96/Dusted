@@ -100,10 +100,6 @@
 }
 
 @media (max-width: 430px) {
-  .searchSection {
-    justify-content: center;
-  }
-
   .sortDropdown {
     max-width: 20px;
   }

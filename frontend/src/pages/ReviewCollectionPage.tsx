@@ -59,7 +59,6 @@ const ReviewCollectionPage: React.FC = () => {
     try {
       const reviewData = await getReviews(page, query, sorting, order, selectedFolderId);
 
-      console.log("Fetched reviews:", reviewData);
       const fetchedReviews = reviewData.results || [];
 
       if (page === 1) {
@@ -165,7 +164,6 @@ const ReviewCollectionPage: React.FC = () => {
 
       {!error && !loading && reviews.length === 0 && (
         <EmptyContainer
-          icon="🎬"
           title={t("No reviews found")}
           text={t("Try searching with different keywords or check back later.")}
         />
