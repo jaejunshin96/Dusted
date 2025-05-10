@@ -20,7 +20,6 @@ const authAxios = async (url: string, options: AxiosRequestConfig = {}) => {
     return response;
   } catch (error: any) {
     if (error.response?.status === 401) {
-      console.log("Access token expired. Trying to refresh...");
       token = await refreshAccessToken();
 
       if (token) {

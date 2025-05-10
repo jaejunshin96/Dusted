@@ -88,28 +88,45 @@ class ExploreMoviesAPIView(APIView):
                 movie_id = movie.get("id")
 
                 if movie_id:
-                    # Check if we have cached director information
+                    # Check if we have cached director and cast information
                     director_cache_key = f"movie:directors:{movie_id}:{lang}"
+                    cast_cache_key = f"movie:cast:{movie_id}:{lang}"
                     cached_directors = cache.get(director_cache_key)
+                    cached_cast = cache.get(cast_cache_key)
 
                     if cached_directors:
                         movie['directors'] = json.loads(force_str(cached_directors))
-                    else:
-                        # Fetch directors for the movie
+
+                    if cached_cast:
+                        movie['cast'] = json.loads(force_str(cached_cast))
+
+                    if not cached_directors or not cached_cast:
+                        # Fetch credits for the movie
                         credits_url = f"https://api.themoviedb.org/3/movie/{movie_id}/credits?language={lang}"
                         credits_response = requests.get(credits_url, headers=headers)
 
                         if credits_response.status_code == 200:
                             credits_data = credits_response.json()
-                            directors = [member['name'] for member in credits_data.get('crew', [])
-                                        if member.get('job') == 'Director']
 
-                            # Cache director information for 7 days
-                            cache.set(director_cache_key, json.dumps(directors), 60*60*24*7)
+                            # Get directors if not cached
+                            if not cached_directors:
+                                directors = [member['name'] for member in credits_data.get('crew', [])
+                                            if member.get('job') == 'Director']
+                                # Cache director information for 7 days
+                                cache.set(director_cache_key, json.dumps(directors), 60*60*24*7)
+                                movie['directors'] = directors
 
-                            movie['directors'] = directors
+                            # Get top 5 cast members if not cached
+                            if not cached_cast:
+                                cast = [actor['name'] for actor in credits_data.get('cast', [])[:5]]
+                                # Cache cast information for 7 days
+                                cache.set(cast_cache_key, json.dumps(cast), 60*60*24*7)
+                                movie['cast'] = cast
                         else:
-                            movie['directors'] = []
+                            if not cached_directors:
+                                movie['directors'] = []
+                            if not cached_cast:
+                                movie['cast'] = []
 
                 movies_with_directors.append(movie)
 
@@ -164,28 +181,45 @@ class SearchMovieAPIView(APIView):
                 movie_id = movie.get("id")
 
                 if movie_id:
-                    # Check if we have cached director information
+                    # Check if we have cached director and cast information
                     director_cache_key = f"movie:directors:{movie_id}:{lang}"
+                    cast_cache_key = f"movie:cast:{movie_id}:{lang}"
                     cached_directors = cache.get(director_cache_key)
+                    cached_cast = cache.get(cast_cache_key)
 
                     if cached_directors:
                         movie['directors'] = json.loads(force_str(cached_directors))
-                    else:
-                        # Fetch directors for the movie
+
+                    if cached_cast:
+                        movie['cast'] = json.loads(force_str(cached_cast))
+
+                    if not cached_directors or not cached_cast:
+                        # Fetch credits for the movie
                         credits_url = f"https://api.themoviedb.org/3/movie/{movie_id}/credits?language={lang}"
                         credits_response = requests.get(credits_url, headers=headers)
 
                         if credits_response.status_code == 200:
                             credits_data = credits_response.json()
-                            directors = [member['name'] for member in credits_data.get('crew', [])
-                                        if member.get('job') == 'Director']
 
-                            # Cache director information for 7 days
-                            cache.set(director_cache_key, json.dumps(directors), 60*60*24*7)
+                            # Get directors if not cached
+                            if not cached_directors:
+                                directors = [member['name'] for member in credits_data.get('crew', [])
+                                            if member.get('job') == 'Director']
+                                # Cache director information for 7 days
+                                cache.set(director_cache_key, json.dumps(directors), 60*60*24*7)
+                                movie['directors'] = directors
 
-                            movie['directors'] = directors
+                            # Get top 5 cast members if not cached
+                            if not cached_cast:
+                                cast = [actor['name'] for actor in credits_data.get('cast', [])[:5]]
+                                # Cache cast information for 7 days
+                                cache.set(cast_cache_key, json.dumps(cast), 60*60*24*7)
+                                movie['cast'] = cast
                         else:
-                            movie['directors'] = []
+                            if not cached_directors:
+                                movie['directors'] = []
+                            if not cached_cast:
+                                movie['cast'] = []
 
                 movies_with_directors.append(movie)
 

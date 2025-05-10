@@ -41,6 +41,13 @@ const DesktopSidebar: React.FC = () => {
     };
   }, [showDropdown]);
 
+  const handleNavigation = (path: string) => {
+    navigate(path);
+    setShowDropdown(false);
+    setCurrentView('main');
+    window.scrollTo(0, 0);
+  };
+
   const handleLanguageClick = (e: React.MouseEvent) => {
     e.stopPropagation();
     setCurrentView('language');
@@ -78,7 +85,7 @@ const DesktopSidebar: React.FC = () => {
       <div className={styles.sidebarLinks}>
         <div
           className={`${styles.sidebarLink} ${isActive("/") ? styles.active : ""}`}
-          onClick={() => navigate("/")}
+          onClick={() => handleNavigation("/")}
         >
           <FaRegCompass size={24} />
           <span>{t("Explore")}</span>
@@ -86,7 +93,7 @@ const DesktopSidebar: React.FC = () => {
 
         <div
           className={`${styles.sidebarLink} ${isActive("/search") ? styles.active : ""}`}
-          onClick={() => navigate("/search")}
+          onClick={() => handleNavigation("/search")}
         >
           <FaSearch size={24} />
           <span>{t("Search")}</span>
@@ -94,7 +101,7 @@ const DesktopSidebar: React.FC = () => {
 
         <div
           className={`${styles.sidebarLink} ${isActive("/watchlist") ? styles.active : ""}`}
-          onClick={() => navigate("/watchlist")}
+          onClick={() => handleNavigation("/watchlist")}
         >
           <FaBookmark size={24} />
           <span>{t("Watchlist")}</span>
@@ -102,7 +109,7 @@ const DesktopSidebar: React.FC = () => {
 
         <div
           className={`${styles.sidebarLink} ${isActive("/reviews") ? styles.active : ""}`}
-          onClick={() => navigate("/reviews")}
+          onClick={() => handleNavigation("/reviews")}
         >
           <MdCollections size={24} />
           <span>{t("Collections")}</span>
@@ -110,7 +117,7 @@ const DesktopSidebar: React.FC = () => {
 
         <div
           className={`${styles.sidebarLink} ${isActive("/profile") ? styles.active : ""}`}
-          onClick={() => navigate("/profile")}
+          onClick={() => handleNavigation("/profile")}
         >
           <FaUserAlt size={24} />
           <span>{t("Profile")}</span>

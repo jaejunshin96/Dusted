@@ -1,4 +1,4 @@
-import React, { useState, useRef } from "react";
+import React, { useState, useRef, useEffect } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import { GiHamburgerMenu } from "react-icons/gi";
@@ -19,6 +19,22 @@ const MobileHeader: React.FC = () => {
   const [showMobileMenu, setShowMobileMenu] = useState(false);
   const [currentView, setCurrentView] = useState<'main' | 'language' | 'country' | 'theme'>('main');
   const menuRef = useRef<HTMLDivElement>(null);
+
+  // Add this effect to disable scrolling when mobile menu is open
+  useEffect(() => {
+    if (showMobileMenu) {
+      document.body.style.overflow = "hidden";
+      document.documentElement.style.overflow = "hidden";
+    } else {
+      document.body.style.overflow = "";
+      document.documentElement.style.overflow = "";
+    }
+
+    return () => {
+      document.body.style.overflow = "";
+      document.documentElement.style.overflow = "";
+    };
+  }, [showMobileMenu]);
 
   const closeMobileMenu = () => {
     setShowMobileMenu(false);
@@ -56,11 +72,19 @@ const MobileHeader: React.FC = () => {
     localStorage.removeItem("refresh_token");
     closeMobileMenu();
     navigate("/login");
+    window.scrollTo(0, 0);
+  };
+
+  // Add this function to handle navigation with scroll reset
+  const handleNavigation = (path: string) => {
+    navigate(path);
+    closeMobileMenu();
+    window.scrollTo(0, 0); // Reset scroll position to top
   };
 
   return (
     <header className={styles.mobileHeader}>
-      <div className={styles.logo} onClick={() => navigate("/")}>
+      <div className={styles.logo} onClick={() => handleNavigation("/")}>
         Dusted
       </div>
 
@@ -78,7 +102,7 @@ const MobileHeader: React.FC = () => {
               <>
                 <div
                   className={`${styles.navLink} ${isActive("/") ? styles.active : ""}`}
-                  onClick={() => { navigate("/"); closeMobileMenu(); }}
+                  onClick={() => handleNavigation("/")}
                 >
                   <FaRegCompass size={20} />
                   <span>{t("Explore")}</span>
@@ -86,7 +110,7 @@ const MobileHeader: React.FC = () => {
 
                 <div
                   className={`${styles.navLink} ${isActive("/search") ? styles.active : ""}`}
-                  onClick={() => { navigate("/search"); closeMobileMenu(); }}
+                  onClick={() => handleNavigation("/search")}
                 >
                   <FaSearch size={20} />
                   <span>{t("Search")}</span>
@@ -94,7 +118,7 @@ const MobileHeader: React.FC = () => {
 
                 <div
                   className={`${styles.navLink} ${isActive("/watchlist") ? styles.active : ""}`}
-                  onClick={() => { navigate("/watchlist"); closeMobileMenu(); }}
+                  onClick={() => handleNavigation("/watchlist")}
                 >
                   <FaBookmark size={20} />
                   <span>{t("Watchlist")}</span>
@@ -102,7 +126,7 @@ const MobileHeader: React.FC = () => {
 
                 <div
                   className={`${styles.navLink} ${isActive("/reviews") ? styles.active : ""}`}
-                  onClick={() => { navigate("/reviews"); closeMobileMenu(); }}
+                  onClick={() => handleNavigation("/reviews")}
                 >
                   <MdCollections size={20} />
                   <span>{t("Collections")}</span>
@@ -110,7 +134,7 @@ const MobileHeader: React.FC = () => {
 
                 <div
                   className={`${styles.navLink} ${isActive("/profile") ? styles.active : ""}`}
-                  onClick={() => { navigate("/profile"); closeMobileMenu(); }}
+                  onClick={() => handleNavigation("/profile")}
                 >
                   <FaUserAlt size={20} />
                   <span>{t("Profile")}</span>

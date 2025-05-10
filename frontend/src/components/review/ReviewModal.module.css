@@ -251,7 +251,7 @@ h2.textBlock {
 .button:hover {
   transform: translateY(-2px);
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
-  background-color: rgba(255, 255, 255, 0.5);
+  background-color: var(--accent-color, #8090ff);
 }
 
 .button:disabled {
@@ -266,8 +266,13 @@ h2.textBlock {
   color: #ff6b6b;
 }
 
-.saveButton {
-  color: #8090ff;
+.deleteButton:hover {
+  background-color: rgba(255, 59, 48, 0.2);
+}
+
+.closeButton:hover {
+  background-color: rgba(30, 30, 30, 0.6);
+  box-shadow: none;
 }
 
 .spinner {

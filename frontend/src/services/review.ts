@@ -48,13 +48,16 @@ export const postReview = async (movie: Movie, reviewText: string, rating: numbe
       movie_id: movie.movie_id,
       title: movie.title,
       directors: Array.isArray(movie.directors)
-        ? movie.directors.join(", ")
-        : movie.directors,
+        ? movie.directors.join(", ") : movie.directors,
+      cast: Array.isArray(movie.cast)
+        ? movie.cast.join(", ") : movie.cast,
+      genre_ids: Array.isArray(movie.genre_ids)
+        ? movie.genre_ids.join(", ") : movie.genre_ids,
       review: reviewText,
       rating: rating,
       backdrop_path: movie.backdrop_path,
       poster_path: movie.poster_path,
-      folder_id: folderId, // Add folder assignment on creation
+      folder_id: folderId,
     }
   });
 

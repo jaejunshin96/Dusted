@@ -40,6 +40,7 @@
   border: 1px solid var(--border-color);
   border-radius: 10px;
   background-color: var(--card-background);
+  box-shadow: 0 2px 8px var(--shadow-color);
   color: var(--text-primary);
   font-size: 0.9rem;
   cursor: pointer;

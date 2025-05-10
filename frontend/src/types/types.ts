@@ -4,6 +4,8 @@ export interface Movie {
   original_title: string;
   title: string;
   directors: [string];
+  cast: [string];
+  genre_ids: [number];
   release_date: string;
   overview: string;
   backdrop_path: string | null;
@@ -24,6 +26,8 @@ export interface Review {
   movie_id: number;
   title: string;
   directors: string;
+  cast: string;
+  genre_ids: string;
   review: string;
   rating: number;
   backdrop_path: string | null;

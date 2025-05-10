@@ -7,6 +7,8 @@ class Watchlist(models.Model):
     movie_id = models.IntegerField(null=False, default=0)
     title = models.CharField(max_length=255)
     directors = models.CharField(max_length=255)
+    cast = models.CharField(max_length=500, blank=True)
+    genre_ids = models.CharField(max_length=255, blank=True)
     release_date = models.DateField(blank=True, null=True)
     overview = models.TextField(blank=True)
     backdrop_path = models.CharField(max_length=255, blank=True, null=True)

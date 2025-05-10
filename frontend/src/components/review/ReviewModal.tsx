@@ -8,6 +8,7 @@ import { toast } from "react-toastify";
 import { Folder } from "../../types/types";
 import FolderList from "../folder/FolderList";
 import { getFolders, postFolder } from "../../services/folder";
+import { GENRE_MAP } from "../../constants/genreMap";
 
 interface ReviewDetailModalProps {
   review: Review;
@@ -48,7 +49,7 @@ const ReviewModal: React.FC<ReviewDetailModalProps> = ({ review, onClose, onSave
     }
 
     const img = new Image();
-    img.src = getImageUrl(review.backdrop_path || review.poster_path);
+    img.src = `https://image.tmdb.org/t/p/w1280${review.backdrop_path || review.poster_path}`;
     img.onload = () => setIsImageLoaded(true);
   }, [review.backdrop_path, review.poster_path]);
 
@@ -92,7 +93,19 @@ const ReviewModal: React.FC<ReviewDetailModalProps> = ({ review, onClose, onSave
 
   const getImageUrl = (path: string | null) => {
     if (!path) return clapperboard;
-    return `https://image.tmdb.org/t/p/original${path}`;
+    return `https://image.tmdb.org/t/p/w1280${path}`;
+  };
+
+  const getGenreNames = (genreIds: string | number[]): string => {
+    if (!genreIds) return "Not found";
+
+    const ids = Array.isArray(genreIds)
+      ? genreIds
+      : genreIds.split(',').map(id => parseInt(id.trim(), 10));
+
+    return ids
+      .map(id => GENRE_MAP[id] || `Unknown (${id})`)
+      .join(", ");
   };
 
   const handleCreateFolder = async (folderName: string) => {
@@ -160,7 +173,6 @@ const ReviewModal: React.FC<ReviewDetailModalProps> = ({ review, onClose, onSave
         }}
         onClick={(e) => e.stopPropagation()}
       >
-        {/* Add global navigation buttons */}
         <div className={styles.navigationButtons}>
           {(isEditing) && (
             <button
@@ -194,6 +206,31 @@ const ReviewModal: React.FC<ReviewDetailModalProps> = ({ review, onClose, onSave
                   </span>
                 ))}
               </div>
+
+              <p className={styles.textBlock}>
+                <span style={{ opacity: 0.7 }}>{t("Director")}: </span>
+                <strong>
+                  {Array.isArray(review.directors)
+                    ? review.directors.join(", ")
+                    : review.directors || "Not found"}
+                </strong>
+              </p>
+
+              <p className={styles.textBlock}>
+                <span style={{ opacity: 0.7 }}>{t("Cast")}: </span>
+                <strong>
+                  {Array.isArray(review.cast)
+                    ? review.cast.join(", ")
+                    : review.cast || "Not found"}
+                </strong>
+              </p>
+
+              <p className={styles.textBlock}>
+                <span style={{ opacity: 0.7 }}>{t("Genres")}: </span>
+                <strong>
+                  {getGenreNames(review.genre_ids)}
+                </strong>
+              </p>
 
               {review.review && (
                 <div className={styles.reviewTextBlock}>
@@ -269,7 +306,7 @@ const ReviewModal: React.FC<ReviewDetailModalProps> = ({ review, onClose, onSave
               <button className={`${styles.button} ${styles.saveButton}`} onClick={handleSave}>
                 {t("Save")}
               </button>
-              <button className={`${styles.button}`} onClick={() => setIsEditing(false)}>
+              <button className={`${styles.button} ${styles.closeButton}`} onClick={() => setIsEditing(false)}>
                 {t("Cancel")}
               </button>
             </div>

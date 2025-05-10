@@ -59,6 +59,7 @@ const ReviewCollectionPage: React.FC = () => {
     try {
       const reviewData = await getReviews(page, query, sorting, order, selectedFolderId);
 
+      console.log("Fetched reviews:", reviewData);
       const fetchedReviews = reviewData.results || [];
 
       if (page === 1) {
@@ -66,7 +67,6 @@ const ReviewCollectionPage: React.FC = () => {
       } else {
         setReviews(prev => [...prev, ...fetchedReviews]);
       }
-      console.log(fetchedReviews);
       const PAGE_SIZE = 18;
       setHasMore(fetchedReviews.length === PAGE_SIZE);
     } catch (err: any) {
@@ -95,9 +95,9 @@ const ReviewCollectionPage: React.FC = () => {
     }, 300);
   };
 
-  const handleSortingChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
+  const handleSortingChange = (newSorting: string) => {
     setPage(1);
-    setSorting(e.target.value);
+    setSorting(newSorting);
   };
 
   const handleOrder = async () => {
@@ -151,7 +151,7 @@ const ReviewCollectionPage: React.FC = () => {
         selectedFolderId={selectedFolderId}
         onOptionClicked={handleDeleteFolder}
       />
-      
+
       <ReviewSearch
         inputValue={inputValue}
         onInputChange={handleInputChange}

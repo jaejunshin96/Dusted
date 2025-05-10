@@ -8,9 +8,10 @@ import { FaYoutube } from "react-icons/fa";
 import { getMovieTrailer } from "../../services/movie";
 import { getReviewStatus, postReview } from "../../services/review";
 import { toast } from "react-toastify";
-import { getFolders, postFolder } from "../../services/folder"; // Assuming this service exists
+import { getFolders, postFolder } from "../../services/folder";
 import { Folder } from "../../types/types";
 import FolderList from "../folder/FolderList";
+import { GENRE_MAP } from "../../constants/genreMap";
 
 interface MovieModalProps {
   movie: Movie;
@@ -72,11 +73,6 @@ const MovieModal: React.FC<MovieModalProps> = ({ movie, onClose }) => {
     fetchReviewStatus();
   }, [movie.movie_id]);
 
-  const getImageUrl = (path: string | null) => {
-    if (!path) return clapperboard;
-    return `https://image.tmdb.org/t/p/w1280${path}`;
-  };
-
   useEffect(() => {
     if (!movie.backdrop_path) {
       setLoading(true);
@@ -84,9 +80,9 @@ const MovieModal: React.FC<MovieModalProps> = ({ movie, onClose }) => {
     }
 
     const img = new Image();
-    img.src = `https://image.tmdb.org/t/p/w1280${movie.backdrop_path}`;
+    img.src = `https://image.tmdb.org/t/p/w1280${movie.backdrop_path || movie.poster_path}`;
     img.onload = () => setLoading(true);
-  }, [movie.backdrop_path]);
+  }, [movie.backdrop_path, movie.poster_path]);
 
   useEffect(() => {
     setError(null);
@@ -141,6 +137,11 @@ const MovieModal: React.FC<MovieModalProps> = ({ movie, onClose }) => {
 
     fetchFolders();
   }, []);
+
+  const getImageUrl = (path: string | null) => {
+    if (!path) return clapperboard;
+    return `https://image.tmdb.org/t/p/w1280${path}`;
+  };
 
   const handleCreateFolder = async (folderName: string) => {
     if (!folderName) {
@@ -199,6 +200,11 @@ const MovieModal: React.FC<MovieModalProps> = ({ movie, onClose }) => {
     }
   };
 
+  const getGenreNames = (genreIds: number[]): string[] => {
+    if (!genreIds || !Array.isArray(genreIds)) return ["Not found"];
+    return genreIds.map(id => GENRE_MAP[id] || `Unknown (${id})`);
+  };
+
   return (
     <div className={styles.overlay} onClick={showTrailer ? undefined : onClose}>
       <div
@@ -208,7 +214,6 @@ const MovieModal: React.FC<MovieModalProps> = ({ movie, onClose }) => {
         }}
         onClick={(e) => e.stopPropagation()}
       >
-        {/* Add global navigation buttons */}
         <div className={styles.navigationSection}>
           {(showDetails || writingReview || showTrailer) && (
             <button
@@ -226,7 +231,6 @@ const MovieModal: React.FC<MovieModalProps> = ({ movie, onClose }) => {
           </button>
         </div>
 
-        {/* Rest of the existing UI */}
         {!loading ? (<div className={styles.spinner}></div>) : (
           <>
             {!showDetails ? (
@@ -250,6 +254,22 @@ const MovieModal: React.FC<MovieModalProps> = ({ movie, onClose }) => {
                       {Array.isArray(movie.directors)
                         ? movie.directors.join(", ")
                         : movie.directors || "Not found"}
+                    </strong>
+                  </p>
+                  <p className={styles.textBlock}>
+                    <span style={{ opacity: 0.7 }}>{t("Cast")}: </span>
+                    <strong>
+                      {Array.isArray(movie.cast)
+                        ? movie.cast.join(", ")
+                        : movie.cast || "Not found"}
+                    </strong>
+                  </p>
+                  <p className={styles.textBlock}>
+                    <span style={{ opacity: 0.7 }}>{t("Genre")}: </span>
+                    <strong>
+                      {movie.genre_ids && Array.isArray(movie.genre_ids)
+                        ? getGenreNames(movie.genre_ids).join(", ")
+                        : "Not found"}
                     </strong>
                   </p>
                   <p className={styles.textBlock}>

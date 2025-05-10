@@ -5,7 +5,6 @@ const refreshAccessToken = async () => {
   const backendUrl = import.meta.env.DEV ? import.meta.env.VITE_BACKEND_URL : import.meta.env.VITE_BACKEND_URL_PROD;
 
   if (!refreshToken) {
-    console.log("No refresh token found. User must log in.");
     return null;
   }
 

@@ -140,6 +140,7 @@
 /* Logout section at the bottom with different styling */
 .logoutButton {
   border-top: 5px solid rgba(128, 128, 128, 0.2);
+  color: var(--danger-color);
 }
 
 .systemIcon {

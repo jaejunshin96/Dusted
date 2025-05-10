@@ -22,7 +22,12 @@ export const addToWatchlist = async (movie: Movie) => {
   const watchlistItem = {
     movie_id: movie.id,
     title: movie.title,
-    directors: Array.isArray(movie.directors) ? movie.directors.join(', ') : movie.directors,
+    directors: Array.isArray(movie.directors)
+      ? movie.directors.join(', ') : movie.directors,
+    cast: Array.isArray(movie.cast)
+      ? movie.cast.join(', ') : movie.cast,
+    genre_ids: Array.isArray(movie.genre_ids)
+      ? movie.genre_ids.join(', ') : movie.genre_ids,
     release_date: movie.release_date,
     overview: movie.overview,
     backdrop_path: movie.backdrop_path,

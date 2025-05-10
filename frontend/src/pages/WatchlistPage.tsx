@@ -42,8 +42,28 @@ const WatchlistPage: React.FC = () => {
     setLoading(true);
     try {
       const data = await getWatchlist();
-      setMovies(data);
-      setWatchlistIds(data.map((movie: Movie) => movie.movie_id));
+
+      // Convert genre_ids to number arrays if they're strings
+      const processedData = data.map((movie: Movie) => {
+        // If genre_ids is a string, convert it to an array of numbers
+        if (movie.genre_ids && typeof movie.genre_ids === 'string') {
+          return {
+            ...movie,
+            genre_ids: (movie.genre_ids as string).split(',').map(id => parseInt(id.trim(), 10)).filter(id => !isNaN(id))
+          };
+        }
+        // If genre_ids is already an array but contains strings, convert to numbers
+        else if (Array.isArray(movie.genre_ids) && movie.genre_ids.length > 0 && typeof movie.genre_ids[0] === 'string') {
+          return {
+            ...movie,
+            genre_ids: movie.genre_ids.map(id => typeof id === 'string' ? parseInt(id, 10) : id).filter(id => !isNaN(id))
+          };
+        }
+        return movie;
+      });
+
+      setMovies(processedData);
+      setWatchlistIds(processedData.map((movie: Movie) => movie.movie_id));
       setLoading(false);
     } catch (err) {
       console.error('Error fetching watchlist:', err);
@@ -64,9 +84,6 @@ const WatchlistPage: React.FC = () => {
 
   const handleWatchlistToggle = async (movie: Movie) => {
     try {
-      // Log the movie ID to debug
-      console.log('Attempting to remove movie from watchlist:', movie.id, movie);
-
       // Remove movie from UI first for better user experience
       await removeFromWatchlist(movie.movie_id);
       setMovies(prevMovies => prevMovies.filter(m => m.movie_id !== movie.movie_id));

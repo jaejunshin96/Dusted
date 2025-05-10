@@ -65,6 +65,7 @@ const SearchPage: React.FC = () => {
     try {
       const movieData = await getMovieSearch(query, page, currentLanguage, currentCountry);
 
+      console.log("Movie data:", movieData);
       const newMovies = (movieData.results || []).map((movie: any) => ({
         ...movie,
         movie_id: movie.id

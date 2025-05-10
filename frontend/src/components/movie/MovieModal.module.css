@@ -464,7 +464,7 @@ h2.textBlock {
 .button:hover {
   transform: translateY(-2px);
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
-  background-color: #6b78d1;
+  background-color: var(--accent-color, #8090ff);
 }
 
 .button:disabled {
@@ -476,14 +476,13 @@ h2.textBlock {
 }
 
 .closeButton {
-  background-color: transparent;
   color: white;
   background-color: rgba(30, 30, 30, 0.6);
   box-shadow: none;
 }
 
 .closeButton:hover {
-  background-color: rgba(255, 255, 255, 0.1);
+  background-color: rgba(30, 30, 30, 0.6);
   box-shadow: none;
 }
 
