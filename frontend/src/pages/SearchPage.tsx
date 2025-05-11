@@ -125,7 +125,7 @@ const SearchPage: React.FC = () => {
         setWatchlistIds(prev => prev.filter(id => id !== movie.movie_id));
       }
     } catch (error) {
-      console.error('Watchlist operation failed:', error);
+      setError(t("Failed to update watchlist"));
     }
   };
 
