@@ -7,8 +7,7 @@
 .searchBar {
   display: flex;
   justify-content: center;
-  margin-right: auto;
-  margin-left: auto;
+  margin: auto;
   margin-bottom: 20px;
   gap: 10px;
   width: clamp(300px, 40%, 600px);
@@ -36,11 +35,10 @@
   box-shadow: 0 0 0 2px rgba(var(--accent-color-rgb), 0.3), 0 4px 12px rgba(0, 0, 0, 0.12);
 }
 
-/* New styles for the clear button */
 .clearButton {
   position: absolute;
   right: 20px;
-  top: 10%;
+  top: 7%;
   transform: translateY(-50%);
   background: none;
   border: none;

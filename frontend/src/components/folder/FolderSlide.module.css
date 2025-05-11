@@ -12,10 +12,7 @@
   padding: 0;
   margin: 0;
   position: relative;
-}
-
-.headerLeft {
-  width: 42px; /* Match the width of the button */
+  margin-bottom: 10px;
 }
 
 .folderTitle {
@@ -25,6 +22,14 @@
   position: absolute;
   left: 50%;
   transform: translateX(-50%);
+  width: 60%;
+  text-align: center;
+  font-weight: 500;
+  text-overflow: ellipsis;
+  overflow: hidden;
+  max-width: 100%;
+  padding: 0 1rem;
+  z-index: 1;
 }
 
 .folderSlideContainer {

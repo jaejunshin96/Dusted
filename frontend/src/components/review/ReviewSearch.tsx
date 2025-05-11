@@ -46,14 +46,26 @@ const ReviewSearch: React.FC<ReviewSearchProps> = ({
 
   return (
     <div className={styles.searchSection}>
-      <input
-        type="search"
-        value={inputValue}
-        onChange={onInputChange}
-        placeholder={t("Search for reviews...")}
-        className={styles.searchInput}
-        aria-label="Search reviews"
-      />
+      <div className={styles.searchInputContainer}>
+        <input
+          type="text"
+          value={inputValue}
+          onChange={onInputChange}
+          placeholder={t("Search for reviews...")}
+          className={styles.searchInput}
+          aria-label="Search reviews"
+        />
+        {inputValue && (
+          <button
+            className={styles.clearButton}
+            onClick={() => onInputChange({ target: { value: '' } } as React.ChangeEvent<HTMLInputElement>)}
+            aria-label="Clear search"
+            type="button"
+          >
+            ×
+          </button>
+        )}
+      </div>
 
       <div
         className={styles.sortIcon}

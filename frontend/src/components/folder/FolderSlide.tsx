@@ -24,6 +24,7 @@ const FolderSlide: React.FC<FolderSlideProps> = ({
   const [showModal, setShowModal] = useState(false);
   const [isEditing, setIsEditing] = useState(false);
   const [selectedFolder, setSelectedFolder] = useState<Folder | null>(null);
+  const [selectedFolderName, setSelectedFolderName] = useState<string | null>(null);
   const [newName, setNewName] = useState('');
   const [isAdding, setIsAdding] = useState(false);
 
@@ -63,6 +64,18 @@ const FolderSlide: React.FC<FolderSlideProps> = ({
     };
   }, [showModal]);
 
+  const handleAllFolderClick = () => {
+    onFolderSelect(null);
+    setSelectedFolder(null);
+    setSelectedFolderName(null);
+  }
+
+  const handleFolderClick = (folder: Folder) => {
+    onFolderSelect(folder.id);
+    setSelectedFolder(folder);
+    setSelectedFolderName(folder.name);
+  };
+
   const handleAdd = async () => {
     if (!newFolderName.trim()) {
       return;
@@ -101,6 +114,7 @@ const FolderSlide: React.FC<FolderSlideProps> = ({
       setFolders(folders.map(folder => folder.id === selectedFolder.id ? { ...folder, name: newName } : folder));
       setIsEditing(false);
       setShowModal(false);
+      setSelectedFolderName(newName);
     }
   }
 
@@ -117,10 +131,10 @@ const FolderSlide: React.FC<FolderSlideProps> = ({
   return (
     <div className={styles.folderContainer}>
       <div className={styles.folderHeader}>
-        <div className={styles.headerLeft}></div>
         <h1 className={styles.folderTitle}>
-          {selectedFolderId === null ? t('All') : selectedFolder?.name}
+          {selectedFolderName ? selectedFolderName : t('All')}
         </h1>
+
         <button
           className={styles.optionButton}
           onClick={handleOptionClick}
@@ -134,7 +148,7 @@ const FolderSlide: React.FC<FolderSlideProps> = ({
         <div className={styles.folderScroll}>
           <button
             className={`${styles.folderItem} ${selectedFolderId === null ? styles.active : ''}`}
-            onClick={() => {onFolderSelect(null); setSelectedFolder(null);}}
+            onClick={() => handleAllFolderClick()}
           >
             {t('All')}
           </button>
@@ -147,20 +161,12 @@ const FolderSlide: React.FC<FolderSlideProps> = ({
             <button
               key={folder.id}
               className={`${styles.folderItem} ${selectedFolderId === folder.id ? styles.active : ''}`}
-              onClick={() => {onFolderSelect(folder.id); setSelectedFolder(folder);}}
+              onClick={() => handleFolderClick(folder)}
             >
               {folder.name}
             </button>
           ))}
         </div>
-
-        {/*<button
-          className={styles.optionButton}
-          onClick={handleOptionClick}
-          aria-label={t("Folder options")}
-        >
-          <FaEllipsis size={24} />
-        </button>*/}
 
         {showModal && (
           <div className={styles.modalOverlay} onClick={() => setShowModal(false)}>

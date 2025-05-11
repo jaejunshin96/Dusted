@@ -94,6 +94,7 @@ const SearchPage: React.FC = () => {
 
   const handleSearch = () => {
     if (query.trim().length > 0) {
+      setLoading(true);
       setMovies([]);
       setHasMore(false);
       setSearchAttempted(true);
@@ -143,6 +144,7 @@ const SearchPage: React.FC = () => {
           value={query}
           onChange={handleInputChange}
         />
+
         <button
           type="button"
           className={`${styles.clearButton} ${!query ? styles.hidden : ''}`}
@@ -162,7 +164,7 @@ const SearchPage: React.FC = () => {
         />
       )}
 
-      {searchAttempted && movies.length === 0 && !loading && !error && (
+      {searchAttempted && movies.length === 0 && !loading && (
         <EmptyContainer
           title={t("No movies found")}
           text={t("Try a different search term or check your spelling")}
