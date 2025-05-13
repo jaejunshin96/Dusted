@@ -27,6 +27,12 @@ const LoginPage: React.FC = () => {
   const backendUrl = import.meta.env.DEV ? import.meta.env.VITE_BACKEND_URL : import.meta.env.VITE_BACKEND_URL_PROD;
 
   useEffect(() => {
+    const browserLanguage = navigator.language || (navigator as any).userLanguage;
+    const languageCode = browserLanguage.split('-')[0];
+    i18n.changeLanguage(languageCode);
+  }, []);
+
+  useEffect(() => {
     if (email && password) {
       setDisabled(false);
     } else {
