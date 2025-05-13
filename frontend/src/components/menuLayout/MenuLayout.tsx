@@ -1,6 +1,7 @@
 import React from "react";
 import DesktopSidebar from "./DesktopSidebar";
 import MobileHeader from "./MobileHeader";
+import Footer from "../footer/Footer";
 import styles from "./MenuLayout.module.css";
 
 interface LayoutProps {
@@ -12,9 +13,12 @@ const MenuLayout: React.FC<LayoutProps> = ({ children }) => {
     <div className={styles.layout}>
       <DesktopSidebar />
       <MobileHeader />
-      <main className={styles.mainContent}>
-        {children}
-      </main>
+      <div className={styles.contentWrapper}>
+        <main className={styles.mainContent}>
+          {children}
+        </main>
+        <Footer />
+      </div>
     </div>
   );
 };

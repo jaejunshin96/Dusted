@@ -19,6 +19,9 @@ import 'react-toastify/dist/ReactToastify.css';
 import './styles/toastify.css';
 import "./App.css";
 import GoogleAuthCallback from './components/auth/GoogleAuthCallback';
+import Terms from "./pages/terms/Terms";
+import Privacy from "./pages/terms/Privacy";
+import CookiePolicy from "./pages/terms/CookiePolicy";
 
 function App() {
   return (
@@ -35,6 +38,12 @@ function App() {
             <Route path="/password-reset-complete" element={<NewPasswordPage />} />
             <Route path="/auth/google/callback" element={<GoogleAuthCallback />} />
           </Route>
+
+
+          <Route path="/terms_of_service" element={<Terms />} />
+          <Route path="/privacy_policy" element={<Privacy />} />
+          <Route path="/cookie_policy" element={<CookiePolicy />} />
+
 
           {/* authenticated access */}
           <Route element={<MenuLayout><Outlet /></MenuLayout>}>
