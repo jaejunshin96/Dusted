@@ -18,6 +18,7 @@ import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import './styles/toastify.css';
 import "./App.css";
+import GoogleAuthCallback from './components/auth/GoogleAuthCallback';
 
 function App() {
   return (
@@ -32,6 +33,7 @@ function App() {
             <Route path="/activation-confirm" element={<ActivationConfirmPage />} />
             <Route path="/password-reset" element={<PasswordResetPage />} />
             <Route path="/password-reset-complete" element={<NewPasswordPage />} />
+            <Route path="/auth/google/callback" element={<GoogleAuthCallback />} />
           </Route>
 
           {/* authenticated access */}

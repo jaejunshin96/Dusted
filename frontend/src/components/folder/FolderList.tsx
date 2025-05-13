@@ -107,7 +107,7 @@ const FolderList: React.FC<FolderListProps> = ({
             className={styles.createFolderButton}
             onClick={handleCreateClick}
           >
-            <span className={styles.folderName}>{t('Add New Folder')}</span>
+            <span className={styles.folderName}>{t('Add new folder')}</span>
           </button>
         )}
       </div>

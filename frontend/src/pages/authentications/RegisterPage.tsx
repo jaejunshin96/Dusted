@@ -57,8 +57,7 @@ const RegisterPage: React.FC = () => {
       const isLongEnough = password.length >= 9;
 
       if (!isLongEnough || !hasLetter || !hasDigit || !hasSpecial) {
-        setPasswordError(t("Password must be at least 9 characters long and include \
-                            letters, numbers, and special characters (!@#$%^&*)."));
+        setPasswordError(t("Password must be at least 9 characters long and include letters, numbers, and special characters (!@#$%^&*)."));
       } else {
         setPasswordError(null);
       }
@@ -125,8 +124,7 @@ const RegisterPage: React.FC = () => {
       } else if (err.response?.data?.username) {
         setError(t("Username already exists.") || "Registration failed");
       } else if (err.response?.data?.password2) {
-        setError(t("Password must be at least 9 characters long and include \
-                  letters, numbers, and special characters (!@#$%^&*).")
+        setError(t("Password must be at least 9 characters long and include letters, numbers, and special characters (!@#$%^&*).")
                   || "Registration failed");
       } else if (err.response?.data?.password) {
         setError(t("Passwords do not match.") || "Registration failed");

@@ -11,7 +11,7 @@ import { toast } from "react-toastify";
 import { getFolders, postFolder } from "../../services/folder";
 import { Folder } from "../../types/types";
 import FolderList from "../folder/FolderList";
-import { GENRE_MAP } from "../../constants/genreMap";
+import { getGenreName } from "../../constants/genreMap";
 
 interface MovieModalProps {
   movie: Movie;
@@ -197,7 +197,7 @@ const MovieModal: React.FC<MovieModalProps> = ({ movie, onClose }) => {
 
   const getGenreNames = (genreIds: number[]): string[] => {
     if (!genreIds || !Array.isArray(genreIds)) return ["Not found"];
-    return genreIds.map(id => GENRE_MAP[id] || `Unknown (${id})`);
+    return genreIds.map(id => getGenreName(id, t));
   };
 
   return (

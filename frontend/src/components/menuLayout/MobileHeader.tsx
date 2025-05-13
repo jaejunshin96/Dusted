@@ -10,6 +10,7 @@ import ThemeToggleButton from "./ThemeToggleButton";
 import LanguageSelector from "./LanguageSelector";
 import CountrySelector from "./CountrySelector";
 import styles from "./MobileHeader.module.css";
+import axios from "axios";
 
 const MobileHeader: React.FC = () => {
   const { t } = useTranslation();
@@ -19,6 +20,9 @@ const MobileHeader: React.FC = () => {
   const [showMobileMenu, setShowMobileMenu] = useState(false);
   const [currentView, setCurrentView] = useState<'main' | 'language' | 'country' | 'theme'>('main');
   const menuRef = useRef<HTMLDivElement>(null);
+  const backendUrl = import.meta.env.DEV
+    ? import.meta.env.VITE_BACKEND_URL
+    : import.meta.env.VITE_BACKEND_URL_PROD;
 
   // Add this effect to disable scrolling when mobile menu is open
   useEffect(() => {
@@ -65,15 +69,48 @@ const MobileHeader: React.FC = () => {
     setCurrentView('main');
   };
 
-  const handleLogout = () => {
-    localStorage.removeItem("email");
-    localStorage.removeItem("username");
-    localStorage.removeItem("access_token");
-    localStorage.removeItem("refresh_token");
-    closeMobileMenu();
-    navigate("/login");
-    window.scrollTo(0, 0);
+  const handleLogout = async () => {
+    try {
+      const refreshToken = localStorage.getItem("refresh_token");
+      const accessToken = localStorage.getItem("access_token");
+
+      if (refreshToken) {
+        // Call the backend logout endpoint using axios
+        await axios.post(
+          `${backendUrl}/api/auth/logout/`,
+          { refresh: refreshToken },
+          {
+            headers: {
+              "Content-Type": "application/json",
+              "Authorization": `Bearer ${accessToken}`
+            }
+          }
+        );
+      }
+    } catch (error) {
+      console.error("Logout error:", error);
+    } finally {
+      // Clear local storage regardless of server response
+      localStorage.removeItem("email");
+      localStorage.removeItem("username");
+      localStorage.removeItem("access_token");
+      localStorage.removeItem("refresh_token");
+
+      closeMobileMenu();
+      navigate("/login");
+      window.scrollTo(0, 0);
+    }
   };
+
+  //const handleLogout = () => {
+  //  localStorage.removeItem("email");
+  //  localStorage.removeItem("username");
+  //  localStorage.removeItem("access_token");
+  //  localStorage.removeItem("refresh_token");
+  //  closeMobileMenu();
+  //  navigate("/login");
+  //  window.scrollTo(0, 0);
+  //};
 
   // Add this function to handle navigation with scroll reset
   const handleNavigation = (path: string) => {

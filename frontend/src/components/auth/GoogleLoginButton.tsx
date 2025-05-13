@@ -1,15 +1,11 @@
 import { useEffect } from "react";
-import { useNavigate } from "react-router-dom";
-import { useTranslation } from "react-i18next";
-import axios from "axios";
 import { FcGoogle } from "react-icons/fc";
+import { useTranslation } from "react-i18next";
 import styles from './GoogleLoginButton.module.css';
-import i18n from "../../i18n";
 
 const GoogleLoginButton = () => {
   const { t } = useTranslation();
-  const navigate = useNavigate();
-  const backendUrl = import.meta.env.DEV ? import.meta.env.VITE_BACKEND_URL : import.meta.env.VITE_BACKEND_URL_PROD;
+  const redirectUri = import.meta.env.VITE_GOOGLE_REDIRECT_URI || `${window.location.origin}/auth/google/callback`;
 
   useEffect(() => {
     // Load the Google Identity Services SDK
@@ -20,44 +16,24 @@ const GoogleLoginButton = () => {
     document.body.appendChild(script);
 
     return () => {
-      document.body.removeChild(script);
+      const scriptElement = document.querySelector('script[src="https://accounts.google.com/gsi/client"]');
+      if (scriptElement && document.body.contains(scriptElement)) {
+        document.body.removeChild(scriptElement);
+      }
     };
   }, []);
 
   const handleGoogleLogin = () => {
     // @ts-ignore (google is added to window by the script)
-    window.google.accounts.id.initialize({
+    const client = window.google.accounts.oauth2.initCodeClient({
       client_id: import.meta.env.VITE_GOOGLE_CLIENT_ID,
-      callback: handleCredentialResponse,
       scope: "profile email openid",
+      redirect_uri: redirectUri,
+      ux_mode: "redirect",
     });
 
-    // @ts-ignore
-    window.google.accounts.id.prompt();
-  };
-
-  const handleCredentialResponse = async (response: any) => {
-    try {
-      const browserLocale = navigator.language;
-
-      const res = await axios.post(`${backendUrl}/api/social_auth/google/`, {
-        auth_token: response.credential,
-        locale: browserLocale,
-      });
-
-      localStorage.setItem("email", res.data.email);
-      localStorage.setItem("username", res.data.username);
-      localStorage.setItem("country", res.data.country);
-      localStorage.setItem("language", res.data.language);
-      localStorage.setItem("access_token", res.data.access_token);
-      localStorage.setItem("refresh_token", res.data.refresh_token);
-      i18n.changeLanguage(res.data.language);
-
-      navigate("/");
-    } catch (error) {
-      console.error("Google Login Failed:", error);
-      alert("Google login failed. Please try again.");
-    }
+    // Redirect to Google's OAuth 2.0 server
+    client.requestCode();
   };
 
   return (

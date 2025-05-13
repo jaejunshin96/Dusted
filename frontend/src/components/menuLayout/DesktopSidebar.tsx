@@ -1,6 +1,7 @@
 import React, { useState, useRef, useEffect } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
 import { useTranslation } from "react-i18next";
+import axios from "axios";
 import { FaSearch, FaBookmark, FaUserAlt, FaRegCompass, FaLanguage } from "react-icons/fa";
 import { MdCollections } from "react-icons/md";
 import { PiMoon, PiSun, PiGlobe } from 'react-icons/pi';
@@ -18,6 +19,9 @@ const DesktopSidebar: React.FC = () => {
   const [showDropdown, setShowDropdown] = useState(false);
   const [currentView, setCurrentView] = useState<'main' | 'language' | 'country' | 'theme'>('main');
   const dropdownRef = useRef<HTMLDivElement>(null);
+  const backendUrl = import.meta.env.DEV
+    ? import.meta.env.VITE_BACKEND_URL
+    : import.meta.env.VITE_BACKEND_URL_PROD;
 
   // Helper function to check if a route is active
   const isActive = (path: string) => location.pathname === path;
@@ -68,15 +72,36 @@ const DesktopSidebar: React.FC = () => {
     setCurrentView('main');
   };
 
-  const handleLogout = () => {
-    localStorage.removeItem("email");
-    localStorage.removeItem("username");
-    localStorage.removeItem("access_token");
-    localStorage.removeItem("refresh_token");
+  const handleLogout = async () => {
+    try {
+      const refreshToken = localStorage.getItem("refresh_token");
+      const accessToken = localStorage.getItem("access_token");
 
-    navigate("/login");
+      if (refreshToken) {
+        // Call the backend logout endpoint using axios
+        await axios.post(
+          `${backendUrl}/api/auth/logout/`,
+          { refresh: refreshToken },
+          {
+            headers: {
+              "Content-Type": "application/json",
+              "Authorization": `Bearer ${accessToken}`
+            }
+          }
+        );
+      }
+    } catch (error) {
+      console.error("Logout error:", error);
+    } finally {
+      // Clear local storage regardless of server response
+      localStorage.removeItem("email");
+      localStorage.removeItem("username");
+      localStorage.removeItem("access_token");
+      localStorage.removeItem("refresh_token");
+
+      navigate("/login");
+    }
   };
-
 
   return (
     <nav className={styles.desktopSidebar}>

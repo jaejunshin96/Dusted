@@ -8,7 +8,7 @@ import { toast } from "react-toastify";
 import { Folder } from "../../types/types";
 import FolderList from "../folder/FolderList";
 import { getFolders, postFolder } from "../../services/folder";
-import { GENRE_MAP } from "../../constants/genreMap";
+import { getGenreName } from "../../constants/genreMap";
 
 interface ReviewDetailModalProps {
   review: Review;
@@ -104,7 +104,7 @@ const ReviewModal: React.FC<ReviewDetailModalProps> = ({ review, onClose, onSave
       : genreIds.split(',').map(id => parseInt(id.trim(), 10));
 
     return ids
-      .map(id => GENRE_MAP[id] || `Unknown (${id})`)
+      .map(id => getGenreName(id, t))
       .join(", ");
   };
 

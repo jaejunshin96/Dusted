@@ -178,7 +178,7 @@ const FolderSlide: React.FC<FolderSlideProps> = ({
                       className={`${styles.optionItem} ${styles.deleteOption}`}
                       onClick={handleDelete}
                     >
-                      {t("Delate folder")}
+                      {t("Delete folder")}
                     </button>
                   )}
 
