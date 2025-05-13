@@ -4,18 +4,15 @@ import axios from "axios";
 import styles from "./NewPasswordPage.module.css";
 import { useTranslation } from "react-i18next";
 
-//interface ResetResponse {
-//  success?: boolean;
-//  message?: string;
-//  Error?: string;
-//}
-
 const NewPasswordPage: React.FC = () => {
   const { t } = useTranslation();
   const [password, setPassword] = useState<string>("");
   const [password2, setPassword2] = useState<string>("");
   const [error, setError] = useState<string | null>(null);
   const [message, setMessage] = useState<string | null>(null);
+  const [passwordError, setPasswordError] = useState<string | null>(null);
+  const [passwordMatchError, setPasswordMatchError] = useState<string | null>(null);
+  const [isFormValid, setIsFormValid] = useState<boolean>(false);
   const navigate = useNavigate();
   const [isRedirecting, setIsRedirecting] = useState(false);
   const location = useLocation();
@@ -27,9 +24,59 @@ const NewPasswordPage: React.FC = () => {
 
   useEffect(() => {
     if (!uidb64 || !token) {
-      navigate("/"); // Redirect to home if token is invalid
+      navigate("/");
     }
   }, [uidb64, token, navigate]);
+
+  // Password validation function
+  const validatePassword = (password: string): boolean => {
+    const hasLetter = /[a-zA-Z]/.test(password);
+    const hasDigit = /[0-9]/.test(password);
+    const hasSpecial = /[!@#$%^&*()_+\-=[\]{};':"\\|,.<>/?]+/.test(password);
+    const isLongEnough = password.length >= 9;
+
+    return hasLetter && hasDigit && hasSpecial && isLongEnough;
+  };
+
+  // Password validation effect
+  useEffect(() => {
+    if (password) {
+      const hasLetter = /[a-zA-Z]/.test(password);
+      const hasDigit = /[0-9]/.test(password);
+      const hasSpecial = /[!@#$%^&*()_+\-=[\]{};':"\\|,.<>/?]+/.test(password);
+      const isLongEnough = password.length >= 9;
+
+      if (!isLongEnough || !hasLetter || !hasDigit || !hasSpecial) {
+        setPasswordError(t("Password must be at least 9 characters long and include letters, numbers, and special characters (!@#$%^&*)."));
+      } else {
+        setPasswordError(null);
+      }
+    } else {
+      setPasswordError(null);
+    }
+  }, [password, t]);
+
+  // Password match validation effect
+  useEffect(() => {
+    if (password2) {
+      if (password !== password2) {
+        setPasswordMatchError(t("Passwords do not match"));
+      } else {
+        setPasswordMatchError(null);
+      }
+    } else {
+      setPasswordMatchError(null);
+    }
+  }, [password, password2, t]);
+
+  // Form validation effect
+  useEffect(() => {
+    const isPasswordValid = validatePassword(password);
+    const doPasswordsMatch = password === password2;
+
+    setIsFormValid(isPasswordValid && doPasswordsMatch);
+    setError(null);
+  }, [password, password2]);
 
   const handleResetPassword = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -40,8 +87,7 @@ const NewPasswordPage: React.FC = () => {
       return;
     }
 
-    if (password !== password2) {
-      setError(t("Passwords do not match."));
+    if (!isFormValid) {
       return;
     }
 
@@ -58,8 +104,8 @@ const NewPasswordPage: React.FC = () => {
       }
     } catch (err: any) {
       if (err.response?.data?.password) {
-        setError(t("Password must be at least 8 characters long."))
-      } else if (err.response?.data?.password) {
+        setError(t("Password must be at least 9 characters long and include letters, numbers, and special characters."))
+      } else if (err.response?.data?.password2) {
         setError(t("Passwords do not match."));
       } else {
         setError(t("An unexpected error occurred."));
@@ -74,21 +120,53 @@ const NewPasswordPage: React.FC = () => {
         {error && <p className={styles.error}>{error}</p>}
         {message && <p className={styles.message}>{message}</p>}
         <form onSubmit={handleResetPassword}>
-          <input
-            type="password"
-            placeholder={t("New Password")}
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
-            required
-          />
-          <input
-            type="password"
-            placeholder={t("Confirm Password")}
-            value={password2}
-            onChange={(e) => setPassword2(e.target.value)}
-            required
-          />
-          <button type="submit" disabled={isRedirecting}>{t("Reset Password")}</button>
+          <div className={styles.formGroup}>
+            <div className={styles.labelWithValidation}>
+              <label htmlFor="password">{t("New Password")}</label>
+              <div className={styles.validationIndicators}>
+                <span className={password.length >= 9 ? styles.validRule : styles.invalidRule} title={t("9+ characters")}>
+                  9+
+                </span>
+                <span className={/[a-zA-Z]/.test(password) ? styles.validRule : styles.invalidRule} title={t("Contains letters")}>
+                  A
+                </span>
+                <span className={/[0-9]/.test(password) ? styles.validRule : styles.invalidRule} title={t("Contains numbers")}>
+                  1
+                </span>
+                <span className={/[!@#$%^&*()_+\-=[\]{};':"\\|,.<>/?]+/.test(password) ? styles.validRule : styles.invalidRule} title={t("Contains special characters")}>
+                  @
+                </span>
+              </div>
+            </div>
+            <input
+              id="password"
+              type="password"
+              placeholder={t("New Password")}
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+              required
+              className={passwordError ? styles.inputError : ""}
+            />
+            {passwordError && <p className={styles.fieldError}>{passwordError}</p>}
+          </div>
+
+          <div className={styles.formGroup}>
+            <label htmlFor="confirmPassword">{t("Confirm Password")}</label>
+            <input
+              id="confirmPassword"
+              type="password"
+              placeholder={t("Confirm Password")}
+              value={password2}
+              onChange={(e) => setPassword2(e.target.value)}
+              required
+              className={passwordMatchError ? styles.inputError : ""}
+            />
+            {passwordMatchError && <p className={styles.fieldError}>{passwordMatchError}</p>}
+          </div>
+
+          <button type="submit" disabled={isRedirecting || !isFormValid}>
+            {t("Reset Password")}
+          </button>
         </form>
       </div>
     </div>

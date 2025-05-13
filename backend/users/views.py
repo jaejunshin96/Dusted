@@ -62,11 +62,38 @@ class RegisterUserView(APIView):
             current_site = os.getenv("BACKEND_URL", "http://localhost")
             relative_link = reverse('verify-email')
             absurl = current_site + relative_link + "?token=" + str(token)
-            email_body = 'Hello, ' + user.username + '\n' + \
-                'Welcome to Dusted.\n' + \
-                'Use the link below to verify your email.\n\n' + absurl
-            data = {'email_body': email_body, 'to_email': user.email,
-                    'email_subject': 'Verify your email to activate the account'}
+
+            email_body = f"""
+                <!DOCTYPE html>
+                <html>
+                <head>
+                    <style>
+                        body {{ font-family: Arial, sans-serif; line-height: 1.6; color: #333; max-width: 600px; margin: 0 auto; padding: 20px; }}
+                        .container {{ border: 1px solid #ddd; border-radius: 5px; padding: 20px; text-align: center; }}
+                        .button {{ background-color: #8090ff; color: white; padding: 12px 20px; text-decoration: none; display: inline-block; border-radius: 4px; margin: 20px 0; }}
+                        .footer {{ margin-top: 30px; font-size: 12px; color: #777; }}
+                    </style>
+                </head>
+                <body>
+                    <div class="container">
+                        <h2>Welcome to Dusted!</h2>
+                        <p>Hello, {user.username},</p>
+                        <p>Thank you for signing up. Please verify your email address to activate your account.</p>
+                        <a href="{absurl}" class="button">Verify Email</a>
+                        <p>If you did not create an account, no further action is required.</p>
+                        <div class="footer">
+                            <p>The Dusted Team</p>
+                        </div>
+                    </div>
+                </body>
+                </html>
+            """
+            data = {
+                'email_body': email_body,
+                'to_email': user.email,
+                'email_subject': 'Verify your email to activate the account',
+                'is_html': True
+            }
 
             Util.send_email(data)
 
@@ -84,7 +111,7 @@ class VerifyEmail(APIView):
             if not user.is_verified:
                 user.is_verified = True
                 user.save()
-            domain_url = os.getenv("FRONTEND_URL", "http://localhost")
+            domain_url = os.getenv("DOMAIN_URL", "http://localhost")
             activation_confirm_url = f"{domain_url}/activation-confirm?token={token}"
             return redirect(activation_confirm_url)
             #return Response({'email': 'Successfully activated'}, status=status.HTTP_200_OK)
@@ -150,9 +177,40 @@ class RequestPasswordResetEmail(APIView):
                 relative_link = reverse('password-reset-confirm', kwargs={'uidb64': uidb64, 'token': token})
 
                 absurl = current_site + relative_link
-                email_body = 'Hello, \nUse link below to reset your password.\n\n' + absurl
-                data = {'email_body': email_body, 'to_email': user.email,
-                        'email_subject': 'Reset your password'}
+
+                email_body = f"""
+                    <!DOCTYPE html>
+                    <html>
+                    <head>
+                        <style>
+                            body {{ font-family: Arial, sans-serif; line-height: 1.6; color: #333; max-width: 600px; margin: 0 auto; padding: 20px; }}
+                            .container {{ border: 1px solid #ddd; border-radius: 5px; padding: 20px; text-align: center; }}
+                            .button {{ background-color: #8090ff; color: white; padding: 12px 20px; text-decoration: none; display: inline-block; border-radius: 4px; margin: 20px 0; }}
+                            .footer {{ margin-top: 30px; font-size: 12px; color: #777; }}
+                        </style>
+                    </head>
+                    <body>
+                        <div class="container">
+                            <h2>Password Reset</h2>
+                            <p>Hello, {user.username}</p>
+                            <p>We received a request to reset your password for your Dusted account.</p>
+                            <p>Please click the button below to reset your password:</p>
+                            <a href="{absurl}" class="button">Reset Password</a>
+                            <p>If you did not request a password reset, please ignore this email.</p>
+                            <p>This link will expire in 24 hours.</p>
+                            <div class="footer">
+                                <p>The Dusted Team</p>
+                            </div>
+                        </div>
+                    </body>
+                    </html>
+                """
+                data = {
+                    'email_body': email_body,
+                    'to_email': user.email,
+                    'email_subject': 'Reset your password',
+                    'is_html': True
+                }
 
                 Util.send_email(data)
                 return Response({'success': 'We have sent you a link to reset your password.'}, status=status.HTTP_200_OK)
@@ -169,11 +227,11 @@ class PasswordResetTokenConfirm(APIView):
             if not PasswordResetTokenGenerator().check_token(user, token):
                 #I guess this should be a redirect to the frontend 404 page?
                 #return Response({'Error': 'Token is not valid, please request a new one'}, status=status.HTTP_401_UNAUTHORIZED)
-                domain_url = os.getenv("FRONTEND_URL", "http://localhost")
+                domain_url = os.getenv("DOMAIN_URL", "http://localhost")
                 frontend_404_url = f'{domain_url}/404'
                 return redirect(frontend_404_url)
 
-            domain_url = os.getenv("FRONTEND_URL", "http://localhost")
+            domain_url = os.getenv("DOMAIN_URL", "http://localhost")
             password_reset_complete_url = f"{domain_url}/password-reset-complete?uidb64={uidb64}&token={token}"
             return redirect(password_reset_complete_url)
         except DjangoUnicodeDecodeError as identifier:

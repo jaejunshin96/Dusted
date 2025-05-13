@@ -46,7 +46,8 @@ class Google:
             id_info = id_token.verify_oauth2_token(
                 token_data['id_token'],
                 google_requests.Request(),
-                os.environ.get('VITE_GOOGLE_CLIENT_ID')
+                os.environ.get('VITE_GOOGLE_CLIENT_ID'),
+                clock_skew_in_seconds=0,
             )
 
             return id_info
