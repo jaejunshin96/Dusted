@@ -7,145 +7,84 @@ const Terms: React.FC = () => {
       <h1 className="terms-title">Terms and Conditions</h1>
       <div className="terms-content">
         <section className="terms-section">
-          <p>Welcome to Dusted!</p>
-
-          <p>These terms and conditions outline the rules and regulations for the use of Dusted's Website, located at www.dustedfilm.com.</p>
-
-          <p>By accessing this website we assume you accept these terms and conditions. Do not continue to use Dusted if you do not agree to take all of the terms and conditions stated on this page.</p>
-
-          <p>The following terminology applies to these Terms and Conditions, Privacy Statement and Disclaimer Notice and all Agreements: "Client", "You" and "Your" refers to you, the person log on this website and compliant to the Company's terms and conditions. "The Company", "Ourselves", "We", "Our" and "Us", refers to our Company. "Party", "Parties", or "Us", refers to both the Client and ourselves. All terms refer to the offer, acceptance and consideration of payment necessary to undertake the process of our assistance to the Client in the most appropriate manner for the express purpose of meeting the Client's needs in respect of provision of the Company's stated services, in accordance with and subject to, prevailing law of Netherlands. Any use of the above terminology or other words in the singular, plural, capitalization and/or he/she or they, are taken as interchangeable and therefore as referring to same.</p>
+          <h2>1. Acceptance of Terms</h2>
+          <p>Welcome to Dusted ("we," "us," "our"). These Terms of Service ("Terms") govern your access to and use of www.dustedfilm.com and any related services (collectively, "Services"). By creating an account or otherwise using the Services, you agree to be bound by these Terms.</p>
         </section>
 
         <section className="terms-section">
-          <h2>Cookies</h2>
-
-          <p>We employ the use of cookies. By accessing Dusted, you agreed to use cookies in agreement with the Dusted's Privacy Policy.</p>
-
-          <p>Most interactive websites use cookies to let us retrieve the user's details for each visit. Cookies are used by our website to enable the functionality of certain areas to make it easier for people visiting our website. Some of our affiliate/advertising partners may also use cookies.</p>
+          <h2>2. Eligibility</h2>
+          <p>You must be at least 13 years old to use our Services. By registering, you confirm that you meet this requirement and have the legal capacity to enter into these Terms.</p>
         </section>
 
         <section className="terms-section">
-          <h2>License</h2>
-
-          <p>Unless otherwise stated, Dusted and/or its licensors own the intellectual property rights for all material on Dusted. All intellectual property rights are reserved. You may access this from Dusted for your own personal use subjected to restrictions set in these terms and conditions.</p>
-
-          <p>You must not:</p>
-          <ul>
-            <li>Republish material from Dusted</li>
-            <li>Sell, rent or sub-license material from Dusted</li>
-            <li>Reproduce, duplicate or copy material from Dusted</li>
-            <li>Redistribute content from Dusted</li>
-          </ul>
-
-          <p>This Agreement shall begin on the date hereof. Our Terms and Conditions were created with the help of the <a href="https://www.freetoolshub.com/" className="terms-link">Terms and Conditions Generator</a>.</p>
-
-          <p>Parts of this website offer an opportunity for users to post and exchange opinions and information in certain areas of the website. Dusted does not filter, edit, publish or review Comments prior to their presence on the website. Comments do not reflect the views and opinions of Dusted,its agents and/or affiliates. Comments reflect the views and opinions of the person who post their views and opinions. To the extent permitted by applicable laws, Dusted shall not be liable for the Comments or for any liability, damages or expenses caused and/or suffered as a result of any use of and/or posting of and/or appearance of the Comments on this website.</p>
-
-          <p>Dusted reserves the right to monitor all Comments and to remove any Comments which can be considered inappropriate, offensive or causes breach of these Terms and Conditions.</p>
-
-          <p>You warrant and represent that:</p>
-
-          <ul>
-            <li>You are entitled to post the Comments on our website and have all necessary licenses and consents to do so;</li>
-            <li>The Comments do not invade any intellectual property right, including without limitation copyright, patent or trademark of any third party;</li>
-            <li>The Comments do not contain any defamatory, libelous, offensive, indecent or otherwise unlawful material which is an invasion of privacy</li>
-            <li>The Comments will not be used to solicit or promote business or custom or present commercial activities or unlawful activity.</li>
-          </ul>
-
-          <p>You hereby grant Dusted a non-exclusive license to use, reproduce, edit and authorize others to use, reproduce and edit any of your Comments in any and all forms, formats or media.</p>
+          <h2>3. Account Registration & Login</h2>
+          <p>3.1 Account Creation. To access certain features, you must register for an account by providing a valid email address and password. You're responsible for keeping your credentials secure.</p>
+          <p>3.2 Third-Party Social Login. We offer login via third-party providers (e.g., Google, Facebook). You authorize us to access basic profile information (name, email, profile picture) from those providers. Your use of these login options is subject to the providers' terms and policies.</p>
         </section>
 
         <section className="terms-section">
-          <h2>Hyperlinking to our Content</h2>
-
-          <p>The following organizations may link to our Website without prior written approval:</p>
-
-          <ul>
-            <li>Government agencies;</li>
-            <li>Search engines;</li>
-            <li>News organizations;</li>
-            <li>Online directory distributors may link to our Website in the same manner as they hyperlink to the Websites of other listed businesses; and</li>
-            <li>System wide Accredited Businesses except soliciting non-profit organizations, charity shopping malls, and charity fundraising groups which may not hyperlink to our Web site.</li>
-          </ul>
-
-          <p>These organizations may link to our home page, to publications or to other Website information so long as the link: (a) is not in any way deceptive; (b) does not falsely imply sponsorship, endorsement or approval of the linking party and its products and/or services; and (c) fits within the context of the linking party's site.</p>
-
-          <p>We may consider and approve other link requests from the following types of organizations:</p>
-
-          <ul>
-            <li>commonly-known consumer and/or business information sources;</li>
-            <li>dot.com community sites;</li>
-            <li>associations or other groups representing charities;</li>
-            <li>online directory distributors;</li>
-            <li>internet portals;</li>
-            <li>accounting, law and consulting firms; and</li>
-            <li>educational institutions and trade associations.</li>
-          </ul>
-
-          <p>We will approve link requests from these organizations if we decide that: (a) the link would not make us look unfavorably to ourselves or to our accredited businesses; (b) the organization does not have any negative records with us; (c) the benefit to us from the visibility of the hyperlink compensates the absence of Dusted; and (d) the link is in the context of general resource information.</p>
-
-          <p>These organizations may link to our home page so long as the link: (a) is not in any way deceptive; (b) does not falsely imply sponsorship, endorsement or approval of the linking party and its products or services; and (c) fits within the context of the linking party's site.</p>
-
-          <p>If you are one of the organizations listed in paragraph 2 above and are interested in linking to our website, you must inform us by sending an e-mail to Dusted. Please include your name, your organization name, contact information as well as the URL of your site, a list of any URLs from which you intend to link to our Website, and a list of the URLs on our site to which you would like to link. Wait 2-3 weeks for a response.</p>
-
-          <p>Approved organizations may hyperlink to our Website as follows:</p>
-
-          <ul>
-            <li>By use of our corporate name; or</li>
-            <li>By use of the uniform resource locator being linked to; or</li>
-            <li>By use of any other description of our Website being linked to that makes sense within the context and format of content on the linking party's site.</li>
-          </ul>
-
-          <p>No use of Dusted's logo or other artwork will be allowed for linking absent a trademark license agreement.</p>
+          <h2>4. Subscription, Billing & Payment</h2>
+          <p>4.1 Subscription Plans. Premium features require a recurring monthly subscription. Current pricing is displayed on our site.</p>
+          <p>4.2 Automatic Renewal. Subscriptions auto-renew each month at the then-current rate. We'll charge your payment method on file unless you cancel before renewal.</p>
+          <p>4.3 Payment Methods. We accept major credit cards and other payment methods offered at checkout.</p>
+          <p>4.4 Cancellation & Refunds. You can cancel anytime via account settings. Cancellation takes effect at period end; fees already paid are non-refundable, except as required by law.</p>
         </section>
 
         <section className="terms-section">
-          <h2>iFrames</h2>
-
-          <p>Without prior approval and written permission, you may not create frames around our Webpages that alter in any way the visual presentation or appearance of our Website.</p>
+          <h2>5. User Content</h2>
+          <p>5.1 Your Content. You retain ownership of any content you upload or post ("User Content"). By submitting it, you grant Dusted a worldwide, royalty-free license to host, display, and distribute that content in connection with the Services.</p>
+          <p>5.2 Prohibited Content. You agree not to post anything unlawful, infringing, obscene, defamatory, or otherwise objectionable.</p>
+          <p>5.3 Moderation Rights. We may review, remove, or disable access to any User Content at our discretion and without notice.</p>
         </section>
 
         <section className="terms-section">
-          <h2>Content Liability</h2>
-
-          <p>We shall not be hold responsible for any content that appears on your Website. You agree to protect and defend us against all claims that is rising on your Website. No link(s) should appear on any Website that may be interpreted as libelous, obscene or criminal, or which infringes, otherwise violates, or advocates the infringement or other violation of, any third party rights.</p>
+          <h2>6. Intellectual Property</h2>
+          <p>All materials on the Site (text, graphics, logos, code) are owned by Dusted or its licensors. You may not copy, modify, distribute, or create derivative works without prior written permission.</p>
         </section>
 
         <section className="terms-section">
-          <h2>Your Privacy</h2>
-
-          <p>Please read Privacy Policy</p>
+          <h2>7. Privacy</h2>
+          <p>Your use of the Services is governed by our Privacy Policy, available at [Privacy Policy link], which explains how we collect, use, and share your data.</p>
         </section>
 
         <section className="terms-section">
-          <h2>Reservation of Rights</h2>
-
-          <p>We reserve the right to request that you remove all links or any particular link to our Website. You approve to immediately remove all links to our Website upon request. We also reserve the right to amen these terms and conditions and it's linking policy at any time. By continuously linking to our Website, you agree to be bound to and follow these linking terms and conditions.</p>
+          <h2>8. Third-Party Services</h2>
+          <p>We may link to or integrate with third-party sites, services, or APIs. Your interactions with those are governed by their own terms and privacy practices. We're not responsible for their content or policies.</p>
         </section>
 
         <section className="terms-section">
-          <h2>Removal of links from our website</h2>
-
-          <p>If you find any link on our Website that is offensive for any reason, you are free to contact and inform us any moment. We will consider requests to remove links but we are not obligated to or so or to respond to you directly.</p>
-
-          <p>We do not ensure that the information on this website is correct, we do not warrant its completeness or accuracy; nor do we promise to ensure that the website remains available or that the material on the website is kept up to date.</p>
+          <h2>9. Disclaimers</h2>
+          <p>THE SERVICES ARE PROVIDED "AS IS" AND "AS AVAILABLE," WITHOUT WARRANTIES OF ANY KIND, EXPRESS OR IMPLIED.</p>
         </section>
 
         <section className="terms-section">
-          <h2>Disclaimer</h2>
+          <h2>10. Limitation of Liability</h2>
+          <p>TO THE MAXIMUM EXTENT PERMITTED BY LAW, DUSTED WILL NOT BE LIABLE FOR ANY INDIRECT, INCIDENTAL, SPECIAL, OR CONSEQUENTIAL DAMAGES.</p>
+        </section>
 
-          <p>To the maximum extent permitted by applicable law, we exclude all representations, warranties and conditions relating to our website and the use of this website. Nothing in this disclaimer will:</p>
+        <section className="terms-section">
+          <h2>11. Indemnification</h2>
+          <p>You agree to defend, indemnify, and hold harmless Dusted and its affiliates from any claims, liabilities, damages, or expenses arising out of your breach of these Terms or your use of the Services.</p>
+        </section>
 
-          <ul>
-            <li>limit or exclude our or your liability for death or personal injury;</li>
-            <li>limit or exclude our or your liability for fraud or fraudulent misrepresentation;</li>
-            <li>limit any of our or your liabilities in any way that is not permitted under applicable law; or</li>
-            <li>exclude any of our or your liabilities that may not be excluded under applicable law.</li>
-          </ul>
+        <section className="terms-section">
+          <h2>12. Governing Law</h2>
+          <p>These Terms are governed by the laws of [JURISDICTION], without regard to conflict-of-law principles.</p>
+        </section>
 
-          <p>The limitations and prohibitions of liability set in this Section and elsewhere in this disclaimer: (a) are subject to the preceding paragraph; and (b) govern all liabilities arising under the disclaimer, including liabilities arising in contract, in tort and for breach of statutory duty.</p>
+        <section className="terms-section">
+          <h2>13. Changes to Terms</h2>
+          <p>We may update these Terms at any time. Significant changes will be communicated via the Site or email. Continued use after updates constitutes your acceptance.</p>
+        </section>
 
-          <p>As long as the website and the information and services on the website are provided free of charge, we will not be liable for any loss or damage of any nature.</p>
+        <section className="terms-section">
+          <h2>14. Termination</h2>
+          <p>We reserve the right to suspend or terminate your access for violations of these Terms or misuse of the Services.</p>
+        </section>
+
+        <section className="terms-section">
+          <h2>15. Contact Us</h2>
+          <p>If you have questions or need support, email jaeshinkorean@gmail..com.</p>
         </section>
       </div>
 
