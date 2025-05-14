@@ -204,8 +204,6 @@ const MobileHeader: React.FC = () => {
                   <IoChevronForward size={18} />
                 </div>
 
-                {/*<div className={styles.mobileNavDivider}></div>*/}
-
                 <div className={`${styles.navLink} ${styles.logoutButton}`} onClick={handleLogout}>
                   <span>{t("Log out")}</span>
                 </div>
