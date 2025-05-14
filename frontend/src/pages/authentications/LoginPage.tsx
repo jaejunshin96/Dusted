@@ -22,6 +22,7 @@ const LoginPage: React.FC = () => {
   const [email, setEmail] = useState<string>("");
   const [password, setPassword] = useState<string>("");
   const [disabled, setDisabled] = useState<boolean>(false);
+  const [isLoading, setIsLoading] = useState<boolean>(false);
   const [error, setError] = useState<string | null>(null);
   const navigate = useNavigate();
   const backendUrl = import.meta.env.DEV ? import.meta.env.VITE_BACKEND_URL : import.meta.env.VITE_BACKEND_URL_PROD;
@@ -43,6 +44,7 @@ const LoginPage: React.FC = () => {
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
     setError(null);
+    setIsLoading(true);
 
     try {
       const response = await axios.post(`${backendUrl}/api/auth/login/`, {
@@ -73,6 +75,8 @@ const LoginPage: React.FC = () => {
       } else {
         setError(t("An unexpected error occurred."));
       }
+    } finally {
+      setIsLoading(false);
     }
   };
 
@@ -116,7 +120,12 @@ const LoginPage: React.FC = () => {
               onChange={(e) => setPassword(e.target.value)}
               required
             />
-            <button type="submit" disabled={disabled}>{t("Login")}</button>
+            <button
+              type="submit"
+              disabled={disabled || isLoading}
+            >
+              {isLoading ? t("Logging in...") : t("Login")}
+            </button>
           </form>
 
           <p>

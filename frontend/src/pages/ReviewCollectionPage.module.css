@@ -1,5 +1,6 @@
 /* ReviewCollectionPage.module.css */
 .container {
+  min-height: 90vh;
   width: 65vw;
   margin: 0 auto;
 }
