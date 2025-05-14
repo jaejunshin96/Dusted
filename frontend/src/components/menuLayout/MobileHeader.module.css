@@ -33,7 +33,7 @@
   right: 0;
   bottom: 0;
   width: 100%;
-  height: calc(100vh - 60px);
+  max-height: 100vh;
   background-color: var(--background-color);
   padding-top: 40px;
   padding-bottom: 40px;
