@@ -181,6 +181,7 @@ REST_FRAMEWORK = {
 SIMPLE_JWT = {
     "ACCESS_TOKEN_LIFETIME": timedelta(minutes=15),
     "REFRESH_TOKEN_LIFETIME": timedelta(days=7),
+    "TOKEN_BLACKLIST_PRUNE_INTERVAL": 60 * 60 * 24,
 }
 
 CACHES = {
