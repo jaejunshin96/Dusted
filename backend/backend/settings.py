@@ -34,7 +34,10 @@ SECRET_KEY = os.getenv('SECRET_KEY')
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = os.getenv('DEBUG')
 
-ALLOWED_HOSTS = [os.getenv('ALLOWED_HOSTS'), os.getenv('ALLOWED_HOSTS2')]
+ALLOWED_HOSTS = [
+    os.getenv('ALLOWED_HOSTS'),
+    os.getenv('ALLOWED_HOSTS_2')
+]
 
 
 # Application definition
@@ -72,7 +75,7 @@ MIDDLEWARE = [
 ]
 
 CORS_ALLOWED_ORIGINS = [
-    os.getenv('FRONTEND_URL', 'http://127.0.0.1:5173'),
+    #os.getenv('FRONTEND_URL', 'http://127.0.0.1:5173'),
     os.getenv('DOMAIN_URL', 'http://dustedfilm.com'),
     'https://dustedfilm.com',
     'http://dustedfilm.com',
