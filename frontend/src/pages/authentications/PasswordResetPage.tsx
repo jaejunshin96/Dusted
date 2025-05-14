@@ -16,7 +16,7 @@ const PasswordResetPage: React.FC = () => {
   const [message, setMessage] = useState<string | null>(null);
   const [loading, setLoading] = useState<boolean>(false);
   const navigate = useNavigate();
-  const backendUrl = import.meta.env.DEV ? import.meta.env.VITE_BACKEND_URL : import.meta.env.VITE_BACKEND_URL_PROD;
+  const backendUrl = import.meta.env.VITE_BACKEND_URL;
 
   const handleResetRequest = async (e: React.FormEvent) => {
     e.preventDefault();

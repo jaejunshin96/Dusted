@@ -9,7 +9,7 @@ const ActivationConfirmPage: React.FC = () => {
   const [isValid, setIsValid] = useState<boolean | null>(null);
   const location = useLocation();
   const navigate = useNavigate();
-  const backendUrl = import.meta.env.DEV ? import.meta.env.VITE_BACKEND_URL : import.meta.env.VITE_BACKEND_URL_PROD;
+  const backendUrl = import.meta.env.VITE_BACKEND_URL;
 
   useEffect(() => {
     const token = new URLSearchParams(location.search).get("token");

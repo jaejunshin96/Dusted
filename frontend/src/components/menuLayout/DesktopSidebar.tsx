@@ -19,9 +19,7 @@ const DesktopSidebar: React.FC = () => {
   const [showDropdown, setShowDropdown] = useState(false);
   const [currentView, setCurrentView] = useState<'main' | 'language' | 'country' | 'theme'>('main');
   const dropdownRef = useRef<HTMLDivElement>(null);
-  const backendUrl = import.meta.env.DEV
-    ? import.meta.env.VITE_BACKEND_URL
-    : import.meta.env.VITE_BACKEND_URL_PROD;
+  const backendUrl = import.meta.env.VITE_BACKEND_URL;
 
   // Helper function to check if a route is active
   const isActive = (path: string) => location.pathname === path;

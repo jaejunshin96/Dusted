@@ -11,9 +11,7 @@ const ProfilePage: React.FC = () => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
 
-  const backendUrl = import.meta.env.DEV
-    ? import.meta.env.VITE_BACKEND_URL
-    : import.meta.env.VITE_BACKEND_URL_PROD;
+  const backendUrl = import.meta.env.VITE_BACKEND_URL;
 
   useEffect(() => {
     const fetchProfile = async () => {

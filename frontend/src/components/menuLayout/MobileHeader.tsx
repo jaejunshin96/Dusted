@@ -20,9 +20,7 @@ const MobileHeader: React.FC = () => {
   const [showMobileMenu, setShowMobileMenu] = useState(false);
   const [currentView, setCurrentView] = useState<'main' | 'language' | 'country' | 'theme'>('main');
   const menuRef = useRef<HTMLDivElement>(null);
-  const backendUrl = import.meta.env.DEV
-    ? import.meta.env.VITE_BACKEND_URL
-    : import.meta.env.VITE_BACKEND_URL_PROD;
+  const backendUrl = import.meta.env.VITE_BACKEND_URL;
 
   // Add this effect to disable scrolling when mobile menu is open
   useEffect(() => {

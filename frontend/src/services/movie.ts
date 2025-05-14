@@ -1,8 +1,6 @@
 import authAxios from '../utils/authentications/authFetch';
 
-const backendUrl = import.meta.env.DEV
-    ? import.meta.env.VITE_BACKEND_URL
-    : import.meta.env.VITE_BACKEND_URL_PROD;
+const backendUrl = import.meta.env.VITE_BACKEND_URL;
 
 const API_URL = `${backendUrl}/api/film`;
 

@@ -20,7 +20,7 @@ const RegisterPage: React.FC = () => {
   const [isFormValid, setIsFormValid] = useState<boolean>(false);
   const [passwordMatchError, setPasswordMatchError] = useState<string | null>(null);
   const navigate = useNavigate();
-  const backendUrl = import.meta.env.DEV ? import.meta.env.VITE_BACKEND_URL : import.meta.env.VITE_BACKEND_URL_PROD;
+  const backendUrl = import.meta.env.VITE_BACKEND_URL;
 
   // Set default country and language from browser settings
   useEffect(() => {
