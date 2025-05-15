@@ -74,39 +74,67 @@ const MovieModal: React.FC<MovieModalProps> = ({ movie, onClose }) => {
   }, [movie.movie_id]);
 
   useEffect(() => {
-    if (!movie.backdrop_path) {
-      setLoading(true);
-      return;
-    }
-
-    const img = new Image();
-    img.src = `https://image.tmdb.org/t/p/w1280${movie.backdrop_path || movie.poster_path}`;
-    img.onload = () => setLoading(true);
-  }, [movie.backdrop_path, movie.poster_path]);
-
-  useEffect(() => {
     setError(null);
     setTextCount(reviewText.length);
   }, [reviewText, rating]);
 
-  //to fetch trailer data
+  //to fetch trailer data and image loading
   useEffect(() => {
+    // Flag to track overall loading state
+    let imageLoaded = false;
+    let trailerFetched = false;
+
+    // Function to check and update loading state
+    const updateLoadingState = () => {
+      if (imageLoaded && trailerFetched) {
+        setLoading(true);
+      }
+    };
+
+    // Start image loading
+    if (!movie.backdrop_path && !movie.poster_path) {
+      imageLoaded = true;
+    } else {
+      const img = new Image();
+      img.src = `https://image.tmdb.org/t/p/w1280${movie.backdrop_path || movie.poster_path}`;
+      img.onload = () => {
+        imageLoaded = true;
+        updateLoadingState();
+      };
+      img.onerror = () => {
+        imageLoaded = true;
+        updateLoadingState();
+      };
+    }
+
+    // Start trailer fetching simultaneously
     const fetchTrailer = async () => {
-      if (!movie.id) return;
+      if (!movie.movie_id) {
+        trailerFetched = true;
+        updateLoadingState();
+        return;
+      }
 
       try {
         const trailerData = await getMovieTrailer(movie.movie_id, i18n.language);
-
         if (trailerData && trailerData.key) {
           setTrailerKey(trailerData.key);
         }
       } catch (error) {
         console.error("Failed to fetch trailer:", error);
+      } finally {
+        trailerFetched = true;
+        updateLoadingState();
       }
     };
 
     fetchTrailer();
-  }, [movie.movie_id, i18n.language]);
+
+    // If image is missing, ensure we update the loading state
+    if (imageLoaded) {
+      updateLoadingState();
+    }
+  }, [movie.backdrop_path, movie.poster_path, movie.movie_id, i18n.language]);
 
   // Add useEffect to detect mobile screen
   useEffect(() => {

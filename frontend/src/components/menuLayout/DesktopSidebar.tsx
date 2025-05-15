@@ -103,7 +103,9 @@ const DesktopSidebar: React.FC = () => {
 
   return (
     <nav className={styles.desktopSidebar}>
-      <div className={styles.sidebarLogo}>Dusted</div>
+      <div className={styles.sidebarLogo} onClick={() => handleNavigation("/")}>
+        Dusted
+      </div>
 
       <div className={styles.sidebarLinks}>
         <div
