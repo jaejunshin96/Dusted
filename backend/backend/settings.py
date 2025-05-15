@@ -21,6 +21,8 @@ load_dotenv()
 
 from django.conf import settings
 
+import dj_database_url
+
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
@@ -107,15 +109,19 @@ WSGI_APPLICATION = 'backend.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/5.0/ref/settings/#databases
 
+#DATABASES = {
+#	'default': {
+#		"ENGINE": os.getenv('POSTGRES_ENGINE'),
+#        "NAME": os.getenv('POSTGRES_DB'),
+#        "USER": os.getenv('POSTGRES_USER'),
+#        "PASSWORD": os.getenv('POSTGRES_PASSWORD'),
+#        "HOST": os.getenv('POSTGRES_HOST'),
+#        "PORT": os.getenv('POSTGRES_PORT'),
+#    }
+#}
+
 DATABASES = {
-	'default': {
-		"ENGINE": os.getenv('POSTGRES_ENGINE'),
-        "NAME": os.getenv('POSTGRES_DB'),
-        "USER": os.getenv('POSTGRES_USER'),
-        "PASSWORD": os.getenv('POSTGRES_PASSWORD'),
-        "HOST": os.getenv('POSTGRES_HOST'),
-        "PORT": os.getenv('POSTGRES_PORT'),
-    }
+    'default': dj_database_url.config(default=os.environ.get('DATABASE_URL'))
 }
 
 
