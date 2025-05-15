@@ -44,6 +44,7 @@
   transition: transform 0.3s ease;
   overflow-y: auto;
   -webkit-overflow-scrolling: touch;
+  scrollbar-width: thin;
 }
 
 /* Animation for mobile menu entering */

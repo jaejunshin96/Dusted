@@ -111,30 +111,6 @@ button:disabled {
   cursor: not-allowed;
 }
 
-select {
-  padding: 12px;
-  border: 1px solid var(--border-color);
-  border-radius: 5px;
-  outline: none;
-  font-size: 1rem;
-  background-color: var(--input-background);
-  color: var(--text-primary);
-  transition: border 0.3s;
-  width: 100%;
-  cursor: pointer;
-  appearance: auto; /* Preserves native dropdown arrow */
-}
-
-select:focus {
-  border-color: var(--accent-color);
-}
-
-select option {
-  background-color: var(--input-background);
-  color: var(--text-primary);
-  padding: 8px;
-}
-
 .formGroup {
   display: flex;
   flex-direction: column;
@@ -152,6 +128,31 @@ select option {
 .formGroup input,
 .formGroup select {
   margin-bottom: 0;
+}
+
+
+.formGroup select {
+  padding: 12px;
+  border: 1px solid var(--border-color);
+  border-radius: 5px;
+  outline: none;
+  font-size: 1rem;
+  background-color: var(--input-background);
+  color: var(--text-primary);
+  transition: border 0.3s;
+  width: 100%;
+  cursor: pointer;
+  appearance: auto; /* Preserves native dropdown arrow */
+}
+
+.formGroup select:focus {
+  border-color: var(--accent-color);
+}
+
+.formGroup select option {
+  background-color: var(--input-background);
+  color: var(--text-primary);
+  padding: 8px;
 }
 
 .fieldError {

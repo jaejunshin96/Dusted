@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import i18n from "../../i18n";
+import styles from './GoogleAuthCallback.module.css';
 
 const GoogleAuthCallback = () => {
   const navigate = useNavigate();
@@ -69,8 +70,8 @@ const GoogleAuthCallback = () => {
 
   if (error) {
     return (
-      <div className="flex flex-col justify-center items-center h-screen">
-        <p className="text-xl text-red-500 mb-4">Error: {error}</p>
+      <div className={styles.container}>
+        <p className={styles.errorMessage}>Error: {error}</p>
         <p>Redirecting to login page...</p>
       </div>
     );
@@ -78,9 +79,9 @@ const GoogleAuthCallback = () => {
 
   if (isProcessing) {
     return (
-      <div className="flex flex-col justify-center items-center h-screen">
-        <p className="text-xl mb-4">Processing your Google login...</p>
-        <div className="w-16 h-16 border-t-4 border-blue-500 rounded-full animate-spin"></div>
+      <div className={styles.container}>
+        <p className={styles.processingMessage}>Processing your Google login...</p>
+        <div className={styles.spinner}></div>
       </div>
     );
   }
