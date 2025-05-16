@@ -11,7 +11,6 @@ import WatchlistPage from "./pages/WatchlistPage";
 import ProfilePage from "./pages/ProfilePage";
 import NotFoundPage from "./pages/404/NotFoundPage";
 import ProtectedRoute from "./utils/authentications/ProtectedRoute";
-import PublicRoute from "./utils/authentications/PublicRoute";
 import ReviewCollectionPage from "./pages/ReviewCollectionPage";
 import PublicLayout from "./components/footer/PublicLayout";
 import MenuLayout from "./components/menuLayout/MenuLayout";
