@@ -15,7 +15,7 @@ interface ReviewDetailModalProps {
   review: Review;
   onClose: () => void;
   onSave: (updatedReview: Review) => void;
-  onDelete: (deletedReview: Review) => void;
+  onDelete: () => void;
 }
 
 const ReviewModal: React.FC<ReviewDetailModalProps> = ({ review, onClose, onSave, onDelete }) => {
@@ -157,14 +157,16 @@ const ReviewModal: React.FC<ReviewDetailModalProps> = ({ review, onClose, onSave
       setIsDeleting(true);
       try {
         await deleteReview(review.id);
-        const deletedReview = {...review};
-        onDelete(deletedReview);
+        onDelete();
 
         toast.success(t("Review deleted successfully!"));
-      } catch (error) {
-        alert(t("Failed to delete the review. Please try again."));
+      } catch (error: any) {
+        if (error.response?.data?.review) {
+          alert(t("Failed to delete the review. Please try again."));
+        }
       } finally {
         setIsDeleting(false);
+        onClose();
       }
     }
   };

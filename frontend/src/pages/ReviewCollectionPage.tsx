@@ -136,9 +136,10 @@ const ReviewCollectionPage: React.FC = () => {
     );
   };
 
-  const handleDelete = (deletedReview: Review) => {
+  const handleDelete = () => {
+    if (!selectedReview) return;
     setReviews(prevReviews =>
-      prevReviews.filter(review => review.id !== deletedReview.id)
+      prevReviews.filter(review => review.id !== selectedReview.id)
     );
     setSelectedReview(null);
   };
