@@ -7,6 +7,7 @@ import { MdCollections } from "react-icons/md";
 import { PiMoon, PiSun, PiGlobe } from 'react-icons/pi';
 import { GiHamburgerMenu } from "react-icons/gi";
 import { IoChevronBack } from "react-icons/io5";
+import { BiLoaderAlt } from "react-icons/bi";
 import ThemeToggleButton from "./ThemeToggleButton";
 import LanguageSelector from "./LanguageSelector";
 import styles from "./DesktopSidebar.module.css";
@@ -18,6 +19,7 @@ const DesktopSidebar: React.FC = () => {
   const location = useLocation();
   const [showDropdown, setShowDropdown] = useState(false);
   const [currentView, setCurrentView] = useState<'main' | 'language' | 'country' | 'theme'>('main');
+  const [isLoggingOut, setIsLoggingOut] = useState(false);
   const dropdownRef = useRef<HTMLDivElement>(null);
   const backendUrl = import.meta.env.VITE_BACKEND_URL;
 
@@ -71,6 +73,7 @@ const DesktopSidebar: React.FC = () => {
   };
 
   const handleLogout = async () => {
+    setIsLoggingOut(true);
     try {
       const refreshToken = localStorage.getItem("refresh_token");
       const accessToken = localStorage.getItem("access_token");
@@ -97,6 +100,7 @@ const DesktopSidebar: React.FC = () => {
       localStorage.removeItem("access_token");
       localStorage.removeItem("refresh_token");
 
+      setIsLoggingOut(false);
       navigate("/login");
     }
   };
@@ -180,7 +184,11 @@ const DesktopSidebar: React.FC = () => {
                   </div>
 
                   <div className={`${styles.dropdownItem} ${styles.logoutButton}`} onClick={handleLogout}>
-                    <span>{t("Log out")}</span>
+                    {isLoggingOut ? (
+                      <BiLoaderAlt size={20} className={styles.spinner} />
+                    ) : (
+                      <span>{t("Log out")}</span>
+                    )}
                   </div>
                 </div>
               )}

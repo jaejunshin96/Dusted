@@ -31,15 +31,13 @@ function App() {
         <Routes>
           {/* public access */}
           <Route element={<PublicLayout><Outlet /></PublicLayout>}>
-            <Route element={<PublicRoute/>}>
-              <Route path="/login" element={<LoginPage />} />
-              <Route path="/register" element={<RegisterPage />} />
-              {/*<Route path="/verify-email" element={<VerifyEmailPage />} />*/}
-              <Route path="/activation-confirm" element={<ActivationConfirmPage />} />
-              <Route path="/password-reset" element={<PasswordResetPage />} />
-              <Route path="/password-reset-complete" element={<NewPasswordPage />} />
-              <Route path="/auth/google/callback" element={<GoogleAuthCallback />} />
-            </Route>
+            <Route path="/login" element={<LoginPage />} />
+            <Route path="/register" element={<RegisterPage />} />
+            {/*<Route path="/verify-email" element={<VerifyEmailPage />} />*/}
+            <Route path="/activation-confirm" element={<ActivationConfirmPage />} />
+            <Route path="/password-reset" element={<PasswordResetPage />} />
+            <Route path="/password-reset-complete" element={<NewPasswordPage />} />
+            <Route path="/auth/google/callback" element={<GoogleAuthCallback />} />
           </Route>
 
           {/* authenticated access */}

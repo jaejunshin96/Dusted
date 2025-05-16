@@ -6,6 +6,7 @@ import { PiGlobe, PiMoon, PiSun } from "react-icons/pi";
 import { FaSearch, FaBookmark, FaUserAlt, FaRegCompass, FaLanguage } from "react-icons/fa";
 import { MdCollections } from "react-icons/md";
 import { IoChevronBack, IoChevronForward, IoClose } from "react-icons/io5";
+import { BiLoaderAlt } from "react-icons/bi";
 import ThemeToggleButton from "./ThemeToggleButton";
 import LanguageSelector from "./LanguageSelector";
 import CountrySelector from "./CountrySelector";
@@ -19,6 +20,7 @@ const MobileHeader: React.FC = () => {
   const username = localStorage.getItem("username");
   const [showMobileMenu, setShowMobileMenu] = useState(false);
   const [currentView, setCurrentView] = useState<'main' | 'language' | 'country' | 'theme'>('main');
+  const [isLoggingOut, setIsLoggingOut] = useState(false);
   const menuRef = useRef<HTMLDivElement>(null);
   const backendUrl = import.meta.env.VITE_BACKEND_URL;
 
@@ -68,6 +70,7 @@ const MobileHeader: React.FC = () => {
   };
 
   const handleLogout = async () => {
+    setIsLoggingOut(true);
     try {
       const refreshToken = localStorage.getItem("refresh_token");
       const accessToken = localStorage.getItem("access_token");
@@ -94,6 +97,7 @@ const MobileHeader: React.FC = () => {
       localStorage.removeItem("access_token");
       localStorage.removeItem("refresh_token");
 
+      setIsLoggingOut(false);
       closeMobileMenu();
       navigate("/login");
       window.scrollTo(0, 0);
@@ -205,7 +209,11 @@ const MobileHeader: React.FC = () => {
                 </div>
 
                 <div className={`${styles.navLink} ${styles.logoutButton}`} onClick={handleLogout}>
-                  <span>{t("Log out")}</span>
+                  {isLoggingOut ? (
+                    <BiLoaderAlt size={20} className={styles.spinner} />
+                  ) : (
+                    <span>{t("Log out")}</span>
+                  )}
                 </div>
               </>
             )}

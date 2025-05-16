@@ -164,6 +164,16 @@
   clip-path: polygon(50% 0, 100% 0, 100% 100%, 50% 100%);
 }
 
+/* Loading spinner */
+.spinner {
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
 /* Hide desktop sidebar on mobile */
 @media (max-width: 768px) {
   .desktopSidebar {

@@ -9,6 +9,7 @@ import { Folder } from "../../types/types";
 import FolderList from "../folder/FolderList";
 import { getFolders, postFolder } from "../../services/folder";
 import { getGenreName } from "../../constants/genreMap";
+import { BiLoaderAlt } from "react-icons/bi";
 
 interface ReviewDetailModalProps {
   review: Review;
@@ -30,6 +31,8 @@ const ReviewModal: React.FC<ReviewDetailModalProps> = ({ review, onClose, onSave
   const [isMobile, setIsMobile] = useState(false);
   const [folders, setFolders] = useState<Folder[]>([]);
   const [selectedFolder, setSelectedFolder] = useState<number | null>(null);
+  const [isSaving, setIsSaving] = useState(false);
+  const [isDeleting, setIsDeleting] = useState(false);
 
   useEffect(() => {
     const handleEsc = (e: KeyboardEvent) => {
@@ -127,6 +130,7 @@ const ReviewModal: React.FC<ReviewDetailModalProps> = ({ review, onClose, onSave
       return;
     }
 
+    setIsSaving(true);
     try {
       await patchReview(review.id, editedReview, editedRating, selectedFolder ?? null);
       const updatedReview = {...review, review: editedReview, rating: editedRating, folder_id: selectedFolder};
@@ -143,11 +147,14 @@ const ReviewModal: React.FC<ReviewDetailModalProps> = ({ review, onClose, onSave
       } else {
         setError(t("Failed to save the review. Please try again."));
       }
+    } finally {
+      setIsSaving(false);
     }
   };
 
   const handleDelete = async () => {
     if (window.confirm(t("Are you sure you want to delete this review?"))) {
+      setIsDeleting(true);
       try {
         await deleteReview(review.id);
         const deletedReview = {...review};
@@ -156,6 +163,8 @@ const ReviewModal: React.FC<ReviewDetailModalProps> = ({ review, onClose, onSave
         toast.success(t("Review deleted successfully!"));
       } catch (error) {
         alert(t("Failed to delete the review. Please try again."));
+      } finally {
+        setIsDeleting(false);
       }
     }
   };
@@ -167,7 +176,7 @@ const ReviewModal: React.FC<ReviewDetailModalProps> = ({ review, onClose, onSave
   return (
     <div className={styles.overlay} onClick={onClose}>
       <div
-        className={`${styles.modalContainer} ${styles.modalBackgroundImage} ${!isEditing ? '' : styles.blurred}`}
+        className={`${styles.modalContainer} ${styles.modalBackgroundImage} ${styles.blurred}`}
         style={{
           backgroundImage: `url(${getImageUrl(isMobile ? review.poster_path : (review.backdrop_path || review.poster_path))})`
         }}
@@ -300,11 +309,19 @@ const ReviewModal: React.FC<ReviewDetailModalProps> = ({ review, onClose, onSave
             </div>
 
             <div className={styles.buttonSection}>
-              <button className={`${styles.button} ${styles.deleteButton}`} onClick={handleDelete}>
-                {t("Delete")}
+              <button className={`${styles.button} ${styles.deleteButton}`} onClick={handleDelete} disabled={isDeleting}>
+                {isDeleting ? (
+                  <BiLoaderAlt size={20} className={styles.buttonSpinner} />
+                ) : (
+                  t("Delete")
+                )}
               </button>
-              <button className={`${styles.button} ${styles.saveButton}`} onClick={handleSave}>
-                {t("Save")}
+              <button className={`${styles.button} ${styles.saveButton}`} onClick={handleSave} disabled={isSaving}>
+                {isSaving ? (
+                  <BiLoaderAlt size={20} className={styles.buttonSpinner} />
+                ) : (
+                  t("Save")
+                )}
               </button>
               <button className={`${styles.button} ${styles.closeButton}`} onClick={() => setIsEditing(false)}>
                 {t("Cancel")}

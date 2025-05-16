@@ -12,6 +12,7 @@ import { getFolders, postFolder } from "../../services/folder";
 import { Folder } from "../../types/types";
 import FolderList from "../folder/FolderList";
 import { getGenreName } from "../../constants/genreMap";
+import { BiLoaderAlt } from "react-icons/bi";
 
 interface MovieModalProps {
   movie: Movie;
@@ -33,6 +34,7 @@ const MovieModal: React.FC<MovieModalProps> = ({ movie, onClose }) => {
   const [isMobile, setIsMobile] = useState(false);
   const [folders, setFolders] = useState<Folder[]>([]);
   const [selectedFolder, setSelectedFolder] = useState<number | null>(null);
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
   useEffect(() => {
     const handleEsc = (e: KeyboardEvent) => {
@@ -190,6 +192,8 @@ const MovieModal: React.FC<MovieModalProps> = ({ movie, onClose }) => {
       return;
     }
 
+    setIsSubmitting(true); // Set loading state to true
+
     try {
       await postReview(movie, reviewText, rating, selectedFolder);
 
@@ -205,6 +209,8 @@ const MovieModal: React.FC<MovieModalProps> = ({ movie, onClose }) => {
       } else {
         setError(t("Failed to save the review. Please try again."));
       }
+    } finally {
+      setIsSubmitting(false); // Reset loading state when done
     }
   };
 
@@ -378,8 +384,12 @@ const MovieModal: React.FC<MovieModalProps> = ({ movie, onClose }) => {
                 </div>
 
                 <div className={styles.buttonSection}>
-                  <button className={`${styles.button}`} onClick={handleSubmitReview}>
-                    {t("Submit")}
+                  <button className={`${styles.button}`} onClick={handleSubmitReview} disabled={isSubmitting}>
+                    {isSubmitting ? (
+                      <BiLoaderAlt size={20} className={styles.submitSpinner} />
+                    ) : (
+                      t("Submit")
+                    )}
                   </button>
                   <button className={`${styles.button} ${styles.closeButton}`} onClick={() => setWritingReview(false)}>
                     {t("Cancel")}
