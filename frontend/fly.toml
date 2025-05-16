@@ -1,10 +1,10 @@
-# fly.toml app configuration file generated for dusted-frontend on 2025-05-15T16:52:32+09:00
+# fly.toml app configuration file generated for dusted-frontend on 2025-05-16T15:41:15+09:00
 #
 # See https://fly.io/docs/reference/configuration/ for information about how to use this file.
 #
 
 app = 'dusted-frontend'
-primary_region = 'hkg'
+primary_region = 'nrt'
 
 [build]
 
@@ -20,9 +20,3 @@ primary_region = 'hkg'
   memory = '1gb'
   cpu_kind = 'shared'
   cpus = 1
-
-[env]
-  VITE_BACKEND_URL='https://dusted-backend.fly.dev'
-  VITE_GOOGLE_CLIENT_ID='414597970054-0r5hefrjr4p34lpsgqdonoerhndp8hk5.apps.googleusercontent.com'
-  VITE_GOOGLE_REDIRECT_URI='https://dustedfilm.com/auth/google/callback'
-

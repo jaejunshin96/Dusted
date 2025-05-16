@@ -51,6 +51,7 @@
   left: 0;
   width: 100%;
   height: 100%;
+  overflow-y: auto;
   border-radius: 16px;
   z-index: -1;
   animation: zoomBlur 0.5s cubic-bezier(0.23, 1, 0.32, 1) forwards;
@@ -65,8 +66,8 @@
   align-items: flex-start;
   flex-grow: 1;
   margin-bottom: 30px;
-  /*gap: 15px;*/
   width: 100%;
+  overflow: hidden;
 }
 
 .reviewContainer {
@@ -103,8 +104,7 @@ h2.textBlock {
 
 /* Review Block */
 .reviewTextBlock {
-  /*background: rgba(0, 0, 0, 0.5);*/
-  /*border-radius: 12px;*/
+  background-color: rgba(30, 30, 30, 0.6);
   color: white;
   text-shadow: 0px 1px 3px rgba(0, 0, 0, 1),
                0px 2px 8px rgba(0, 0, 0, 0.8);
@@ -117,8 +117,10 @@ h2.textBlock {
   letter-spacing: 0.01em;
   margin: 0 auto;
   margin-top: 20px;
+  max-height: 60%;
   width: 90%;
   padding: 10px 15px;
+  overflow-y: scroll;
 }
 
 /* Rating Stars */
@@ -321,6 +323,7 @@ h2.textBlock {
 @media (max-width: 768px) {
   .modalContainer {
     width: 100vw;
+    height: 80vh;
   }
 
   .blurred::before {
@@ -334,39 +337,22 @@ h2.textBlock {
 
 @media (max-width: 430px) {
   .modalContainer {
-    position: fixed;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    width: 100%;
+    width: 100vw;
     height: 100vh;
     margin: 0;
     border-radius: 0;
     box-sizing: border-box;
   }
 
-  h2.textBlock {
-    margin-top: 20px;
-    font-size: 2rem;
-  }
-
-  .modalBackgroundImage {
-    border-radius: 0;
-  }
-
   .blurred::before {
     border-radius: 0;
   }
 
-  .tapToViewOverlay {
-    opacity: 1;
+  h2.textBlock {
     font-size: 1rem;
   }
 
-  .trailerContainer {
-    width: 100%;
-    height: 0;
-    padding-bottom: 56.25%; /* 16:9 aspect ratio */
+  .modalBackgroundImage {
+    border-radius: 0;
   }
 }

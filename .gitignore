@@ -227,3 +227,5 @@ dist
 stats.html
 
 .eslintcache
+
+fly.toml

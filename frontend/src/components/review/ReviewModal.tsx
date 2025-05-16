@@ -280,7 +280,7 @@ const ReviewModal: React.FC<ReviewDetailModalProps> = ({ review, onClose, onSave
                 <textarea
                   className={styles.textarea}
                   value={editedReview}
-                  rows={6}
+                  rows={7}
                   placeholder={t("What do you think about this film?")}
                   onChange={(e) => setEditedReview(e.target.value)}
                 />
